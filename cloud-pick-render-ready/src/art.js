@@ -146,7 +146,7 @@
   }
   function drawPlayers(t){
     const reveal=state.phase==='reveal'||state.phase==='finished',elapsed=(now()-state.phaseStartedAt)/1000;
-    const moves=state.players.map(p=>{
+    const moves=state.players.filter(p=>mode!=='queue'||p.id===state.yourId).map(p=>{
       const home=view.cells[G.HOMES[p.slot]],r=state.results.find(r=>r.id===p.id),destination=reveal&&r&&r.cell!==null?view.cells[r.cell]:home;
       const progress=reveal?(reducedMotion?1:Math.min(1,Math.max(0,(elapsed-NIGHT_TIMING.anticipation)/NIGHT_TIMING.jump))):0;
       const ease=progress<.5?2*progress*progress:1-Math.pow(-2*progress+2,2)/2;
@@ -222,4 +222,3 @@
     if(state.phase==='reveal'&&e>=NIGHT_TIMING.land&&e<NIGHT_TIMING.land+.23&&state.results.some(r=>r.collision)&&!reducedMotion){const strength=1-(e-NIGHT_TIMING.land)/.23;ctx.translate(Math.sin(e*83)*3.6*strength,Math.cos(e*67)*1.8*strength);}
     drawSelectedPath();for(let i=0;i<9;i++)drawCloud(i,t);drawPlayers(t);drawParticles();ctx.restore();drawAtmosphere(t);drawTimerAndBanner();
   }
-

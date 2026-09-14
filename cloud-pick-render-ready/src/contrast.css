@@ -1,0 +1,30 @@
+/* Preserve the dusk palette while separating actionable UI from scenery.
+ * Text tokens and control edges are tested in tests/contrast.test.mjs.
+ * This is not a claim of whole-site WCAG conformance.
+ */
+:root{--panel:#2b2e40;--deep:#1d2233;--ink:#f2e7d5;--muted:#d0c6d3;--line:#89778e;--gold:#f0c293;--action:#e6b482;--green:#c6dfad;--warn:#ffc5ae}
+.panel-desc,.choice-intro small,.player-status,.board-footer,.match-policy,.queue-hint,.queue-fine,.inline-note,.screen-location,.hero-meta{color:var(--muted)}
+.menu-trigger,.btn-line,.btn-soft,.name-field,.mode-card,.join-code,.config-fields select,.pick-btn{border-color:#ac98ae}
+.btn-primary,.lock-btn:not(:disabled){background:var(--action);color:#1c2232;border-color:var(--action)}
+.pick-btn{position:relative;background:#202638;color:#f2e7d5}
+.pick-btn kbd{color:#d0c6d3}
+.pick-btn[aria-pressed=true]{background:#f0c293;color:#1c2232;border-color:#fff0d8;box-shadow:0 0 0 2px #1c2232}
+.pick-btn[aria-pressed=true] kbd{color:#1c2232}
+.pick-btn[aria-pressed=true]:after{content:'✓';position:absolute;right:-5px;top:-9px;width:18px;height:18px;display:grid;place-items:center;border-radius:50%;background:#fff0d8;color:#1c2232;font-size:12px;font-weight:900;border:1px solid #1c2232}
+.lock-btn:disabled{background:#3c3b4d;border-color:#7e7088;color:#d0c6d3}
+button:disabled{opacity:.7}
+.lock-btn:disabled{opacity:1}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #fff0d8;outline-offset:4px}
+.timer{background:#1c2232;border-radius:50%;color:#f2e7d5;box-shadow:0 0 0 4px #1c2232}
+.timer span,.round-label,.banner-eyebrow{color:#e7d5de}
+.timer-progress{stroke:#f0c293}
+.phase-banner:not(:empty){background:#171a29ed;padding:9px 12px;border:1px solid #8f7b91;border-radius:3px}
+.round-chip{background:#171a29ed;padding:8px 10px;border-left-color:#f0c293;border-radius:2px}
+.fixed-rule,.queue-seat.empty,.queue-clock,.queue-card-top,.alternate-modes summary{color:#d0c6d3}
+.queue-seat.empty .unknown-seat{border-color:#a18ba2}
+.queue-seat .mini-avatar,.queue-seat.occupied .unknown-seat{border-color:#ddba99}
+.roster .player-row.is-me{border:2px solid #f0c293}
+.roster .bot-tag{color:#c6dfad}
+.player-row.is-me .you-tag{background:#f0c293;color:#1c2232}
+.text-button,.menu-item span,.history-link{color:#f0c293}
+@media(max-width:780px){.queue-hint,.match-policy,.inline-note,.choice-intro small{font-size:12px}.queue-fine{font-size:11px}.phase-banner:not(:empty){padding:7px 10px}.round-chip{padding:6px 8px}.roster .player-status{font-size:10px}}

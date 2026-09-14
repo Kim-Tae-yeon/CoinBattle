@@ -8,7 +8,7 @@
       if(secs<=3&&!me().locked)banner='<span class="banner-eyebrow">DON’T BLINK.</span><strong>지금 결정해.</strong>';
     }else if(state.phase==='countdown'){
       value=String(secs||1);label='준비';progress=remaining/duration;
-      banner='<span class="banner-eyebrow">A MOMENT OF SILENCE.</span><strong>욕심낼까, 피해 갈까.</strong>';
+      banner=isRandom()?`<span class="banner-eyebrow">사람 ${state.matchmaking.humans}명${state.matchmaking.bots?' + 봇 '+state.matchmaking.bots+'명':''} · 자동 시작</span><strong>${state.round===1?'오늘 밤의 상대를 만났어.':'욕심낼까, 피해 갈까.'}</strong>`:'<span class="banner-eyebrow">A MOMENT OF SILENCE.</span><strong>욕심낼까, 피해 갈까.</strong>';
     }else if(state.phase==='reveal'){
       value=lesson?'✓':String(Math.max(1,secs));label=lesson?'확인':'다음';progress=lesson?1:remaining/duration;
       if(!revealVisible())banner='<span class="banner-eyebrow">THE MOMENT OF TRUTH.</span><strong>함께, 공개.</strong>';

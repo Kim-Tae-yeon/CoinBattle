@@ -1,21 +1,18 @@
   // Progressive-disclosure UI. The authoritative game rules and API are unchanged.
-  const ux = { page: 'home', kind: 'solo', screen: '', error: '' };
+  const ux = { page: 'home', kind: 'random', screen: '', error: '' };
   let tutor = null, tutorSerial = 0, pausedAt = 0, dialogReturnFocus = null, presentedReveal = ''; 
   const CELL_NAMES = ['왼쪽 위','','오른쪽 위','','가운데','','왼쪽 아래','','오른쪽 아래'];
   const LEARN_KEY = 'cloud-pick:tutorial:v3';
   const fmt = n => String(n).padStart(2,'0');
   function announce(text) { $('srStatus').textContent = text; }
-  function screenName() { return mode === 'home' ? ux.page : mode === 'tutorial' ? (tutor?.stage === 'done' ? 'result' : 'tutorial') : state.phase === 'lobby' ? 'lobby' : state.phase === 'finished' ? 'result' : 'play'; }
+  function screenName() { return mode === 'queue' ? 'queue' : mode === 'home' ? ux.page : mode === 'tutorial' ? (tutor?.stage === 'done' ? 'result' : 'tutorial') : state.phase === 'lobby' ? 'lobby' : state.phase === 'finished' ? 'result' : 'play'; }
   function focusHeading() { requestAnimationFrame(() => { const el = $('screenHeading'); if (el) el.focus({preventScroll:true}); }); }
   function heroHTML() {
     const learned = storage.get(LEARN_KEY) === 'done';
-    return `<section class="hero"><div class="eyebrow hero-kicker">A SMALL TOWN. A QUIET BETRAYAL.</div><h1 id="screenHeading" class="screen-title" tabindex="-1">좋은 친구들.<br><em>수상한 선택들.</em></h1><p class="premise">혼자 고르면 전부 내 것.<br>같은 구름을 고르면, 모두 빈손.</p><button class="btn btn-primary" data-action="setup">시작하기 <span class="arrow">↗</span></button><button class="text-button tutorial-link" data-action="tutorial">${learned ? '튜토리얼 다시 해보기' : '직접 해보며 배우기'} <small>${learned ? '언제든 다시' : '처음이라면 추천'}</small><span>→</span></button><p class="hero-meta"><span>1–4명</span><span>혼자서는 봇과</span><span>설치 없이 플레이</span></p></section>`;
+    return `<section class="hero"><div class="eyebrow hero-kicker">A SMALL TOWN. A QUIET BETRAYAL.</div><h1 id="screenHeading" class="screen-title" tabindex="-1">좋은 친구들.<br><em>수상한 선택들.</em></h1><p class="premise">혼자 고르면 전부 내 것.<br>같은 구름을 고르면, 모두 빈손.</p><button class="btn btn-primary" data-action="setup">랜덤 매칭 <span class="arrow">↗</span></button><button class="text-button tutorial-link" data-action="tutorial">${learned ? '튜토리얼 다시 해보기' : '직접 해보며 배우기'} <small>${learned ? '언제든 다시' : '처음이라면 추천'}</small><span>→</span></button><p class="hero-meta"><span>최대 4인</span><span>방 코드 없이</span><span>봇 연습도 가능</span></p></section>`;
   }
   function nameHTML() { return `<label class="field-label" for="nameInput">오늘 밤의 이름 <small>비워도 괜찮아요</small></label><div class="name-field">${avatar(0)}<input id="nameInput" maxlength="12" placeholder="플레이어" value="${escapeHTML(name)}" autocomplete="nickname">${icons.edit}</div>`; }
-  function setupHTML() {
-    const online = ux.kind === 'friends';
-    return `<section class="setup-panel"><button class="back-button" data-action="backHome">← 처음으로</button><div class="eyebrow">PICK YOUR COMPANY.</div><h1 id="screenHeading" class="screen-title" tabindex="-1">오늘 밤, 누구와?</h1><p class="panel-desc">가볍게 연습하거나, 친구의 속마음을 읽거나.</p>${nameHTML()}<div class="mode-picks" role="group" aria-label="플레이 방식"><button class="mode-card" data-action="kindSolo" aria-pressed="${!online}"><strong>봇과 연습</strong><small>나 + 봇 3명</small></button><button class="mode-card" data-action="kindFriends" aria-pressed="${online}"><strong>친구와 플레이</strong><small>같은 방에서 최대 4명</small></button></div>${online ? `<p class="inline-note">방을 만들거나, 친구에게 받은 코드로 들어가세요.</p>${!serverAvailable ? `<div class="server-offline">${!backendChecked ? '멀티플레이 서버를 확인하고 있어요…' : '지금은 혼자 연습만 가능해요. 멀티플레이는 서버에 연결된 주소에서 열어 주세요.'}</div>` : ''}<button class="btn btn-primary" data-action="create" ${busy || !serverAvailable ? 'disabled' : ''}>${busy ? '방을 만드는 중…' : '방 만들기 →'}</button><button class="text-button setup-secondary" data-action="joinDialog" ${busy || !serverAvailable ? 'disabled' : ''}>초대 코드로 참가하기</button>${!serverAvailable && backendChecked ? '<button class="text-button setup-secondary" data-action="connectionHelp">연결 방법 보기 →</button>' : ''}` : `<div class="setup-meta"><span>${config.rounds}라운드 · 선택 ${config.seconds}초</span><button class="text-button" data-action="settings">규칙 변경</button></div><button class="btn btn-primary" data-action="solo" ${busy ? 'disabled' : ''}>연습 시작 →</button>`}<p id="setupError" class="inline-error" role="alert">${escapeHTML(ux.error)}</p>${storage.get(LEARN_KEY) !== 'done' ? '<button class="text-button setup-secondary" data-action="tutorial">조작이 낯설다면, 먼저 배워보기 →</button>' : ''}</section>`;
-  }
+  function setupHTML() { return randomSetupHTML(); }
   function playerHTML(p, lobby = false) {
     const self = p.id === state.yourId, r = state.results.find(x=>x.id===p.id), presented=revealVisible();
     const score = p.score - (!presented ? (r?.gain || 0) : 0);
@@ -24,7 +21,7 @@
     else if (state.phase === 'choose') {label=p.locked?'확정':'고르는 중';cls=p.locked?'is-locked':'';}
     else if (r && !presented) label='공개 중';
     else if (r) {label=r.missed?'선택 없음':r.collision?'겹침 · +0':`획득 · +${r.gain}`;cls=r.gain?'gained':'collision';}
-    return `<div class="player-row ${self?'is-me':''} ${!p.connected&&!p.bot?'offline':''}">${avatar(p.slot)}<div class="player-meta"><div class="player-name"><span class="text-name" title="${escapeHTML(p.name)}">${escapeHTML(p.name)}</span>${self?'<span class="you-tag">나</span>':p.bot?'<span class="bot-tag">봇</span>':''}${p.id===state.hostId&&mode==='online'?'<span class="host-crown" title="방장">♛</span>':''}</div><div class="player-status ${cls}">${label}</div></div>${!lobby?`<div class="player-score" aria-label="${score}코인">${coin}<span>${score}</span></div>`:p.bot&&state.hostId===state.yourId?`<button class="remove-bot" data-action="removeBot" data-id="${escapeHTML(p.id)}" aria-label="${escapeHTML(p.name)} 봇 빼기">×</button>`:''}</div>`;
+    return `<div class="player-row ${p.bot?'is-bot':''} ${self?'is-me':''} ${!p.connected&&!p.bot?'offline':''}">${avatar(p.slot)}<div class="player-meta"><div class="player-name"><span class="text-name" title="${escapeHTML(p.name)}">${escapeHTML(p.name)}</span>${self?'<span class="you-tag">나</span>':p.bot?'<span class="bot-tag">봇</span>':''}${p.id===state.hostId&&mode==='online'&&!isRandom()?'<span class="host-crown" title="방장">♛</span>':''}</div><div class="player-status ${cls}">${label}</div></div>${!lobby?`<div class="player-score" aria-label="${score}코인">${coin}<span>${score}</span></div>`:p.bot&&state.hostId===state.yourId?`<button class="remove-bot" data-action="removeBot" data-id="${escapeHTML(p.id)}" aria-label="${escapeHTML(p.name)} 봇 빼기">×</button>`:''}</div>`;
   }
   function lobbyHTML() {
     const host = state.hostId === state.yourId, canStart=state.config.fillBots||state.players.length>=2;
@@ -54,25 +51,25 @@
   function renderFinish() {
     const el=$('finishOverlay');el.hidden=screenName()!=='result';if(el.hidden)return;
     if(mode==='tutorial'){
-      el.innerHTML=`<div class="finish-card tutor-summary"><div class="eyebrow">YOUR FIRST NIGHT, COMPLETE.</div><div class="completion-cast">${[0,1,2,3].map(s=>avatar(s)).join('')}</div><h1 id="screenHeading" tabindex="-1" class="screen-title">첫 밤을 지날 준비 끝.</h1><p>이제 친구의 생각만 읽으면 돼.<br>실전에서는 <strong>${config.rounds}라운드 동안 가장 많은 코인</strong>을 모으면 승리.<br>동점이면 함께 우승해요.</p><div class="button-row"><button class="btn btn-primary" data-action="learnSolo">봇과 한 판 →</button><button class="btn btn-line" data-action="learnFriends">친구와 플레이</button></div><button class="text-button" data-action="backHome">처음으로</button></div>`;return;
+      el.innerHTML=`<div class="finish-card tutor-summary"><div class="eyebrow">YOUR FIRST NIGHT, COMPLETE.</div><div class="completion-cast">${[0,1,2,3].map(s=>avatar(s)).join('')}</div><h1 id="screenHeading" tabindex="-1" class="screen-title">첫 밤을 지날 준비 끝.</h1><p>이제 친구의 생각만 읽으면 돼.<br>실전에서는 <strong>5라운드 동안 가장 많은 코인</strong>을 모으면 승리.<br>동점이면 함께 우승해요.</p><div class="button-row"><button class="btn btn-primary" data-action="learnMatch">랜덤 매칭 →</button><button class="btn btn-line" data-action="learnSolo">봇과 연습</button></div><button class="text-button" data-action="backHome">처음으로</button></div>`;return;
     }
     const order=state.players.slice().sort((a,b)=>b.score-a.score||a.slot-b.slot),best=order[0]?.score||0,winners=order.filter(p=>p.score===best),win=winners.some(p=>p.id===state.yourId),mine=me();
     const title=winners.length>1?'같은 밤의 승자들.':win?'이 밤의 승자, 나.':`${escapeHTML(winners[0]?.name||'친구')}의 승리.`;
-    el.innerHTML=`<div class="finish-card"><div class="trophy" aria-hidden="true">☾</div><div class="eyebrow">THE NIGHT IS OVER.</div><h1 id="screenHeading" tabindex="-1" class="screen-title">${title}</h1><p class="result-summary">${state.config.rounds}번의 선택, 나의 주머니엔 <strong>${mine?.score||0}코인.</strong><br>${winners.length>1?`${winners.length}명이 ${best}코인으로 공동 우승했어요.`:'다음 밤엔, 다른 선택을.'}</p><div aria-label="최종 순위">${order.map(p=>`<div class="podium-line ${p.id===state.yourId?'is-me':''}"><span class="rank">${1+order.filter(x=>x.score>p.score).length}</span>${avatar(p.slot)}<strong>${escapeHTML(p.name)} ${p.id===state.yourId?'<span class="you-tag">나</span>':''}</strong>${coin}<span class="score">${p.score}</span></div>`).join('')}</div>${state.hostId===state.yourId?`<div class="button-row"><button class="btn btn-primary" data-action="start">한 판 더 →</button><button class="btn btn-line" data-action="${mode==='solo'?'leave':'lobby'}">${mode==='solo'?'처음으로':'대기실로'}</button></div>`:'<p class="wait-host">방장이 다음 판을 시작하면 함께 출발해요.</p>'}<button class="text-button" data-action="history">이번 판 기록 보기 →</button></div>`;
+    el.innerHTML=`<div class="finish-card"><div class="trophy" aria-hidden="true">☾</div><div class="eyebrow">THE NIGHT IS OVER.</div><h1 id="screenHeading" tabindex="-1" class="screen-title">${title}</h1><p class="result-summary">${isRandom()?`랜덤 매칭 · 사람 ${state.matchmaking.humans}명${state.matchmaking.bots?' + 봇 '+state.matchmaking.bots+'명':''}<br>`:''}${state.config.rounds}번의 선택, 나의 주머니엔 <strong>${mine?.score||0}코인.</strong><br>${winners.length>1?`${winners.length}명이 ${best}코인으로 공동 우승했어요.`:'다음 밤엔, 다른 선택을.'}</p><div aria-label="최종 순위">${order.map(p=>`<div class="podium-line ${p.id===state.yourId?'is-me':''}"><span class="rank">${1+order.filter(x=>x.score>p.score).length}</span>${avatar(p.slot)}<strong>${escapeHTML(p.name)} ${p.id===state.yourId?'<span class="you-tag">나</span>':''}</strong>${coin}<span class="score">${p.score}</span></div>`).join('')}</div>${isRandom()?`<div class="button-row"><button class="btn btn-primary" data-action="match" ${busy?'disabled':''}>다시 매칭 →</button><button class="btn btn-line" data-action="leave">처음으로</button></div>`:state.hostId===state.yourId?`<div class="button-row"><button class="btn btn-primary" data-action="start">한 판 더 →</button><button class="btn btn-line" data-action="${mode==='solo'?'leave':'lobby'}">${mode==='solo'?'처음으로':'대기실로'}</button></div>`:'<p class="wait-host">방장이 다음 판을 시작하면 함께 출발해요.</p>'}<button class="text-button" data-action="history">이번 판 기록 보기 →</button></div>`;
   }
   function renderHUD(){
     $('roundChip').innerHTML=mode==='tutorial'?`<span class="round-label">직접 해보며 배우기</span><strong><em>${tutor?.step||1}</em><span class="total-rounds"> / 4</span></strong>`:`<span class="round-label">${state.round===state.config.rounds?'마지막 라운드':'라운드'}</span><strong><em>${fmt(state.round)}</em><span class="total-rounds"> / ${fmt(state.config.rounds)}</span></strong>`;
     const reconnect=mode==='online'&&connection!=='connected';
     $('networkNotice').hidden=!reconnect;$('networkNotice').textContent=reconnect?'연결이 끊겼어요. 다시 연결하는 중에는 선택을 바꿀 수 없어요. 서버의 제한 시간은 계속 흐릅니다.':'';
     const pill=$('connectionPill');pill.hidden=mode!=='online';pill.className='connection-pill'+(reconnect?' reconnect':'');pill.innerHTML=`<i></i>${reconnect?'연결 중':'함께 플레이 중'}`;
-    $('screenLocation').textContent=({home:'작은 마을의 큰 심리전',setup:'오늘 밤의 동행',lobby:'친구를 기다리는 중',tutorial:'첫 밤의 안내',play:mode==='solo'?'봇과 연습':'친구와 플레이',result:'어느새, 동이 튼다.'})[screenName()];
+    $('screenLocation').textContent=({home:'작은 마을의 큰 심리전',setup:'오늘 밤의 동행',lobby:'친구를 기다리는 중',tutorial:'첫 밤의 안내',queue:'랜덤 매칭 · 상대 찾는 중',play:mode==='solo'?'봇과 연습':isRandom()?'랜덤 매칭':'친구와 플레이',result:'어느새, 동이 튼다.'})[screenName()];
   }
   function focusKey(el){if(!el||!el.closest('#sidebar,#choiceBar,#roster,#finishOverlay'))return null;if(el.id)return '#'+CSS.escape(el.id);if(el.dataset.action)return `[data-action="${el.dataset.action}"]${el.dataset.cell?`[data-cell="${el.dataset.cell}"]`:el.dataset.id?`[data-id="${CSS.escape(el.dataset.id)}"]`:''}`;return null;}
   function render(){
     const input=$('nameInput');if(input)name=input.value;
     const key=focusKey(document.activeElement),screen=screenName(),changed=ux.screen!==screen;ux.screen=screen;
     document.body.dataset.screen=screen;
-    $('sidebar').innerHTML=mode==='home'?(ux.page==='setup'?setupHTML():heroHTML()):mode==='tutorial'?(tutor?.stage==='done'?'':tutorialHTML()):state.phase==='lobby'?lobbyHTML():'';
+    $('sidebar').innerHTML=mode==='queue'?queueHTML():mode==='home'?(ux.page==='setup'?setupHTML():heroHTML()):mode==='tutorial'?(tutor?.stage==='done'?'':tutorialHTML()):state.phase==='lobby'?lobbyHTML():'';
     $('roster').innerHTML=screen==='play'?state.players.map(p=>playerHTML(p)).join(''):'';
     renderChoiceBar();renderHUD();renderFinish();updateSoundButton();updateMotionButton();
     if(key){const target=document.querySelector(key);if(target&&!target.disabled)target.focus({preventScroll:true});else if(document.activeElement===document.body&&screen==='play')$('choiceBar').focus({preventScroll:true});}
@@ -104,12 +101,14 @@
     announce(r?.gain?`${r.gain}코인 획득`:r?.missed?'선택하지 않아 0코인':'같은 구름에서 겹쳐 0코인');
   }
   function readName(){name=($('nameInput')?.value||name||'플레이어').trim().slice(0,12)||'플레이어';storage.set('cloud-pick:name',name);return name;}
-  function openSetup(kind='solo'){
+  function openSetup(kind='random'){
+    if(mode==='queue'){cancelMatchmaking();return;}
     if(mode==='online'||mode==='solo'){leaveDialog();return;}
     if($('nameInput'))name=$('nameInput').value;
     tutor=null;tutorSerial++;mode='home';state={...demoState,config:{...config}};optimisticCell=null;particles=[];ux.page='setup';ux.kind=kind;ux.error='';closeDialog();render();focusHeading();window.scrollTo({top:0,behavior:'instant'});
   }
   function backHome(){
+    if(mode==='queue'){cancelMatchmaking();return;}
     if(mode==='online'||mode==='solo'){leaveDialog();return;}
     tutor=null;tutorSerial++;mode='home';ux.page='home';ux.error='';state={...demoState,config:{...config}};optimisticCell=null;particles=[];closeDialog();render();focusHeading();window.scrollTo({top:0,behavior:'instant'});
   }
@@ -121,18 +120,20 @@
   async function api(path,data,token=session?.token){
     const headers={'Content-Type':'application/json'};if(token)headers.Authorization=`Bearer ${token}`;
     const response=await fetch(path,{method:data===undefined?'GET':'POST',headers,body:data===undefined?undefined:JSON.stringify(data),signal:AbortSignal.timeout(9000)});
-    const result=await response.json();if(!response.ok)throw new Error(result.error||'서버 요청에 실패했어요.');return result;
+    const result=await response.json();if(!response.ok)throw Object.assign(new Error(result.error||'서버 요청에 실패했어요.'),{status:response.status});return result;
   }
   function disconnect(){if(stream){stream.close();stream=null;}}
   function onlineRequired(){if(serverAvailable)return true;connectionHelp();return false;}
-  function connectionHelp(){showDialog(`<div class="eyebrow">CONNECT THE NIGHT.</div><h2>친구와 만나려면.</h2><p>HTML 파일만 열면 봇 연습과 튜토리얼을 할 수 있어요. 친구와는 <strong>멀티플레이 서버가 실행 중인 같은 웹 주소</strong>에 접속해야 해요.</p><details class="help-rule"><summary>직접 서버를 실행하는 방법</summary><p>전체 프로젝트 폴더에서 <code>node server.mjs</code>를 실행하고 <code>http://localhost:3000</code>을 여세요. 같은 Wi-Fi의 친구는 실행창에 표시되는 네트워크 주소로 접속하세요. 다른 네트워크에서 함께하려면 인터넷 배포가 필요해요.</p></details><button class="btn btn-primary settings-actions" data-action="checkConnection">연결 다시 확인</button><button class="text-button setup-secondary" data-action="closeDialog">돌아가기</button>`);}
+  function connectionHelp(){showDialog(`<div class="eyebrow">CONNECT THE NIGHT.</div><h2>밤을 연결하려면.</h2><p>HTML 파일만 열면 봇 연습과 튜토리얼을 할 수 있어요. 랜덤 매칭과 친구끼리 플레이는 <strong>최신 멀티플레이 서버가 실행 중인 같은 웹 주소</strong>에 접속해야 해요.</p><details class="help-rule"><summary>직접 서버를 실행하는 방법</summary><p>HTML뿐 아니라 서버 파일도 최신 버전으로 교체한 뒤, 전체 프로젝트 폴더에서 <code>node server.mjs</code>를 실행하고 <code>http://localhost:3000</code>을 여세요. 같은 Wi-Fi의 친구는 실행창에 표시되는 네트워크 주소로 접속하세요. 다른 네트워크에서 함께하려면 인터넷 배포가 필요해요.</p></details><button class="btn btn-primary settings-actions" data-action="checkConnection">연결 다시 확인</button><button class="text-button setup-secondary" data-action="closeDialog">돌아가기</button>`);}
   function connectSession(result){
     closeDialog();disconnect();localRoom=null;tutor=null;tutorSerial++;mode='online';pausedAt=0;session={token:result.token,id:result.id,code:result.code};storage.set('cloud-pick:session',JSON.stringify(session),true);connection='connecting';optimisticCell=null;
     state=result.state;clockOffset=result.state.serverNow-Date.now();
+    if(state.matchmaking?.kind==='random')storage.remove(QUEUE_KEY,true);
+    const activeSession=session;
     stream=new EventSource(`/api/events?token=${encodeURIComponent(session.token)}`);
-    stream.addEventListener('state',event=>{try{connection='connected';applyState(JSON.parse(event.data));}catch{toast('서버 상태를 읽지 못했어요. 다시 연결할게요.');}});
-    stream.addEventListener('replaced',()=>{disconnect();storage.remove('cloud-pick:session',true);session=null;mode='home';connection='home';clockOffset=0;optimisticCell=null;ux.page='setup';state={...demoState,config:{...config}};render();toast('다른 탭에서 이 참가 정보를 사용 중이에요. 이 탭에서는 새로 참가해 주세요.');});
-    stream.onopen=()=>{connection='connected';render();};stream.onerror=()=>{if(mode!=='online')return;connection='reconnecting';render();};
+    stream.addEventListener('state',event=>{if(mode!=='online'||session!==activeSession)return;try{connection='connected';applyState(JSON.parse(event.data));}catch{toast('서버 상태를 읽지 못했어요. 다시 연결할게요.');}});
+    stream.addEventListener('replaced',()=>{if(session!==activeSession)return;disconnect();storage.remove('cloud-pick:session',true);session=null;mode='home';connection='home';clockOffset=0;optimisticCell=null;ux.page='setup';state={...demoState,config:{...config}};render();toast('다른 탭에서 이 참가 정보를 사용 중이에요. 이 탭에서는 새로 참가해 주세요.');});
+    stream.onopen=()=>{if(mode!=='online'||session!==activeSession)return;connection='connected';render();};stream.onerror=()=>{if(mode!=='online'||session!==activeSession)return;connection='reconnecting';render();};
     render();focusHeading();window.scrollTo({top:0,behavior:'instant'});
   }
   async function createRoom(){
@@ -152,7 +153,7 @@
     finally{busy=false;if($('joinSubmit')){$('joinSubmit').disabled=false;$('joinSubmit').textContent='방에 참가하기 →';}}
   }
   async function action(actionName,extra={}){
-    if(mode==='home'||mode==='tutorial')return;
+    if(mode==='home'||mode==='tutorial'||mode==='queue')return;
     if(mode==='solo'){
       try{if(actionName==='select'||actionName==='lock')localRoom.select('you',extra.cell,extra.round,extra.matchId,actionName==='lock');else if(actionName==='start')localRoom.start('you');else if(actionName==='lobby')localRoom.returnToLobby('you');applyState(localRoom.snapshot('you'));}catch(e){optimisticCell=null;toast(e.message);render();}return;
     }
@@ -185,24 +186,27 @@
   }
   $('dialog').addEventListener('close',()=>{if(!$('dialog').open)resumeLocal();});
   $('dialog').addEventListener('cancel',event=>{event.preventDefault();closeDialog();});
-  function liveNote(){return mode==='online'&&state.phase!=='lobby'&&state.phase!=='finished'?'<p class="menu-status">메뉴를 열어도 <strong>게임과 제한 시간은 계속 진행</strong>돼요.</p>':mode==='solo'||mode==='tutorial'?'<p class="menu-status">잠깐 멈췄어요. 메뉴를 닫으면 이어져요.</p>':'';}
+  function liveNote(){return mode==='queue'?'<p class="menu-status">상대 찾기는 계속돼요. 연결이 확인되면 게임 화면으로 자동 이동해요.</p>':mode==='online'&&state.phase!=='lobby'&&state.phase!=='finished'?'<p class="menu-status">메뉴를 열어도 <strong>게임과 제한 시간은 계속 진행</strong>돼요.</p>':mode==='solo'||mode==='tutorial'?'<p class="menu-status">잠깐 멈췄어요. 메뉴를 닫으면 이어져요.</p>':'';}
   function showMenu(){
-    showDialog(`<div class="eyebrow">A MOMENT IN THE WOODS.</div><h2>잠깐, 숨 고르기.</h2><div class="menu-list"><button class="menu-item" data-action="help">게임 방법 <span>→</span></button>${mode==='home'?'<button class="menu-item" data-action="tutorial">직접 해보며 배우기 <span>튜토리얼 →</span></button>':''}<button class="menu-item" id="soundButton" data-action="sound">효과음 <span>${muted?'꺼짐':'켜짐'}</span></button><button class="menu-item" id="motionButton" data-action="motion" aria-pressed="${reducedMotion}">움직임 줄이기 <span>${reducedMotion?'켜짐':'꺼짐'}</span></button>${mode==='online'?`<button class="menu-item" data-action="copyCode">방 코드 <span>${escapeHTML(state.code)} · 복사</span></button>`:''}${['solo','online'].includes(mode)?'<button class="menu-item" data-action="history">라운드 기록 <span>→</span></button>':''}${mode!=='home'?`<button class="menu-item danger" data-action="leaveDialog">${mode==='online'?'방 나가기':mode==='tutorial'?'튜토리얼 나가기':'연습 마치기'} <span>↗</span></button>`:''}</div>${liveNote()}`);updateSoundButton();updateMotionButton();
+    showDialog(`<div class="eyebrow">A MOMENT IN THE WOODS.</div><h2>잠깐, 숨 고르기.</h2><div class="menu-list"><button class="menu-item" data-action="help">게임 방법 <span>→</span></button>${mode==='home'?'<button class="menu-item" data-action="tutorial">직접 해보며 배우기 <span>튜토리얼 →</span></button>':''}<button class="menu-item" id="soundButton" data-action="sound">효과음 <span>${muted?'꺼짐':'켜짐'}</span></button><button class="menu-item" id="motionButton" data-action="motion" aria-pressed="${reducedMotion}">움직임 줄이기 <span>${reducedMotion?'켜짐':'꺼짐'}</span></button>${mode==='online'&&!isRandom()?`<button class="menu-item" data-action="copyCode">방 코드 <span>${escapeHTML(state.code)} · 복사</span></button>`:''}${['solo','online'].includes(mode)?'<button class="menu-item" data-action="history">라운드 기록 <span>→</span></button>':''}${mode!=='home'?`<button class="menu-item danger" data-action="leaveDialog">${mode==='queue'?'매칭 취소':isRandom()?'경기 나가기':mode==='online'?'방 나가기':mode==='tutorial'?'튜토리얼 나가기':'연습 마치기'} <span>↗</span></button>`:''}</div>${liveNote()}`);updateSoundButton();updateMotionButton();
   }
   function showHelp(){
     showDialog(`<div class="eyebrow">FIELD NOTES.</div><h2>규칙은 단순해.<br>친구는 아니고.</h2><p class="help-primary">혼자 고른 구름은 코인 획득.<br>같은 구름을 고르면 모두 0코인.</p><details class="help-rule"><summary>어떤 구름을 고를 수 있나요?</summary><p>내 캐릭터 옆의 <strong>번호가 표시된 세 구름</strong>만 고를 수 있어요. 가운데 3코인 구름은 네 명 모두 노릴 수 있어요. 구름을 누르거나 화면 아래 선택 버튼을 사용하세요.</p></details><details class="help-rule"><summary>선택은 언제까지 바꿀 수 있나요?</summary><p><strong>선택 확정 전까지만</strong> 바꿀 수 있어요. 다른 사람에게는 목적지가 아니라 확정 여부만 보여요. 모두 확정하면 시간이 남아도 동시에 공개해요.</p></details><details class="help-rule"><summary>시간이 끝나면 어떻게 되나요?</summary><p><strong>마지막으로 고른 구름</strong>이 적용돼요. 한 번도 고르지 않았다면 그 라운드는 0코인이에요. 겹치더라도 이전에 모은 코인은 잃지 않아요.</p></details><details class="help-rule"><summary>어떻게 이기나요?</summary><p>${mode==='home'?config.rounds:state.config.rounds}라운드가 끝났을 때 누적 코인이 가장 많으면 승리. 동점은 공동 우승이에요. 현재 선택 시간은 ${mode==='home'?config.seconds:state.config.seconds}초예요.</p></details><details class="help-rule"><summary>키보드로 플레이할 수 있나요?</summary><p><kbd>1</kbd>·<kbd>2</kbd>·<kbd>3</kbd>으로 선택하고 <kbd>Enter</kbd>로 확정해요. <kbd>Tab</kbd>으로 버튼을 옮기고 <kbd>Space</kbd>로 누를 수도 있어요. 대화창은 <kbd>Esc</kbd>로 닫아요.</p></details>${mode==='home'?'<button class="btn btn-primary settings-actions" data-action="tutorial">직접 해보며 배우기 →</button>':''}${liveNote()}<button class="text-button setup-secondary" data-action="closeDialog">게임으로 돌아가기</button>`);
   }
   function settingsDialog(){
+    if(isRandom())return;
     if(mode==='online'&&(state.phase!=='lobby'||state.hostId!==state.yourId))return;
     const c=mode==='online'?state.config:config;
     showDialog(`<div class="eyebrow">SET THE PACE.</div><h2>오늘 밤의 속도.</h2><p>처음엔 기본 규칙으로 시작해도 좋아요.</p><form id="settingsForm"><div class="config-fields"><label for="roundSetting">라운드<select id="roundSetting">${[3,5,8,10].map(n=>`<option value="${n}" ${c.rounds===n?'selected':''}>${n}라운드</option>`).join('')}</select></label><label for="timeSetting">선택 시간<select id="timeSetting">${[5,10,15,20].map(n=>`<option value="${n}" ${c.seconds===n?'selected':''}>${n}초</option>`).join('')}</select></label></div>${mode==='online'?`<label class="check-label"><input id="fillBotsSetting" type="checkbox" ${c.fillBots?'checked':''}>빈자리는 봇으로 채우기</label>`:'<p class="inline-note">혼자 연습할 때는 봇 3명이 함께해요.</p>'}<div class="settings-actions"><button class="btn btn-primary" type="submit">적용하기</button></div></form>`);
   }
   function showHistory(){showDialog(`<div class="eyebrow">YOUR TRAIL TONIGHT.</div><h2>나의 선택이 남긴 것.</h2>${historyBody()}${liveNote()}<button class="text-button setup-secondary" data-action="closeDialog">돌아가기</button>`);}
   function leaveDialog(){
+    if(mode==='queue'){cancelMatchmaking();return;}
     if(mode==='home'){backHome();return;}
-    showDialog(`<div class="eyebrow">SEE YOU AFTER DARK.</div><h2>${mode==='online'?'방을 나갈까요?':mode==='tutorial'?'튜토리얼을 마칠까요?':'연습을 마칠까요?'}</h2><p>${mode==='online'?'진행 중에 나가면 남은 라운드는 0코인이에요. 방장이 나가면 다른 접속자가 방장을 이어받아요.':mode==='tutorial'?'연습 점수는 실전에 영향을 주지 않아요. 처음 화면에서 언제든 다시 배울 수 있어요.':'이번 연습의 점수는 저장되지 않아요.'}</p><div class="button-row"><button class="btn btn-soft" data-action="closeDialog">계속하기</button><button class="btn btn-primary" data-action="leave">${mode==='online'?'방 나가기':'처음으로'}</button></div>`);
+    showDialog(`<div class="eyebrow">SEE YOU AFTER DARK.</div><h2>${mode==='online'?'방을 나갈까요?':mode==='tutorial'?'튜토리얼을 마칠까요?':'연습을 마칠까요?'}</h2><p>${isRandom()?'나가면 남은 라운드에는 참여할 수 없어요. 새로운 상대를 만나려면 처음 화면에서 다시 매칭하세요.':mode==='online'?'진행 중에 나가면 남은 라운드는 0코인이에요. 방장이 나가면 다른 접속자가 방장을 이어받아요.':mode==='tutorial'?'연습 점수는 실전에 영향을 주지 않아요. 처음 화면에서 언제든 다시 배울 수 있어요.':'이번 연습의 점수는 저장되지 않아요.'}</p><div class="button-row"><button class="btn btn-soft" data-action="closeDialog">계속하기</button><button class="btn btn-primary" data-action="leave">${mode==='online'?'방 나가기':'처음으로'}</button></div>`);
   }
   async function leave(){
+    if(mode==='queue'){await cancelMatchmaking();return;}
     if(mode==='online'&&session){try{await api('/api/action',{action:'leave'});}catch{}}
     closeDialog();disconnect();storage.remove('cloud-pick:session',true);session=null;localRoom=null;tutor=null;tutorSerial++;pausedAt=0;
     mode='home';ux.page='home';connection='home';clockOffset=0;optimisticCell=null;particles=[];state={...demoState,config:{...config}};render();focusHeading();window.scrollTo({top:0,behavior:'instant'});
@@ -215,6 +219,7 @@
 
   // Tutorial uses a separate local Room. Scripted examples never touch an online room.
   function startTutorial(){
+    if(mode==='queue'){cancelMatchmaking();return;}
     if(mode==='online'||mode==='solo'){leaveDialog();return;}
     readName();closeDialog();disconnect();localRoom=null;mode='tutorial';clockOffset=0;pausedAt=0;connection='local';tutorSerial++;
     tutor={step:1,stage:'pick',room:null,changed:false,first:null,resultReady:false,serial:tutorSerial};prepareLesson();window.scrollTo({top:0,behavior:'instant'});focusHeading();
@@ -276,7 +281,7 @@
 
   document.addEventListener('click',event=>{
     const b=event.target.closest('[data-action]');if(!b||b.disabled)return;event.preventDefault();unlockAudio();const a=b.dataset.action;
-    if(a==='setup')openSetup();else if(a==='backHome')backHome();else if(a==='kindSolo'||a==='kindFriends'){ux.kind=a==='kindSolo'?'solo':'friends';ux.error='';render();}
+    if(a==='match')startMatchmaking();else if(a==='cancelMatch')cancelMatchmaking();else if(a==='kindRandom'){ux.kind='random';ux.error='';render();}else if(a==='setup')openSetup();else if(a==='backHome')backHome();else if(a==='kindSolo'||a==='kindFriends'){ux.kind=a==='kindSolo'?'solo':'friends';ux.error='';render();}
     else if(a==='solo')startSolo();else if(a==='create')createRoom();else if(a==='joinDialog')joinDialog();
     else if(a==='menu')showMenu();else if(a==='help')showHelp();else if(a==='closeDialog')closeDialog();else if(a==='settings')settingsDialog();
     else if(a==='sound'){muted=!muted;storage.set('cloud-pick:muted',muted?'1':'0');if(!muted){unlockAudio();tone(700);}updateSoundButton();}
@@ -286,7 +291,7 @@
     else if(a==='leaveDialog')leaveDialog();else if(a==='leave')leave();else if(a==='home'){if(mode==='home')backHome();else leaveDialog();}
     else if(a==='copyCode')copy(state.code,'방 코드를 복사했어요.');else if(a==='copyLink')copyInvite();else if(a==='history')showHistory();
     else if(a==='tutorial')startTutorial();else if(a==='lessonNext')nextLesson();else if(a==='lessonTimed')startTimedLesson();else if(a==='lessonRetry')prepareLesson();
-    else if(a==='learnSolo')startSolo();else if(a==='learnFriends')openSetup('friends');else if(a==='connectionHelp')connectionHelp();
+    else if(a==='learnMatch')openSetup('random');else if(a==='learnSolo')startSolo();else if(a==='learnFriends')openSetup('friends');else if(a==='connectionHelp')connectionHelp();
     else if(a==='checkConnection'){closeDialog();initializeBackend(false).then(()=>toast(serverAvailable?'멀티플레이 서버에 연결됐어요.':'서버를 찾지 못했어요. 서버 주소에서 열었는지 확인해 주세요.'));}
   });
   document.addEventListener('submit',event=>{
@@ -302,4 +307,4 @@
   $('dialog').addEventListener('click',event=>{if(event.target===$('dialog')){const r=$('dialog').getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeDialog();}});
   canvas.addEventListener('pointermove',event=>{const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*1000,y=(event.clientY-r.top)/r.width*1000;hoverCell=view.cells.findIndex(c=>Math.pow((x-c.x)/(103*c.s),2)+Math.pow((y-c.y+12)/(64*c.s),2)<1);canvas.style.cursor=state.phase==='choose'&&!me().locked&&(mode==='tutorial'?tutorialAllowed():options()).includes(hoverCell)?'pointer':'default';});
   canvas.addEventListener('pointerleave',()=>{hoverCell=null;});
-  canvas.addEventListener('pointerdown',event=>{if(mode==='home'||state.phase==='lobby')return;const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*1000,y=(event.clientY-r.top)/r.width*1000;const cell=view.cells.findIndex(c=>Math.pow((x-c.x)/(108*c.s),2)+Math.pow((y-c.y+12)/(73*c.s),2)<1);if(cell<0)return;unlockAudio();if(state.board[cell]>0)select(cell);});
+  canvas.addEventListener('pointerdown',event=>{if(mode==='home'||mode==='queue'||state.phase==='lobby')return;const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*1000,y=(event.clientY-r.top)/r.width*1000;const cell=view.cells.findIndex(c=>Math.pow((x-c.x)/(108*c.s),2)+Math.pow((y-c.y+12)/(73*c.s),2)<1);if(cell<0)return;unlockAudio();if(state.board[cell]>0)select(cell);});

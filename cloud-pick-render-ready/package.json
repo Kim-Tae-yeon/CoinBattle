@@ -1,11 +1,11 @@
 {
-  "name": "cloud-pick-after-dark-ux",
-  "version": "3.0.0",
+  "name": "cloud-pick-random",
+  "version": "4.0.1",
   "private": true,
-  "description": "After Dark with progressive disclosure and a playable four-part tutorial",
+  "description": "After Dark with public matchmaking, private rooms, and an interactive tutorial",
   "scripts": {
     "start": "node server.mjs",
-    "test": "node --test tests/protocol.test.mjs",
+    "test": "node --test tests/*.test.mjs",
     "build": "node build.mjs"
   },
   "engines": {
