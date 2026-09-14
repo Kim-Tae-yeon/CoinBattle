@@ -1,0 +1,17 @@
+# Prepared for deployment; no Render resources have been created.
+# Review the service name against existing resources before applying this Blueprint.
+# Reference: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: cloud-pick-after-dark-ux
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: node build.mjs
+    startCommand: node server.mjs
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0

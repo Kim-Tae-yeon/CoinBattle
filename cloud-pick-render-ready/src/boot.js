@@ -1,0 +1,34 @@
+  new ResizeObserver(resize).observe($('stage'));
+  setInterval(()=>{
+    if($('dialog').open||pausedAt)return;
+    if(mode==='solo'&&localRoom&&localRoom.advance())applyState(localRoom.snapshot('you'));
+    else if(mode==='tutorial'&&tutor?.stage==='timed'&&Date.now()>=tutor.room.phaseEndsAt)tutorialResolve();
+    presentReveal();
+  },65);
+  window.addEventListener('pagehide',disconnect);
+  window.addEventListener('pageshow',event=>{if(event.persisted&&mode==='online'&&session)restoreSession();});
+  async function restoreSession(){
+    let saved;try{saved=JSON.parse(storage.get('cloud-pick:session',true));}catch{}
+    if(!saved?.token)return false;
+    try{const next=await api('/api/state',undefined,saved.token);connectSession({...saved,state:next});toast('이전 방으로 다시 연결했어요.');return true;}
+    catch{storage.remove('cloud-pick:session',true);return false;}
+  }
+  async function initializeBackend(restore=true){
+    if(location.protocol==='http:'||location.protocol==='https:'){
+      try{const health=await api('/api/health',undefined,null);serverAvailable=health.ok&&health.app==='cloud-pick';}catch{serverAvailable=false;}
+    }
+    backendChecked=true;
+    // A delayed health check must not overwrite a tutorial or practice already started.
+    if(restore&&serverAvailable&&mode==='home'&&await restoreSession())return;
+    render();
+    const invited=new URLSearchParams(location.search).get('room');
+    if(restore&&mode==='home'&&invited&&/^[A-Z2-9]{6}$/i.test(invited)){openSetup('friends');joinDialog(invited.toUpperCase());}
+  }
+  // Read-only diagnostic view. Never exposes session tokens or unseen opponent choices.
+  window.__CLOUD_DEBUG__=Object.freeze({
+    getState:()=>JSON.parse(JSON.stringify(state)),getMode:()=>mode,
+    getUX:()=>({screen:screenName(),tutorial:tutor?{step:tutor.step,stage:tutor.stage,changed:tutor.changed}:null,paused:!!pausedAt,learned:storage.get(LEARN_KEY)==='done'}),
+    getTheme:()=>({name:'AFTER DARK · VOL. 03',reducedMotion,muted,embeddedArtwork:true}),
+  });
+  render();resize();requestAnimationFrame(frame);initializeBackend();
+})();
