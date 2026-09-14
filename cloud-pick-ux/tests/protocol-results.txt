@@ -1,0 +1,71 @@
+TAP version 13
+# Subtest: After Dark: original multiplayer protocol, four real clients
+    # Subtest: same room, four humans, active SSE on every client
+    ok 1 - same room, four humans, active SSE on every client
+      ---
+      duration_ms: 25.879891
+      type: 'test'
+      ...
+    # Subtest: provisional choices stay private until reveal
+    ok 2 - provisional choices stay private until reveal
+      ---
+      duration_ms: 28.97535
+      type: 'test'
+      ...
+    # Subtest: four-way center collision is zero for all, identical over SSE
+    ok 3 - four-way center collision is zero for all, identical over SSE
+      ---
+      duration_ms: 26.194935
+      type: 'test'
+      ...
+    # Subtest: unique landings award exact values and synchronize totals
+    ok 4 - unique landings award exact values and synchronize totals
+      ---
+      duration_ms: 1.252595
+      type: 'test'
+      ...
+    # Subtest: authenticated state read and reconnection retain the same seat
+    ok 5 - authenticated state read and reconnection retain the same seat
+      ---
+      duration_ms: 4.76262
+      type: 'test'
+      ...
+    # Subtest: illegal cloud cannot be selected
+    ok 6 - illegal cloud cannot be selected
+      ---
+      duration_ms: 3.076783
+      type: 'test'
+      ...
+    # Subtest: server deadline gives all non-choosing players zero
+    ok 7 - server deadline gives all non-choosing players zero
+      ---
+      duration_ms: 5058.538263
+      type: 'test'
+      ...
+    # Subtest: whole match finishes with matching score histories
+    ok 8 - whole match finishes with matching score histories
+      ---
+      duration_ms: 4003.788188
+      type: 'test'
+      ...
+    # Subtest: host disconnect transfers authority; new host can replay
+    ok 9 - host disconnect transfers authority; new host can replay
+      ---
+      duration_ms: 53.123347
+      type: 'test'
+      ...
+    1..9
+ok 1 - After Dark: original multiplayer protocol, four real clients
+  ---
+  duration_ms: 23702.839632
+  type: 'test'
+  ...
+1..1
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 23754.26586

@@ -1,0 +1,1039 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#171a29">
+<meta name="description" content="조용한 밤, 수상한 친구들. 구름을 고르고 서로의 마음을 읽는 1–4인 심리전.">
+<title>CLOUD PICK — After Dark</title>
+<style>:root{--bg:#171a29;--panel:#252637;--deep:#1e2232;--ink:#ecdec2;--muted:#b7aabb;--line:#514657;--gold:#dfb27e;--action:#d5a06e;--green:#b1c1a1;--warn:#efb098;font-family:"Malgun Gothic","Apple SD Gothic Neo","Noto Sans CJK KR",system-ui,sans-serif;color:var(--ink);font-synthesis:none;color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:var(--bg);font-size:14px;-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button{cursor:pointer;touch-action:manipulation}button:disabled{cursor:not-allowed;opacity:.45}button,a,input,select{outline-offset:4px;-webkit-tap-highlight-color:transparent}button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #f3c99a}button{border:0}a{color:inherit;text-decoration:none}[hidden]{display:none!important}svg{display:block}h1,h2,h3,p{margin-top:0}p{line-height:1.8}button:enabled:hover{filter:brightness(1.1)}.app-shell{max-width:1340px;padding:0 44px;margin:0 auto}.topbar{display:flex;height:94px;align-items:center;justify-content:space-between;gap:18px;border-bottom:1px solid #40394b}.brand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;letter-spacing:1.7px}.brand small{display:block;font:9px ui-monospace,monospace;letter-spacing:5px;color:var(--gold);margin-top:7px}.brand-mark{width:34px;height:40px}.brand-mark svg{width:100%;height:100%}.screen-location{font-size:12px;color:var(--muted);letter-spacing:.4px}.menu-trigger{display:flex;align-items:center;gap:9px;background:none;color:var(--ink);min-height:44px;padding:8px 12px;font-size:12px;border:1px solid var(--line);border-radius:3px}.menu-trigger svg{width:20px;height:20px}.top-actions{display:flex;align-items:center;gap:12px}.connection-pill{font-size:11px;color:var(--green)}.connection-pill i{display:inline-block;width:5px;height:5px;background:currentColor;border-radius:50%;margin-right:7px}.connection-pill.reconnect{color:var(--warn)}.game-layout{display:grid;grid-template-columns:minmax(0,1fr) 318px;gap:26px;align-items:start;margin-top:32px}.play-column{min-width:0}.stage{position:relative;overflow:hidden;isolation:isolate;background:#262d47;aspect-ratio:1.4;border:1px solid #635568;border-radius:3px}#gameCanvas{display:block;width:100%;height:100%;touch-action:manipulation}.sidebar{min-width:0;display:flex;flex-direction:column;gap:18px}.page-footer{display:flex;justify-content:space-between;gap:18px;padding:30px 0;color:#ad91a1;font:9px/1.8 ui-monospace,monospace;letter-spacing:1.5px}.page-footer b{font-weight:400;margin:0 8px}.eyebrow,.panel-eyebrow{font:10px/1.6 ui-monospace,monospace;letter-spacing:2px;color:var(--gold);margin:0 0 18px}.btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:13px 18px;font-size:14px;font-weight:700;border-radius:3px;transition:background .14s}.btn-primary{background:var(--action);color:#202332;border:1px solid var(--action)}.btn-soft{background:#343040;color:var(--ink);border:1px solid #766071}.btn-line{background:transparent;color:var(--ink);border:1px solid #796577}.btn svg{width:17px;height:17px}.btn .arrow{margin-left:auto;font-size:22px;font-weight:400}.button-row{display:flex;gap:10px}.button-row>.btn{flex:1;min-width:0}.text-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:8px 4px;background:none;color:var(--gold);font-size:12px}.text-button svg{width:16px;height:16px}.back-button{display:inline-flex;align-self:flex-start;align-items:center;gap:7px;min-height:44px;background:none;color:var(--muted);padding:0 6px 0 0;font-size:12px;margin-bottom:7px}.panel{background:var(--panel);border:1px solid var(--line);padding:24px;border-radius:3px}.panel h2{font-size:23px;letter-spacing:-.7px;line-height:1.5;margin-bottom:14px}.panel-desc{font-size:13px;color:var(--muted);line-height:1.9}.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}.panel-heading h3{font-size:14px;margin:0}.pill-count{font:12px ui-monospace,monospace;color:var(--gold)}.field-label{display:block;font-size:13px;font-weight:600;margin:21px 0 9px;color:var(--ink)}.field-label small{font-size:11px;color:var(--muted);font-weight:400;margin-left:6px}.name-field{display:flex;align-items:center;gap:10px;background:var(--deep);border:1px solid #776376;border-radius:3px;padding:8px 12px;min-height:54px}.name-field:focus-within{border-color:var(--gold)}.name-field input{width:100%;min-width:0;outline:none;background:transparent;border:0;color:var(--ink);font-size:16px}.name-field input::placeholder{color:#b3a0b1}.name-field .mini-avatar{width:29px;height:35px}.edit-icon{width:15px;height:15px;color:var(--muted);flex:none}.mini-coin{display:inline-flex;width:16px;height:16px;border-radius:50%;background:#d4a15d;border:1px solid #f1c988;box-shadow:inset -2px -1px 0 #a46b4399;align-items:center;justify-content:center;flex:none;vertical-align:middle}.mini-coin:after{content:"";width:2px;height:6px;background:#775040;transform:rotate(15deg)}.mini-avatar{width:39px;height:44px;flex:none;overflow:hidden;display:grid;place-items:center;border-radius:2px}.mini-avatar svg{width:100%;height:100%}
+/* First depth: invitation, not the control room. */
+body[data-screen=home] .game-layout,body[data-screen=setup] .game-layout,body[data-screen=lobby] .game-layout{grid-template-columns:400px minmax(0,1fr);align-items:center;gap:56px;margin-top:48px}body[data-screen=home] .sidebar,body[data-screen=setup] .sidebar,body[data-screen=lobby] .sidebar{grid-column:1;grid-row:1}body[data-screen=home] .play-column,body[data-screen=setup] .play-column,body[data-screen=lobby] .play-column{grid-column:2;grid-row:1}body[data-screen=home] .stage,body[data-screen=setup] .stage,body[data-screen=lobby] .stage{aspect-ratio:1.07}body[data-screen=home] .stage{border-color:#544654;transform:rotate(.6deg);box-shadow:10px 12px 0 #202130}body[data-screen=home] .stage-top,body[data-screen=setup] .stage-top,body[data-screen=lobby] .stage-top,body[data-screen=home] .phase-banner,body[data-screen=setup] .phase-banner,body[data-screen=lobby] .phase-banner{display:none}body[data-screen=home] .choice-bar,body[data-screen=setup] .choice-bar,body[data-screen=lobby] .choice-bar,body[data-screen=home] .board-footer,body[data-screen=setup] .board-footer,body[data-screen=lobby] .board-footer{display:none}.scene-note{position:absolute;inset:auto 22px 19px;display:none;justify-content:space-between;color:#c5a28c;font:9px ui-monospace,monospace;letter-spacing:2px;pointer-events:none}body[data-screen=home] .scene-note{display:flex}.hero-kicker{display:flex;align-items:center;gap:12px}.hero-kicker:before{content:"";height:1px;width:28px;background:var(--gold)}.hero h1{font-size:clamp(35px,4.3vw,56px);line-height:1.35;letter-spacing:-2.5px;margin:22px 0}.hero h1 em{color:var(--gold);font-style:normal}.hero .premise{font-size:16px;color:#d2bdc5;line-height:1.9;margin-bottom:32px}.hero .btn-primary{min-height:58px;font-size:16px;max-width:325px;clip-path:polygon(0 2%,100% 0,99.5% 98%,.5% 100%)}.tutorial-link{margin-top:12px;color:#d8bfac;justify-content:flex-start;min-height:48px}.tutorial-link small{color:var(--muted);font-size:11px;margin-left:4px}.hero-meta{margin:27px 0 0;font-size:12px;color:var(--muted);display:flex;gap:17px}.hero-meta span+span:before{content:"·";margin-right:17px;color:#846873}.setup-panel{padding:0;border:none;background:transparent}.setup-panel h1{font-size:32px;letter-spacing:-1px;margin:10px 0 6px}.setup-panel>.panel-desc{margin-bottom:12px}.mode-picks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0 18px}.mode-card{text-align:left;background:var(--deep);border:1px solid #685569;color:var(--ink);padding:16px 14px;min-height:99px;border-radius:3px}.mode-card strong{display:flex;justify-content:space-between;align-items:center;font-size:14px;margin-bottom:9px}.mode-card small{font-size:11px;color:var(--muted)}.mode-card[aria-pressed=true]{background:#3d313b;border-color:var(--gold)}.mode-card[aria-pressed=true] strong:after{content:"✓";color:var(--gold)}.setup-meta{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:12px;margin:8px 0 11px}.setup-meta .text-button{font-size:12px}.inline-note{font-size:12px;color:var(--muted);line-height:1.8;margin:12px 0 0}.inline-note a,.inline-note button{color:var(--gold)}.server-offline{border-left:2px solid var(--gold);padding:8px 12px;font-size:12px;background:#2a2736;color:#d8bbad;margin:13px 0}.setup-secondary{width:100%;margin-top:7px}.screen-title:focus{outline:none}
+/* Lobby keeps invitation and preparation in one place. */
+body[data-screen=lobby] .game-layout{align-items:start;margin-top:28px}.lobby-top h1{font-size:29px;margin:4px 0 18px}.room-code{font:700 33px ui-monospace,monospace;letter-spacing:6px;color:#efc998;margin:5px 0 15px}.room-label{font-size:12px;color:var(--muted)}.room-share{display:flex;gap:8px}.room-share .btn{font-size:12px}.room-summary{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:8px}.player-list{display:flex;flex-direction:column;gap:8px}.player-row{display:flex;position:relative;align-items:center;gap:10px;border:1px solid #504454;padding:10px;background:#1e2231;min-width:0;border-radius:3px}.player-row.is-me{border-color:#b48561;background:#302a36}.player-meta{flex:1;min-width:0}.player-name{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700}.text-name{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;max-width:120px}.you-tag{font-size:9px;background:#bf986e;color:#202332;padding:2px 4px}.bot-tag{font-size:9px;color:var(--muted);font-weight:400}.host-crown{color:var(--gold)}.player-status{font-size:11px;color:var(--muted);margin-top:5px}.player-status.is-locked{color:var(--green)}.player-status.collision{color:var(--warn)}.player-status.gained{color:var(--gold)}.player-score{display:flex;align-items:center;gap:6px;font:700 21px ui-monospace,monospace;color:#e2c69b}.remove-bot{min-width:44px;min-height:44px;background:none;color:var(--muted);font-size:22px;margin-right:-8px}.empty-slot{min-height:48px;border:1px dashed #716074;background:none;color:var(--muted);font-size:12px}.start-match{margin-top:17px}.lobby-note{font-size:12px;text-align:center;color:var(--muted);line-height:1.8;margin:12px 0 0}.lobby-help{display:flex;justify-content:space-between}.player-row.offline{opacity:.65}
+/* Game depth: one decision, always within reach. */
+body[data-screen=play] .game-layout{display:block;max-width:970px;margin:24px auto 0}body[data-screen=play] .sidebar{display:none}.roster{display:none;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}body[data-screen=play] .roster{display:grid}.roster .player-row{padding:9px 10px;min-height:66px;gap:8px}.roster .mini-avatar{width:31px;height:39px}.roster .text-name{max-width:98px}.roster .player-score{font-size:19px}.roster .player-status{font-size:10px}.roster .mini-coin{width:11px;height:11px}.roster .mini-coin:after{height:4px}.roster .host-crown{display:none}body[data-screen=play] .stage{aspect-ratio:1.63}.stage-top{position:absolute;top:22px;left:24px;right:24px;display:flex;justify-content:space-between;align-items:start;pointer-events:none}.round-chip{display:flex;flex-direction:column;gap:7px;border-left:2px solid #ac8566;padding:5px 0 5px 12px}.round-label{font:10px ui-monospace,monospace;letter-spacing:1px;color:#cfb9bd}.round-chip strong{font-weight:500;color:#cbbecb}.round-chip em{font:700 26px ui-monospace,monospace;color:#efc992;padding-right:7px}.total-rounds{font:12px ui-monospace,monospace}.timer{position:relative;width:65px;height:65px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:var(--ink)}.timer svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}.timer circle{fill:none;stroke-width:2}.timer-track{stroke:#615263}.timer-progress{stroke:#d7a475;stroke-dasharray:175.93;stroke-linecap:round}.timer b{font:700 25px ui-monospace,monospace}.timer span{font-size:9px;margin-top:4px;color:#d4b8b3}.timer.urgent b{color:#f1b292}.timer.urgent .timer-progress{stroke:#ec9f7e}.stage-badge,.stage-caption{display:none}.phase-banner{position:absolute;left:50%;top:27px;transform:translateX(-50%);text-align:center;pointer-events:none;width:60%;color:#ead6b7}.banner-eyebrow{display:block;font:9px ui-monospace,monospace;letter-spacing:1.5px;color:#bba6b5;margin-bottom:7px}.phase-banner strong{font-size:18px;font-weight:700;letter-spacing:-.5px;line-height:1.6}.phase-banner .gain{color:#efc286}.choice-bar{background:var(--panel);border:1px solid var(--line);padding:16px 18px;margin-top:14px;border-radius:3px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;min-height:103px}.choice-intro{grid-column:1/-1;display:flex;align-items:baseline;gap:13px;min-width:0}.choice-intro strong{font-size:15px}.choice-intro small{font-size:12px;color:var(--muted);line-height:1.6}.choice-options{display:flex;gap:8px}.pick-btn{display:flex;align-items:center;gap:9px;justify-content:center;width:114px;min-height:48px;background:#202332;border:1px solid #7a6378;border-radius:3px;color:var(--ink)}.pick-btn kbd{font:12px ui-monospace,monospace;color:#c2a8b5}.pick-btn strong{font:700 17px ui-monospace,monospace}.pick-btn[aria-pressed=true]{border:2px solid var(--gold);background:#463441;color:#efc99a}.pick-btn[aria-pressed=true] kbd{color:var(--gold)}.lock-btn{min-height:48px;padding:11px 23px;background:var(--action);color:#202332;border:1px solid var(--action);border-radius:3px;font-size:14px;font-weight:700;min-width:180px}.lock-btn:disabled{background:#514554;border-color:#63576a;color:#c5b0be;opacity:1}.selected-ticket{display:flex;align-items:center;gap:9px;color:var(--gold);font-size:14px;padding:10px 0}.selected-ticket small{font-size:12px;color:var(--muted);margin-left:auto}.board-footer{display:flex;justify-content:space-between;gap:15px;color:var(--muted);font-size:11px;padding:13px 2px}.keyboard-hint{display:flex;align-items:center;gap:6px}.keyboard-hint kbd{font:10px ui-monospace,monospace;border:1px solid #605168;padding:3px 5px;border-radius:2px}.network-notice{border:1px solid #b78a64;background:#382b36;color:#efc6a8;padding:12px;font-size:13px;line-height:1.7;margin-bottom:12px}.stage[data-urgent=true]{border-color:#b88364}.result-line{grid-column:1/-1;display:flex;gap:13px;align-items:center}.result-line .delta{font:700 34px ui-monospace,monospace;color:var(--gold)}.result-line.bad .delta{color:var(--warn)}.result-line strong{font-size:16px;display:block;margin-bottom:6px}.result-line small{font-size:12px;color:var(--muted)}.waiting-note{font-size:13px;color:var(--muted);grid-column:1/-1;text-align:center;padding:8px 0}
+/* Tutorial: the page is the lesson, never a tooltip covering the action. */
+body[data-screen=tutorial] .game-layout{grid-template-columns:minmax(0,1fr) 314px;gap:30px;max-width:1180px;margin:29px auto 0;align-items:start}body[data-screen=tutorial] .stage{aspect-ratio:1.28}body[data-screen=tutorial] .board-footer{display:none}.lesson-panel{padding:24px 0;border:0;background:none}.lesson-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:19px}.lesson-meta strong{color:var(--gold);font-weight:500;letter-spacing:1px}.lesson-progress{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:0 0 29px}.lesson-progress i{height:3px;background:#534355}.lesson-progress i.done{background:#b18c67}.lesson-progress i.active{background:#ecc28d}.lesson-speaker{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--muted);margin-bottom:20px}.lesson-speaker .mini-avatar{width:32px;height:40px;transform:rotate(-4deg)}.lesson-panel h1{font-size:28px;line-height:1.5;letter-spacing:-1px;margin:0 0 17px}.lesson-panel .lesson-copy{font-size:14px;color:#d3bdc7;line-height:1.95;margin-bottom:16px;word-break:keep-all}.lesson-aside{font-size:12px;color:var(--muted);border-left:2px solid #977153;padding:2px 0 2px 12px;line-height:1.9;margin:23px 0 0}.lesson-exit{margin-top:24px;text-align:right}.lesson-next{grid-column:1/-1;display:flex;align-items:center;gap:13px}.lesson-next .btn{width:auto;margin-left:auto;min-width:165px}.lesson-next small{font-size:12px;color:var(--muted);line-height:1.7}.tutor-summary .lesson-progress{max-width:220px;margin:0 auto 30px}.tutor-summary h1{font-size:33px;letter-spacing:-1px;line-height:1.5;margin-bottom:16px}.tutor-summary p{font-size:15px;color:#c6b5c1;line-height:1.9}.completion-cast{display:flex;justify-content:center;gap:6px;margin:22px 0 27px}.completion-cast .mini-avatar{width:65px;height:84px;background:none!important}
+/* Results are a real screen, not a small box on top of the board. */
+body[data-screen=result] .game-layout{display:none}.finish-overlay{max-width:660px;margin:39px auto 0}.finish-card{background:var(--panel);border:1px solid #846452;border-top:3px solid #c39668;padding:36px 38px;text-align:center;border-radius:3px}.finish-card h1{font-size:32px;line-height:1.5;margin:16px 0 12px;letter-spacing:-1px}.finish-card>.eyebrow{margin:0 0 8px}.finish-card>.result-summary{font-size:14px;color:var(--muted);line-height:1.9;margin-bottom:24px}.finish-card .trophy{font-size:42px;line-height:1;color:var(--gold);margin-bottom:15px}.podium-line{display:flex;align-items:center;gap:13px;padding:11px 12px;text-align:left;border-bottom:1px solid #564658;background:#202333}.podium-line.is-me{background:#3b303a}.podium-line .rank{width:22px;font:14px ui-monospace,monospace;color:#b7a4b6}.podium-line .mini-avatar{width:28px;height:36px}.podium-line strong{flex:1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.podium-line .score{font:700 21px ui-monospace,monospace;color:var(--gold)}.finish-card .button-row{margin-top:24px}.wait-host{font-size:13px;color:var(--muted);margin:24px 0 0}.history-list{font-size:13px;line-height:1.8;max-height:48vh;overflow:auto}.history-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #534457}.history-item b{font:11px ui-monospace,monospace;color:var(--muted)}.history-item span{margin-left:auto;white-space:nowrap}.gain{color:var(--gold)}.fail{color:var(--warn)}
+/* Optional depth: only on request. */
+.dialog{max-width:min(480px,calc(100vw - 28px));width:480px;padding:32px;background:#272737;color:var(--ink);border:1px solid #987455;border-radius:4px;box-shadow:0 25px 100px #090c1ea0;overflow:auto;max-height:calc(100dvh - 40px)}.dialog::backdrop{background:#0e1220d9;backdrop-filter:blur(3px)}.dialog h2{font-size:25px;line-height:1.5;letter-spacing:-.7px;margin:8px 28px 15px 0}.dialog .eyebrow{margin-bottom:10px}.dialog p{font-size:13px;color:#c9b3bf;line-height:1.9}.dialog-close{position:absolute;right:8px;top:8px;width:44px;height:44px;background:none;color:var(--muted);font-size:26px}.dialog .button-row{margin-top:20px}.dialog .btn+ .btn{margin-top:10px}.dialog .button-row .btn+.btn{margin-top:0}.dialog .inline-error{color:var(--warn);font-size:12px;line-height:1.8;margin:12px 0 0}.join-code{border:1px solid #a08072;background:#1d2232;padding:15px;text-transform:uppercase;text-align:center;font:700 28px ui-monospace,monospace;letter-spacing:6px;color:#edc89c;width:100%;margin:6px 0 16px;border-radius:3px}.join-code::placeholder{color:#a98a9c}.menu-list{display:flex;flex-direction:column;gap:0}.menu-item{display:flex;justify-content:space-between;align-items:center;gap:16px;width:100%;background:none;border-bottom:1px solid #544655;color:var(--ink);min-height:55px;padding:13px 0;text-align:left;font-size:14px}.menu-item span{font-size:12px;color:var(--gold)}.menu-item.danger{color:var(--warn);margin-top:12px;border-bottom:0}.menu-status{background:#202332;padding:11px 13px;font-size:12px!important;border-left:2px solid #a68061;margin:18px 0 0}.menu-status small{font-size:11px;color:var(--muted)}.help-rule{border-bottom:1px solid #574758;padding:0}.help-rule summary{padding:16px 0;min-height:50px;cursor:pointer;font-size:14px;color:var(--ink);line-height:1.7}.help-rule p{margin:0 0 18px;font-size:13px}.help-primary{font-size:16px!important;line-height:1.9!important;color:var(--ink)!important;border-left:2px solid var(--gold);padding-left:14px;margin:20px 0}.config-fields{display:flex;gap:14px;margin-top:20px}.config-fields label{flex:1;font-size:13px;min-width:0}.config-fields select{display:block;width:100%;border:1px solid #8b6f7d;border-radius:3px;margin-top:8px;background:#1e2333;color:var(--ink);min-height:45px;padding:9px;font-size:14px}.check-label{display:flex;align-items:center;gap:10px;font-size:13px;line-height:1.7;min-height:46px;margin-top:16px}.check-label input{width:20px;height:20px;accent-color:var(--action)}.settings-actions{margin-top:25px}.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,12px);background:#e1cfad;color:#272739;padding:13px 20px;max-width:min(92vw,560px);border:1px solid #997c63;border-radius:3px;font-size:13px;z-index:100;box-shadow:0 10px 30px #080b2055;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;text-align:center;line-height:1.7}.toast.show{opacity:1;transform:translate(-50%,0)}.sr-only{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.skip-link{position:fixed;left:16px;top:-100px;padding:12px 20px;background:var(--gold);color:var(--bg);z-index:999}.skip-link:focus{top:12px}#main:focus{outline:none}#choiceBar:focus{outline:none}
+@media(min-width:1200px){body[data-screen=play] .choice-bar{grid-template-columns:minmax(0,1fr) auto auto;gap:20px}.choice-intro{display:block}.choice-intro strong,.choice-intro small{display:block}.choice-intro small{margin-top:6px}body[data-screen=play] .choice-intro{grid-column:auto}body[data-screen=play] .choice-bar{min-height:93px}.selected-ticket{grid-column:2}.lock-btn{min-width:160px}.pick-btn{width:90px}}
+@media(max-width:1100px){.app-shell{padding:0 27px}.game-layout{gap:22px}body[data-screen=home] .game-layout,body[data-screen=setup] .game-layout,body[data-screen=lobby] .game-layout{grid-template-columns:350px minmax(0,1fr);gap:30px}.hero h1{font-size:43px}.hero .premise{font-size:14px}body[data-screen=tutorial] .game-layout{grid-template-columns:minmax(0,1fr) 278px;gap:24px}.lesson-panel h1{font-size:25px}.lesson-panel .lesson-copy{font-size:13px}.pick-btn{width:88px}.lock-btn{min-width:150px;padding:12px 16px}.phase-banner strong{font-size:16px}body[data-screen=play] .stage{aspect-ratio:1.5}.text-name{max-width:90px}.roster .mini-avatar{width:26px}.roster .player-row{padding:9px 7px}.roster .player-name{font-size:11px}.roster .player-score{font-size:18px}}
+@media(max-width:780px){.app-shell{padding:0 18px}.topbar{height:74px}.brand{font-size:17px;gap:8px;letter-spacing:1px}.brand small{font-size:8px;letter-spacing:3px;margin-top:6px}.brand-mark{width:28px;height:32px}.screen-location{display:none}.menu-trigger{padding:7px 9px;min-height:44px;font-size:11px}.menu-trigger svg{width:18px}.connection-pill{display:none}.game-layout{display:flex;flex-direction:column;gap:16px}.game-layout .sidebar,.game-layout .play-column{width:100%}body[data-screen=home] .game-layout,body[data-screen=setup] .game-layout,body[data-screen=lobby] .game-layout{display:flex;gap:26px;margin-top:23px}body[data-screen=home] .sidebar,body[data-screen=setup] .sidebar,body[data-screen=lobby] .sidebar{order:-1}.hero{text-align:left;max-width:540px;margin:auto}.hero .eyebrow{font-size:9px;margin-bottom:14px}.hero h1{font-size:38px;line-height:1.3;letter-spacing:-1.6px;margin:13px 0 17px}.hero .premise{font-size:14px;line-height:1.85;margin-bottom:21px}.hero .btn-primary{max-width:none;min-height:53px;font-size:15px}.hero-meta{font-size:11px;margin-top:8px;gap:12px}.tutorial-link{margin-top:6px;min-height:46px}.hero-meta span+span:before{margin-right:12px}body[data-screen=home] .stage{aspect-ratio:1.3;transform:none;box-shadow:5px 6px 0 #202130}body[data-screen=setup] .play-column,body[data-screen=lobby] .play-column{display:none}.setup-panel{max-width:490px;width:100%;margin:auto}.setup-panel h1{font-size:29px}.field-label{margin-top:20px}.panel-desc{font-size:13px}.mode-picks{margin:20px 0 17px}.mode-card{min-height:94px}.page-footer{padding:25px 0;font-size:7px;letter-spacing:.8px;gap:15px}.page-footer>span:first-child{max-width:65%}.page-footer>span:last-child{white-space:nowrap}.stage-top{left:15px;right:15px;top:16px}.round-chip{padding-left:9px;gap:6px}.round-label{font-size:9px}.round-chip em{font-size:22px}.total-rounds{font-size:10px}.timer{width:56px;height:56px}.timer b{font-size:23px}.timer span{font-size:8px}.phase-banner{top:88px;width:85%}.phase-banner strong{font-size:15px}.banner-eyebrow{font-size:8px;margin-bottom:6px}body[data-screen=play] .game-layout{margin-top:17px}body[data-screen=play] .stage{aspect-ratio:1.08}.roster{gap:5px;margin-bottom:12px}.roster .player-row{display:grid;grid-template-columns:1fr auto;gap:5px;padding:8px 7px;min-height:70px;align-content:center}.roster .mini-avatar{display:none}.roster .player-meta{display:contents}.roster .player-name{grid-column:1/-1;font-size:11px;gap:4px}.roster .player-status{font-size:9px;margin:0;grid-row:2;grid-column:1;white-space:nowrap}.roster .player-score{font-size:15px;grid-row:2;grid-column:2;gap:0}.roster .player-score .mini-coin{display:none}.roster .text-name{max-width:70px}.roster .you-tag,.roster .bot-tag{display:none}.roster .player-row.is-me .text-name:before{content:"나 · ";color:var(--gold)}.choice-bar{padding:13px 12px;gap:11px;margin-top:12px;grid-template-columns:minmax(0,1fr) auto;min-height:115px}.choice-intro{display:block}.choice-intro strong{font-size:14px;display:block}.choice-intro small{font-size:11px;display:block;margin-top:5px;line-height:1.6}.choice-options{gap:6px;min-width:0}.pick-btn{width:0;flex:1;min-width:0;min-height:48px;gap:5px}.pick-btn strong{font-size:15px}.pick-btn kbd{font-size:10px}.pick-btn .mini-coin{width:12px;height:12px}.lock-btn{min-width:106px;font-size:12px;padding:11px 12px}.board-footer{font-size:10px;padding:11px 0}.keyboard-hint{display:none}.selected-ticket{font-size:12px;flex-wrap:wrap}.selected-ticket small{font-size:10px;margin-left:0}.result-line .delta{font-size:29px}.result-line strong{font-size:15px}.result-line small{font-size:11px;line-height:1.8}.lobby-top h1{font-size:27px}.lobby-top .eyebrow{margin-bottom:9px}.lobby-top .panel{padding:19px}.room-code{font-size:31px;letter-spacing:6px}.sidebar .player-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}.sidebar .player-row{padding:9px 7px;gap:7px}.sidebar .player-row .mini-avatar{width:28px;height:38px}.sidebar .player-name{font-size:11px;gap:4px}.sidebar .player-row .text-name{max-width:80px}.sidebar .player-status{font-size:10px}.sidebar .host-crown{display:none}.sidebar .player-score{font-size:16px;gap:4px}.sidebar .remove-bot{min-width:24px;width:24px;min-height:44px;padding:0;font-size:19px}.sidebar .bot-tag{display:none}.empty-slot{font-size:11px;min-height:61px}.lobby-help .text-button{font-size:12px}body[data-screen=tutorial] .game-layout{display:flex;gap:12px;margin-top:16px}body[data-screen=tutorial] .sidebar{order:-1}body[data-screen=tutorial] .stage{aspect-ratio:1.14}.lesson-panel{padding:0}.lesson-meta{margin-bottom:9px;font-size:10px}.lesson-progress{margin-bottom:14px}.lesson-speaker{display:none}.lesson-panel h1{font-size:22px;letter-spacing:-.7px;margin-bottom:8px;line-height:1.4}.lesson-panel .lesson-copy{font-size:13px;line-height:1.8;margin:0;min-height:45px}.lesson-aside{display:none}.lesson-exit{position:absolute;right:18px;top:88px;margin:0}.lesson-exit .text-button{font-size:10px;min-height:30px;padding:3px 5px}.lesson-meta{padding-right:94px}.lesson-next{gap:8px}.lesson-next .btn{min-width:140px;font-size:13px;width:auto;padding:12px}.lesson-next small{font-size:11px}.finish-overlay{margin:24px auto 0}.finish-card{padding:28px 19px}.finish-card h1{font-size:26px}.finish-card .trophy{font-size:34px}.finish-card>.result-summary{font-size:13px;line-height:1.9}.podium-line{padding:10px 7px;gap:10px}.podium-line strong{font-size:12px}.finish-card .button-row .btn{font-size:13px;padding:12px 8px}.tutor-summary h1{font-size:26px}.tutor-summary p{font-size:13px}.completion-cast .mini-avatar{width:54px;height:73px}.dialog{padding:29px 22px;max-height:calc(100dvh - 28px)}.dialog h2{font-size:23px}.network-notice{font-size:12px}.toast{font-size:12px}}
+@media(max-width:370px){.app-shell{padding:0 12px}.hero h1{font-size:33px}.brand{font-size:15px}.brand small{font-size:7px}.lesson-panel h1{font-size:20px}.lesson-panel .lesson-copy{font-size:12px}.roster .player-row{padding:8px 5px}.roster .player-name{font-size:10px}.roster .text-name{max-width:57px}.roster .player-status{font-size:8px}.roster .player-score{font-size:14px}.lock-btn{min-width:96px;padding:10px 8px;font-size:11px}.choice-bar{padding:12px 10px;gap:9px}.pick-btn{gap:3px}.pick-btn .mini-coin{width:10px;height:10px}.pick-btn strong{font-size:14px}.choice-intro small{font-size:10px}.lesson-exit{right:12px}.lesson-next .btn{min-width:121px;font-size:12px}.lesson-next small{font-size:10px}.setup-meta{font-size:11px}}
+.matchmaking-note{text-align:center;margin:9px 0 14px}.friend-divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11px;margin:18px 0 12px}.friend-divider:before,.friend-divider:after{content:"";height:1px;background:var(--line);flex:1}.matchmaking-wait{text-align:center;padding:24px 0}.matchmaking-wait h1{font-size:32px;line-height:1.45;margin:18px 0 10px}.matchmaking-wait>p{color:var(--muted);font-size:13px}.matchmaking-orbit{position:relative;width:150px;height:82px;margin:18px auto 8px;display:flex;align-items:center;justify-content:space-between}.matchmaking-orbit .mini-avatar{width:56px;height:68px}.matchmaking-orbit>span{display:grid;place-items:center;width:56px;height:68px;background:var(--deep);border:1px dashed var(--gold);font:700 25px ui-monospace;color:var(--gold)}.matchmaking-orbit>i{position:absolute;left:68px;width:14px;height:14px;border:2px solid var(--gold);border-right-color:transparent;border-radius:50%;animation:matchspin .8s linear infinite}@keyframes matchspin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}body.reduce-motion *,body.reduce-motion *:before,body.reduce-motion *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+</style>
+</head>
+<body data-screen="home">
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
+<div class="app-shell">
+<header class="topbar">
+ <a class="brand" href="#" data-action="home" aria-label="Cloud Pick 처음으로">
+  <span class="brand-mark"><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M30 5A17 17 0 1 0 35 34A18 18 0 0 1 30 5" fill="#dab583"/><path d="M34 6 35 10 39 11 35 12 34 16 33 12 29 11 33 10Z" fill="#dab583"/></svg></span>
+  <span>CLOUD PICK<small>AFTER DARK</small></span>
+ </a>
+ <div id="screenLocation" class="screen-location">작은 마을의 큰 심리전</div>
+ <nav class="top-actions" aria-label="게임 메뉴"><span id="connectionPill" class="connection-pill" hidden></span><button class="menu-trigger" data-action="menu" aria-label="메뉴 열기" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>메뉴</span></button></nav>
+</header>
+<main id="main" tabindex="-1">
+<div class="game-layout">
+ <section class="play-column" aria-label="구름 게임 보드">
+  <div id="roster" class="roster" aria-label="플레이어 점수와 확정 상태"></div>
+  <div id="networkNotice" class="network-notice" role="status" hidden></div>
+  <div class="stage" id="stage">
+   <canvas id="gameCanvas" role="img" aria-label="3 × 3 구름 보드. 번호가 표시된 세 구름을 고를 수 있습니다. 아래 버튼 또는 숫자 키로도 조작할 수 있습니다."></canvas>
+   <div class="stage-top">
+    <div class="round-chip" id="roundChip"></div>
+    <div class="timer" id="timer" role="timer" aria-live="off"><svg viewBox="0 0 64 64" aria-hidden="true"><circle class="timer-track" cx="32" cy="32" r="28"/><circle class="timer-progress" id="timerProgress" cx="32" cy="32" r="28"/></svg><b id="timerValue">☾</b><span id="timerLabel">연습</span></div>
+    <div class="stage-badge" id="stageBadge"></div>
+   </div>
+   <div class="phase-banner" id="phaseBanner" aria-live="polite"></div>
+   <div class="stage-caption" id="stageCaption"></div>
+   <div class="scene-note" aria-hidden="true"><span>WICKER HOLLOW</span><span>11:47 PM</span></div>
+  </div>
+  <div class="choice-bar" id="choiceBar" tabindex="-1"></div>
+  <div class="board-footer"><span>내 선택은 공개 전까지 비밀.</span><span class="keyboard-hint"><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> 선택 <span>·</span> <kbd>Enter</kbd> 확정</span></div>
+ </section>
+ <aside class="sidebar" id="sidebar" aria-label="현재 단계 안내"></aside>
+</div>
+<section class="finish-overlay" id="finishOverlay" aria-label="게임 결과" hidden></section>
+<footer class="page-footer"><span>THE WOODS ARE QUIET. YOUR FRIENDS AREN’T.</span><span>VOL. 03 <b> / </b> AFTER DARK</span></footer>
+</main>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="srStatus" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+<dialog id="dialog" class="dialog" aria-labelledby="dialogTitle"><button class="dialog-close" data-action="closeDialog" aria-label="닫기">×</button><div id="dialogBody"></div></dialog>
+<script>/* Cloud Pick — shared, dependency-free game rules. Used by server and offline play. */
+(function (root) {
+  'use strict';
+  const HOMES = [7, 3, 1, 5];
+  const TARGETS = [[6, 4, 8], [0, 4, 6], [0, 4, 2], [2, 4, 8]];
+  const COLORS = ['#fa9775', '#63c6b2', '#af99e8', '#efc35b'];
+  const BOT_NAMES = ['피치', '모모', '루루', '콩이'];
+  const DEFAULTS = { rounds: 5, seconds: 10, fillBots: true };
+  const fail = (message) => { throw new Error(message); };
+  const clampConfig = (config = {}) => ({
+    rounds: [3, 5, 8, 10].includes(Number(config.rounds)) ? Number(config.rounds) : 5,
+    seconds: [5, 10, 15, 20].includes(Number(config.seconds)) ? Number(config.seconds) : 10,
+    fillBots: config.fillBots !== false,
+  });
+  function shuffle(array, rng) {
+    const a = array.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1)); [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function makeBoard(rng = Math.random) {
+    const edges = shuffle([1, 1, 2, 2], rng);
+    return [edges[0], 0, edges[1], 0, 3, 0, edges[2], 0, edges[3]];
+  }
+  /* Bots only receive public information. Never pass human selections here. */
+  function botChoice(slot, board, history, rng = Math.random) {
+    const options = TARGETS[slot];
+    const greed = [1.0, .65, 1.3, .85][slot];
+    const weights = options.map(cell => {
+      const recent = history.slice(-2).flatMap(r => r.results).filter(r => r.cell === cell).length;
+      return Math.max(.2, Math.pow(board[cell], greed) / (1 + recent * .42));
+    });
+    let roll = rng() * weights.reduce((a, b) => a + b, 0);
+    for (let i = 0; i < options.length; i++) { roll -= weights[i]; if (roll <= 0) return options[i]; }
+    return options[options.length - 1];
+  }
+  class Room {
+    constructor(code, config = {}, options = {}) {
+      this.code = code;
+      this.config = clampConfig(config);
+      this.rng = options.rng || Math.random;
+      this.timings = { countdown: 2500, between: 1800, reveal: 4000, ...options.timings };
+      this.players = [];
+      this.hostId = null;
+      this.phase = 'lobby';
+      this.round = 0;
+      this.matchId = 0;
+      this.board = makeBoard(this.rng);
+      this.phaseEndsAt = 0;
+      this.phaseStartedAt = 0;
+      this.results = [];
+      this.history = [];
+      this.createdAt = Date.now();
+      this.touchedAt = Date.now();
+      this.revision = 0;
+    }
+    touch(now = Date.now()) { this.touchedAt = now; this.revision++; }
+    player(id) { return this.players.find(p => p.id === id); }
+    assertHost(id) { if (id !== this.hostId) fail('방장만 할 수 있어요.'); }
+    addHuman(id, name, now = Date.now()) {
+      if (this.phase !== 'lobby') fail('이미 게임이 시작됐어요. 다음 판에 참가해 주세요.');
+      if (this.players.some(p => p.id === id)) fail('이미 참가한 플레이어예요.');
+      if (this.players.length >= 4) {
+        const bot = this.players.find(p => p.bot);
+        if (bot) this.players = this.players.filter(p => p !== bot);
+        else fail('방이 가득 찼어요. 최대 4명까지 참가할 수 있어요.');
+      }
+      const slot = [0, 1, 2, 3].find(s => !this.players.some(p => p.slot === s));
+      const player = { id, name: String(name || '플레이어').replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, 12) || '플레이어', slot, bot: false, connected: true, departed: false, score: 0, selected: null, locked: false, botAt: 0 };
+      this.players.push(player);
+      this.players.sort((a, b) => a.slot - b.slot);
+      if (!this.hostId) this.hostId = id;
+      this.touch(now);
+      return player;
+    }
+    addBot(hostId, now = Date.now()) {
+      this.assertHost(hostId);
+      if (this.phase !== 'lobby') fail('대기실에서만 봇을 추가할 수 있어요.');
+      if (this.players.length >= 4) fail('빈자리가 없어요.');
+      const slot = [0, 1, 2, 3].find(s => !this.players.some(p => p.slot === s));
+      this.players.push({ id: `bot-${slot}`, name: BOT_NAMES[slot], slot, bot: true, connected: true, departed: false, score: 0, selected: null, locked: false, botAt: 0 });
+      this.players.sort((a, b) => a.slot - b.slot);
+      this.touch(now);
+    }
+    removeBot(hostId, botId, now = Date.now()) {
+      this.assertHost(hostId);
+      if (this.phase !== 'lobby') fail('대기실에서만 봇을 뺄 수 있어요.');
+      this.players = this.players.filter(p => !(p.bot && p.id === botId)); this.touch(now);
+    }
+    configure(hostId, config, now = Date.now()) {
+      this.assertHost(hostId);
+      if (this.phase !== 'lobby') fail('대기실에서만 규칙을 바꿀 수 있어요.');
+      this.config = clampConfig({ ...this.config, ...config }); this.touch(now);
+    }
+    setConnected(id, connected, now = Date.now()) {
+      const p = this.player(id); if (!p || p.bot) return;
+      p.connected = connected;
+      if (connected && (!this.hostId || !this.player(this.hostId)?.connected)) this.hostId = id;
+      if (!connected && this.hostId === id) {
+        const next = this.players.find(x => !x.bot && x.connected && !x.departed && x.id !== id);
+        if (next) this.hostId = next.id;
+      }
+      this.touch(now);
+    }
+    leave(id, now = Date.now()) {
+      const p = this.player(id); if (!p) return;
+      p.connected = false; p.departed = true; p.selected = null;
+      if (this.phase === 'choose') p.locked = true;
+      if (this.phase === 'lobby' || this.phase === 'finished') this.players = this.players.filter(x => x.id !== id);
+      if (this.hostId === id) this.hostId = this.players.find(x => !x.bot && x.connected && !x.departed)?.id || null;
+      this.touch(now);
+    }
+    start(hostId, now = Date.now()) {
+      this.assertHost(hostId);
+      if (!['lobby', 'finished'].includes(this.phase)) fail('진행 중인 게임이 있어요.');
+      this.players = this.players.filter(p => !p.departed && (p.bot || p.connected));
+      if (this.config.fillBots) {
+        this.phase = 'lobby';
+        while (this.players.length < 4) this.addBot(hostId, now);
+      }
+      if (this.players.length < 2) fail('2명 이상 필요해요. 봇을 추가하거나 친구를 초대해 주세요.');
+      this.players.forEach(p => { p.score = 0; p.selected = null; p.locked = false; });
+      this.round = 0; this.matchId++; this.results = []; this.history = [];
+      this.nextRound(now, true);
+    }
+    nextRound(now, first = false) {
+      this.round++; this.board = makeBoard(this.rng); this.results = [];
+      this.players.forEach(p => { p.selected = null; p.locked = false; });
+      this.phase = 'countdown'; this.phaseStartedAt = now;
+      this.phaseEndsAt = now + (first ? this.timings.countdown : this.timings.between);
+      this.touch(now);
+    }
+    beginChoice(now) {
+      this.phase = 'choose'; this.phaseStartedAt = now;
+      this.phaseEndsAt = now + this.config.seconds * 1000;
+      this.players.forEach(p => {
+        p.botAt = now + 700 + this.rng() * (this.config.seconds * 650 - 700);
+        if (p.departed) p.locked = true;
+      });
+      this.touch(now);
+    }
+    select(id, cell, round, matchId, lock = false, now = Date.now()) {
+      if (this.phase !== 'choose' || now >= this.phaseEndsAt) fail('선택 시간이 끝났어요.');
+      if (round !== this.round || matchId !== this.matchId) fail('이전 라운드의 선택은 적용할 수 없어요.');
+      const p = this.player(id);
+      if (!p || p.bot || p.departed) fail('참가 정보를 찾을 수 없어요.');
+      if (p.locked) fail('이미 확정했어요. 다음 라운드를 기다려 주세요.');
+      if (!Number.isInteger(cell) || !TARGETS[p.slot].includes(cell)) fail('내 캐릭터 옆의 구름 3개 중에서 골라 주세요.');
+      p.selected = cell;
+      if (lock) p.locked = true;
+      this.touch(now);
+      if (lock && this.players.every(p => p.locked)) this.resolve(now);
+    }
+    resolve(now) {
+      if (this.phase !== 'choose') return;
+      const count = {};
+      this.players.forEach(p => { if (p.selected !== null) count[p.selected] = (count[p.selected] || 0) + 1; });
+      this.results = this.players.map(p => {
+        const missed = p.selected === null;
+        const collision = !missed && count[p.selected] > 1;
+        const gain = !missed && !collision ? this.board[p.selected] : 0;
+        p.score += gain;
+        const r = { id: p.id, slot: p.slot, cell: p.selected, gain, collision, missed, automatic: !p.locked };
+        p.locked = true;
+        return r;
+      });
+      this.history.push({ round: this.round, board: this.board.slice(), results: this.results.map(r => ({ ...r })) });
+      this.phase = 'reveal'; this.phaseStartedAt = now; this.phaseEndsAt = now + this.timings.reveal;
+      this.touch(now);
+    }
+    advance(now = Date.now()) {
+      const before = this.revision;
+      if (this.phase === 'countdown' && now >= this.phaseEndsAt) this.beginChoice(now);
+      else if (this.phase === 'choose') {
+        // Apply the deadline before processing bots that woke up too late.
+        if (now >= this.phaseEndsAt) this.resolve(now);
+        else {
+          this.players.filter(p => p.bot && !p.locked && now >= p.botAt).forEach(p => {
+            p.selected = botChoice(p.slot, this.board, this.history, this.rng);
+            p.locked = true; this.touch(now);
+          });
+          if (this.players.every(p => p.locked)) this.resolve(now);
+        }
+      } else if (this.phase === 'reveal' && now >= this.phaseEndsAt) {
+        if (this.round >= this.config.rounds) {
+          this.phase = 'finished'; this.phaseStartedAt = now; this.phaseEndsAt = 0; this.touch(now);
+        } else this.nextRound(now);
+      }
+      return this.revision !== before;
+    }
+    returnToLobby(hostId, now = Date.now()) {
+      this.assertHost(hostId);
+      if (this.phase !== 'finished') fail('게임이 끝난 뒤 대기실로 돌아갈 수 있어요.');
+      this.players = this.players.filter(p => !p.departed && (p.bot || p.connected));
+      this.players.forEach(p => { p.score = 0; p.selected = null; p.locked = false; });
+      this.phase = 'lobby'; this.round = 0; this.results = []; this.history = [];
+      this.phaseEndsAt = 0; this.board = makeBoard(this.rng); this.touch(now);
+    }
+    snapshot(viewerId, now = Date.now()) {
+      const reveal = this.phase === 'reveal' || this.phase === 'finished';
+      return {
+        code: this.code, hostId: this.hostId, config: { ...this.config }, phase: this.phase,
+        round: this.round, matchId: this.matchId, board: this.board.slice(),
+        phaseStartedAt: this.phaseStartedAt, phaseEndsAt: this.phaseEndsAt, serverNow: now,
+        revision: this.revision, yourId: viewerId,
+        players: this.players.map(p => ({ id: p.id, name: p.name, slot: p.slot, bot: p.bot,
+          connected: p.connected, departed: p.departed, score: p.score, locked: p.locked,
+          // A locked player reveals only readiness, NEVER their destination.
+          selected: p.id === viewerId || reveal ? p.selected : null,
+        })),
+        results: reveal ? this.results.map(r => ({ ...r })) : [],
+        history: this.history.map(h => ({ round: h.round, board: h.board.slice(), results: h.results.map(r => ({ ...r })) })),
+      };
+    }
+  }
+  root.CloudGame = { Room, HOMES, TARGETS, COLORS, BOT_NAMES, DEFAULTS, makeBoard, botChoice, clampConfig };
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script>
+<script>(() => {
+  'use strict';
+  const G = window.CloudGame;
+  const $ = id => document.getElementById(id);
+  const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const storage = {
+    get(key, session = false) { try { return (session ? sessionStorage : localStorage).getItem(key); } catch { return null; } },
+    set(key, value, session = false) { try { (session ? sessionStorage : localStorage).setItem(key, value); } catch {} },
+    remove(key, session = false) { try { (session ? sessionStorage : localStorage).removeItem(key); } catch {} },
+  };
+  const icons = {
+    sound: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></svg>',
+    muted: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6m0-6-5 6"/></svg>',
+    plus: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg>',
+    link: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m8 12 4-4M6 10l-2 2a3 3 0 0 0 4 4l3-3m-2-6 3-3a3 3 0 0 1 4 4l-2 2"/></svg>',
+    copy: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="7" y="7" width="9" height="10" rx="2"/><path d="M12 7V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>',
+    edit: '<svg class="edit-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m12 4 4 4-8 8H4v-4zM11 5l4 4"/></svg>',
+  };
+  const coin = '<span class="mini-coin" aria-hidden="true"></span>';
+  let name = storage.get('cloud-pick:name') || '';
+  let config = { ...G.DEFAULTS };
+  let mode = 'home', state = null, localRoom = null, stream = null, session = null;
+  let serverAvailable = false, backendChecked = false, connection = 'home';
+  let clockOffset = 0, optimisticCell = null, actionQueue = Promise.resolve(), busy = false;
+  let lastFramePhase = '', toastTimer = 0, audio = null, muted = storage.get('cloud-pick:muted') === '1';
+  let reducedMotion = storage.get('cloud-pick:motion') !== null ? storage.get('cloud-pick:motion') === 'reduced' : matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let view = { width: 1000, height: 680, cells: [] }, hoverCell = null;
+  const canvas = $('gameCanvas'), ctx = canvas.getContext('2d');
+  let lastBeep = 0, soundRound = '', particles = [];
+  const demo = new G.Room('DEMO');
+  demo.addHuman('demo-you', '나');
+  while (demo.players.length < 4) demo.addBot('demo-you');
+  const demoState = demo.snapshot('demo-you'); demoState.phase = 'home';
+  state = demoState;
+
+  // Original, reusable vector puppets. Same paths paint the board and SVG portraits.
+  const NIGHT = { paper: '#edddbb', gold: '#ddb16b', rust: '#c17a55', ink: '#161d2c', leaf: '#a5654c' };
+  const NIGHT_TIMING = Object.freeze({ anticipation: .34, jump: .66, land: 1.0 });
+  const animalCache = new Map();
+  const ovalPath = (x,y,rx,ry) => `M${x-rx},${y}a${rx},${ry} 0 1,0 ${rx*2},0a${rx},${ry} 0 1,0 ${-rx*2},0`;
+  function animalLayers(slot, expression='idle', blink=false) {
+    const key = `${slot}:${expression}:${blink}`;
+    if (animalCache.has(key)) return animalCache.get(key);
+    const fur = ['#547589','#b7a98d','#847683','#b79268'][slot];
+    const shade = ['#3f5b74','#897a73','#645a73','#8e6a59'][slot];
+    const shirt = ['#ae6151','#45666c','#97724f','#74806b'][slot];
+    const a = [], add = (d,fill,stroke='',width=1) => a.push({d,fill,stroke,width,path:new Path2D(d)});
+    const happy=expression==='happy', sad=expression==='sad';
+    // Skinny legs, heavy little boots, and angular coats replace round mascot bodies.
+    if(slot===0) add('M15-24Q53-13 50-47L46-65 34-62Q48-31 19-34Z',shade);
+    if(slot===1) add('M15-27Q71-3 48-48Q43-56 40-49Q54-16 19-36Z','#af7c6d');
+    if(slot===2) add('M-13-32L-18-4 0-12 17-3 15-31Z',shade);
+    if(slot===3) {add('M18-23Q58-13 47-48L35-59 28-54Q45-28 17-33Z',shade);add('M34-47L44-50 49-40 39-35Z','#323443');}
+    add('M-16-25L-12-3-6-3-5-24Z',NIGHT.ink);add('M5-24L8-3 14-3 17-27Z',NIGHT.ink);
+    add('M-14-5L-4-5-3 1-21 1-21-2Z','#252537');add('M8-5L15-5 23-1 23 2 7 2Z','#252537');
+    add('M-18-76L19-74 25-20 12-14-23-19Z',shirt);
+    add('M3-72L4-17 17-16 25-20 20-73Z','#1b223225');
+    add(happy?'M-16-65L-31-83-37-77-24-45-15-51Z':'M-16-69L-32-41-31-25-24-24-21-40-10-55Z',shirt);
+    add(happy?'M18-65L30-84 38-78 27-46 14-50Z':'M17-67L32-46 33-27 26-25 23-42 11-52Z',shirt);
+    add(happy?'M-38-83L-33-88-27-82-33-74Z':'M-32-29L-24-29-23-21-31-19Z',fur);
+    add(happy?'M28-82L33-89 39-84 38-76Z':'M26-30L33-30 35-22 29-20Z',fur);
+    if(slot===0){
+      add('M-40-96L-37-142-17-127Q1-136 19-126L39-143 39-92 27-72-8-70-37-80Z',fur);
+      add('M-33-132L-30-112-19-124Z','#30465f');add('M31-132L21-122 32-112Z','#30465f');
+      add('M8-128L21-123 36-128 39-92 27-72 6-72 12-97Z',shade);
+      add('M-31-84L-16-88-2-81 18-88 31-85 22-70-11-69Z','#73888d');
+      add('M-14-60L4-61 12-54 0-49Z','#e0b17b');add('M-3-59L3-56-2-52-7-54Z',shirt);
+      add('M-17-23L18-21 19-16-22-18Z','#744951');
+    }else if(slot===1){
+      add(ovalPath(-36,-114,14,16),shade);add(ovalPath(35,-116,14,16),shade);
+      add(ovalPath(-37,-115,8,10),'#b47977');add(ovalPath(36,-117,8,10),'#b47977');
+      add('M-39-111Q-33-131-10-130L25-125 39-108 28-86 5-69-23-78-42-97Z',fur);
+      add('M7-127L31-121 39-108 28-86 5-69-2-78 15-101Z','#a08e81');
+      add('M-30-91L-2-91 23-95 9-71-10-72Z','#d3c1a0');
+      add('M-24-76L23-76 22-66-20-63Z','#af7254');add('M7-70L19-70 16-39 7-43Z','#c18a59');
+      add('M-11-49L-7-38 5-37 9-45 4-48-3-42Z','#d8c59b');
+    }else if(slot===2){
+      add('M-40-96L-40-132-19-125Q0-132 17-125L42-133 39-94 23-73-19-73Z',fur);
+      add('M-36-115Q-22-126-4-111L-1-86-22-83-38-99Z','#c1b399');
+      add('M2-111Q23-127 37-114L38-98 23-83 2-86Z','#a99f95');
+      add('M-12-78L-1-68 10-79 12-59-12-59Z','#bba591');
+      add('M-4-58L2-58 3-22-3-23Z','#594756');
+      add('M-15-37L-8-38-8-30-16-29Z','#b89666');
+    }else{
+      add(ovalPath(-33,-120,13,13),fur);add(ovalPath(33,-121,13,13),fur);
+      add(ovalPath(-34,-121,7,7),'#5e4b53');add(ovalPath(34,-122,7,7),'#5e4b53');
+      add('M-40-107Q-42-128-16-130L24-125Q45-123 39-99L29-77 2-71-24-76-39-93Z',fur);
+      add('M-20-126L-5-130 10-125 25-75 5-70-6-74Z','#d4c0a0');
+      add('M-39-115L-25-122-11-76-25-78-38-94Z','#303442');
+      add('M17-128L30-123 38-110 37-92 26-77 15-79 20-100Z','#333646');
+      add('M-16-69L14-69 17-58-13-60Z','#566666');
+      add('M-11-47L-8-52 0-46-2-37-8-36Z','#d5b17b');
+      add('M-18-29L18-29 19-26-20-26Z','#a3aa8d');
+    }
+    const eyeY=slot===1?-102:slot===2?-103:-101, eyeColor=slot===2?'#dcac60':'#e5c995';
+    if(sad){
+      [-18,18].forEach(x=>add(`M${x-6} ${eyeY+1}L${x+5} ${eyeY-2}M${x-2} ${eyeY}L${x+4} ${eyeY+4}`,'none',eyeColor,2.6));
+    }else if(happy||blink){
+      [-18,18].forEach(x=>add(happy?`M${x-7} ${eyeY+1}Q${x} ${eyeY-5} ${x+7} ${eyeY+1}`:`M${x-7} ${eyeY}L${x+7} ${eyeY}`,'none',eyeColor,2.5));
+    }else{
+      [-18,18].forEach((x,i)=>{
+        add(ovalPath(x,eyeY,9.6,8.1),eyeColor);
+        add(ovalPath(x+(i===0?2:-1),eyeY+.7,2.7,5.2),NIGHT.ink);
+        add(i===0?`M${x-11} ${eyeY-10}L${x+11} ${eyeY-5} ${x+11} ${eyeY-10}Z`:`M${x-11} ${eyeY-5}L${x+11} ${eyeY-10} ${x-11} ${eyeY-11}Z`,slot===2?(i?'#a99f95':'#c1b399'):slot===3?'#333646':fur);
+      });
+    }
+    if(slot===2) add('M-5-94L6-94 0-82Z','#d8a467');
+    else add('M-5-87L5-87 0-83Z',slot===1?'#aa796b':NIGHT.ink);
+    if(slot!==2) add(happy?'M-7-77Q0-69 7-77':sad?'M-7-74Q0-79 7-75':'M-5-76L6-76','none',NIGHT.ink,1.7);
+    if(expression==='sad') add('M39-107Q47-94 40-93Q34-94 39-107Z','#7292a3');
+    animalCache.set(key,a);return a;
+  }
+  function avatar(slot, extra='') {
+    const paths=animalLayers(slot).map(p=>`<path d="${p.d}" fill="${p.fill}"${p.stroke?` stroke="${p.stroke}" stroke-width="${p.width}" stroke-linecap="round"`:''}/>`).join('');
+    return `<span class="mini-avatar ${extra}" style="background:${['#35374a','#383241','#383446','#39313c'][slot]}"><svg viewBox="-54 -145 108 147" aria-hidden="true">${paths}</svg></span>`;
+  }
+
+  function me() { return state.players.find(p => p.id === state.yourId) || state.players[0]; }
+  function revealVisible() { return state.phase !== 'reveal' || reducedMotion || now() - state.phaseStartedAt >= NIGHT_TIMING.land * 1000; }
+  function currentCell() { return optimisticCell !== null ? optimisticCell : me()?.selected ?? null; }
+  function options() { return G.TARGETS[me()?.slot ?? 0]; }
+  function now() { return pausedAt || (Date.now() + clockOffset); }
+  function toast(message) {
+    $('toast').textContent = message; $('toast').classList.add('show');
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast').classList.remove('show'), 3300);
+  }
+  function unlockAudio() {
+    if (muted) return;
+    try { audio ||= new (window.AudioContext || window.webkitAudioContext)(); if (audio.state === 'suspended') audio.resume(); } catch {}
+  }
+  function tone(freq, delay = 0, duration = .1, volume = .045, type = 'sine') {
+    if (muted || !audio) return;
+    const osc = audio.createOscillator(), gain = audio.createGain(), start = audio.currentTime + delay;
+    osc.type = type; osc.frequency.setValueAtTime(freq, start);
+    gain.gain.setValueAtTime(0, start); gain.gain.linearRampToValueAtTime(volume, start + .007); gain.gain.exponentialRampToValueAtTime(.001, start + duration);
+    osc.connect(gain); gain.connect(audio.destination); osc.start(start); osc.stop(start + duration + .02);
+  }
+  function sound(type) {
+    if (type === 'select') { tone(392,0,.065,.023,'triangle'); tone(196,.015,.065,.012); }
+    if (type === 'lock') { tone(147,0,.11,.038,'triangle'); tone(294,.07,.09,.016,'sine'); }
+    if (type === 'start') [196,233.08,293.66].forEach((n,i)=>tone(n,i*.14,.23,.023,'triangle'));
+    if (type === 'coin') [659.25,783.99,987.77].forEach((n,i)=>tone(n,i*.095,.28,.023));
+    if (type === 'collision') {tone(130.81,0,.16,.045,'triangle');tone(98,.13,.27,.038,'triangle');tone(65.4,.05,.22,.025);}
+    if (type === 'win') [329.63,392,493.88,659.25].forEach((n,i)=>tone(n,i*.20,.38,.033));
+  }
+  function updateMotionButton() {
+    document.body.classList.toggle('reduce-motion', reducedMotion);
+    const b=$('motionButton');if(b){b.setAttribute('aria-pressed',String(reducedMotion));b.innerHTML=`움직임 줄이기 <span>${reducedMotion?'켜짐':'꺼짐'}</span>`;}
+  }
+  function updateSoundButton() { const b=$('soundButton');if(b){b.setAttribute('aria-pressed',String(!muted));b.innerHTML=`효과음 <span>${muted?'꺼짐':'켜짐'}</span>`;} }
+
+
+  // Progressive-disclosure UI. The authoritative game rules and API are unchanged.
+  const ux = { page: 'home', kind: 'solo', screen: '', error: '' };
+  let tutor = null, tutorSerial = 0, pausedAt = 0, dialogReturnFocus = null, presentedReveal = ''; 
+  const CELL_NAMES = ['왼쪽 위','','오른쪽 위','','가운데','','왼쪽 아래','','오른쪽 아래'];
+  const LEARN_KEY = 'cloud-pick:tutorial:v3';
+  const fmt = n => String(n).padStart(2,'0');
+  function announce(text) { $('srStatus').textContent = text; }
+  function screenName() { return mode === 'home' ? ux.page : mode === 'tutorial' ? (tutor?.stage === 'done' ? 'result' : 'tutorial') : state.phase === 'lobby' ? 'lobby' : state.phase === 'finished' ? 'result' : 'play'; }
+  function focusHeading() { requestAnimationFrame(() => { const el = $('screenHeading'); if (el) el.focus({preventScroll:true}); }); }
+  function heroHTML() {
+    const learned = storage.get(LEARN_KEY) === 'done';
+    return `<section class="hero"><div class="eyebrow hero-kicker">A SMALL TOWN. A QUIET BETRAYAL.</div><h1 id="screenHeading" class="screen-title" tabindex="-1">좋은 친구들.<br><em>수상한 선택들.</em></h1><p class="premise">혼자 고르면 전부 내 것.<br>같은 구름을 고르면, 모두 빈손.</p><button class="btn btn-primary" data-action="setup">시작하기 <span class="arrow">↗</span></button><button class="text-button tutorial-link" data-action="tutorial">${learned ? '튜토리얼 다시 해보기' : '직접 해보며 배우기'} <small>${learned ? '언제든 다시' : '처음이라면 추천'}</small><span>→</span></button><p class="hero-meta"><span>1–4명</span><span>혼자서는 봇과</span><span>설치 없이 플레이</span></p></section>`;
+  }
+  function nameHTML() { return `<label class="field-label" for="nameInput">오늘 밤의 이름 <small>비워도 괜찮아요</small></label><div class="name-field">${avatar(0)}<input id="nameInput" maxlength="12" placeholder="플레이어" value="${escapeHTML(name)}" autocomplete="nickname">${icons.edit}</div>`; }
+  function setupHTML() {
+    const online = ux.kind === 'friends';
+    return `<section class="setup-panel"><button class="back-button" data-action="backHome">← 처음으로</button><div class="eyebrow">PICK YOUR COMPANY.</div><h1 id="screenHeading" class="screen-title" tabindex="-1">오늘 밤, 누구와?</h1><p class="panel-desc">가볍게 연습하거나, 낯선 상대의 속마음을 읽거나.</p>${nameHTML()}<div class="mode-picks" role="group" aria-label="플레이 방식"><button class="mode-card" data-action="kindSolo" aria-pressed="${!online}"><strong>봇과 연습</strong><small>나 + 봇 3명</small></button><button class="mode-card" data-action="kindFriends" aria-pressed="${online}"><strong>온라인 플레이</strong><small>랜덤 상대 또는 친구</small></button></div>${online ? `${!serverAvailable ? `<div class="server-offline">${!backendChecked ? '멀티플레이 서버를 확인하고 있어요…' : '지금은 혼자 연습만 가능해요. 멀티플레이는 서버에 연결된 주소에서 열어 주세요.'}</div>` : ''}<button class="btn btn-primary" data-action="matchmake" ${busy || !serverAvailable ? 'disabled' : ''}>${busy ? '상대를 찾는 중…' : '랜덤매칭 시작 →'}</button><p class="inline-note matchmaking-note">다른 플레이어 1명과 매칭되면 봇 2명이 합류해 바로 시작해요.</p><div class="friend-divider"><span>친구와 함께하려면</span></div><button class="btn btn-line" data-action="create" ${busy || !serverAvailable ? 'disabled' : ''}>비공개 방 만들기</button><button class="text-button setup-secondary" data-action="joinDialog" ${busy || !serverAvailable ? 'disabled' : ''}>초대 코드로 참가하기</button>${!serverAvailable && backendChecked ? '<button class="text-button setup-secondary" data-action="connectionHelp">연결 방법 보기 →</button>' : ''}` : `<div class="setup-meta"><span>${config.rounds}라운드 · 선택 ${config.seconds}초</span><button class="text-button" data-action="settings">규칙 변경</button></div><button class="btn btn-primary" data-action="solo" ${busy ? 'disabled' : ''}>연습 시작 →</button>`}<p id="setupError" class="inline-error" role="alert">${escapeHTML(ux.error)}</p>${storage.get(LEARN_KEY) !== 'done' ? '<button class="text-button setup-secondary" data-action="tutorial">조작이 낯설다면, 먼저 배워보기 →</button>' : ''}</section>`;
+  }
+  function playerHTML(p, lobby = false) {
+    const self = p.id === state.yourId, r = state.results.find(x=>x.id===p.id), presented=revealVisible();
+    const score = p.score - (!presented ? (r?.gain || 0) : 0);
+    let label = lobby ? '참가 완료' : '곧 시작', cls = '';
+    if (!p.connected && !p.bot) label = p.departed ? '나감' : '연결 대기';
+    else if (state.phase === 'choose') {label=p.locked?'확정':'고르는 중';cls=p.locked?'is-locked':'';}
+    else if (r && !presented) label='공개 중';
+    else if (r) {label=r.missed?'선택 없음':r.collision?'겹침 · +0':`획득 · +${r.gain}`;cls=r.gain?'gained':'collision';}
+    return `<div class="player-row ${self?'is-me':''} ${!p.connected&&!p.bot?'offline':''}">${avatar(p.slot)}<div class="player-meta"><div class="player-name"><span class="text-name" title="${escapeHTML(p.name)}">${escapeHTML(p.name)}</span>${self?'<span class="you-tag">나</span>':p.bot?'<span class="bot-tag">봇</span>':''}${p.id===state.hostId&&mode==='online'?'<span class="host-crown" title="방장">♛</span>':''}</div><div class="player-status ${cls}">${label}</div></div>${!lobby?`<div class="player-score" aria-label="${score}코인">${coin}<span>${score}</span></div>`:p.bot&&state.hostId===state.yourId?`<button class="remove-bot" data-action="removeBot" data-id="${escapeHTML(p.id)}" aria-label="${escapeHTML(p.name)} 봇 빼기">×</button>`:''}</div>`;
+  }
+  function lobbyHTML() {
+    const host = state.hostId === state.yourId, canStart=state.config.fillBots||state.players.length>=2;
+    if(session?.matchmaking)return `<section class="matchmaking-wait"><div class="eyebrow">FINDING A STRANGER.</div><div class="matchmaking-orbit" aria-hidden="true">${avatar(0)}<i></i><span>?</span></div><h1 id="screenHeading" class="screen-title" tabindex="-1">수상한 상대를<br>찾고 있어요.</h1><p>매칭되면 봇 두 명이 합류해<br>5라운드 게임이 바로 시작돼요.</p><button class="btn btn-line" data-action="leave">매칭 취소</button></section>`;
+    return `<section class="lobby-top"><div class="eyebrow">WAITING AFTER DARK</div><h1 id="screenHeading" class="screen-title" tabindex="-1">누군가 오고 있어.</h1><div class="panel"><div class="room-label">친구에게 알려줄 방 코드</div><div class="room-code">${escapeHTML(state.code)}</div><div class="room-share"><button class="btn btn-soft" data-action="copyLink">${icons.link} 초대 링크 복사</button><button class="btn btn-line" data-action="copyCode">코드 복사</button></div><div class="room-summary"><span>${state.config.rounds}라운드 · ${state.config.seconds}초</span>${host?'<button class="text-button" data-action="settings">방 설정</button>':'<span>방장이 설정해요</span>'}</div></div></section><section class="panel player-panel"><div class="panel-heading"><h3>오늘 밤의 친구들</h3><span class="pill-count">${state.players.length} / 4</span></div><div class="player-list">${state.players.map(p=>playerHTML(p,true)).join('')}${Array.from({length:4-state.players.length},()=>host?'<button class="empty-slot" data-action="addBot">＋ 봇 추가</button>':'<div class="empty-slot">친구를 기다리는 중</div>').join('')}</div><button class="btn btn-primary start-match" data-action="start" ${!host||!canStart||busy||connection!=='connected'?'disabled':''}>${host?'게임 시작 →':'방장이 시작하면 함께 출발해요'}</button><p class="lobby-note">${state.config.fillBots?'빈자리는 봇이 채워요. 혼자서도 시작할 수 있어요.':canStart?'모두 모였다면 시작하세요.':'2명 이상이 필요해요. 친구를 초대하거나 봇을 추가하세요.'}</p></section><div class="lobby-help"><button class="text-button" data-action="help">게임 방법</button><button class="text-button" data-action="leaveDialog">방 나가기 ↗</button></div>`;
+  }
+  function choiceButtons(allowed = options(), active = true) {
+    const selected=currentCell();
+    return `<div class="choice-options" role="group" aria-label="내가 갈 수 있는 구름 세 개">${options().map((cell,i)=>`<button class="pick-btn" data-action="select" data-cell="${cell}" ${!active||!allowed.includes(cell)?'disabled':''} aria-label="${i+1}번, ${CELL_NAMES[cell]} 구름, ${state.board[cell]}코인" aria-pressed="${selected===cell}"><kbd>${i+1}</kbd>${coin}<strong>${state.board[cell]}</strong></button>`).join('')}</div>`;
+  }
+  function renderChoiceBar() {
+    if(mode==='tutorial'){ $('choiceBar').innerHTML=tutorialControls();return; }
+    if(mode==='home'||state.phase==='lobby'||state.phase==='finished'){ $('choiceBar').innerHTML='';return; }
+    const p=me(), selected=currentCell(), active=state.phase==='choose'&&!p.locked&&(mode!=='online'||connection==='connected');
+    if(state.phase==='choose'){
+      if(p.locked){ $('choiceBar').innerHTML=`<div class="choice-intro"><strong>선택을 믿어.</strong><small>확정했어요. 이제 모두의 공개를 기다려요.</small></div><div class="selected-ticket">✓ ${selected===null?'선택 없음':CELL_NAMES[selected]+' 구름'}<small>${state.players.filter(p=>p.locked).length}/${state.players.length}명 확정</small></div><button class="lock-btn" disabled>확정 완료</button>`;return; }
+      $('choiceBar').innerHTML=`<div class="choice-intro"><strong>${selected===null?'아무도 안 올 곳으로.':'이 구름으로 갈까?'}</strong><small>${selected===null?'아래 세 구름 중 하나를 선택하세요.':'확정 전까지는 다른 구름으로 바꿀 수 있어요.'}</small></div>${choiceButtons(options(),active)}<button class="lock-btn" data-action="lock" ${!active||selected===null?'disabled':''}>선택 확정 ↗</button>`;
+    }else if(state.phase==='reveal'){
+      const r=state.results.find(r=>r.id===state.yourId);
+      if(!revealVisible())$('choiceBar').innerHTML='<div class="waiting-note">누가 같은 생각을 했을까.</div>';
+      else $('choiceBar').innerHTML=`<div class="result-line ${!r?.gain?'bad':''}"><span class="delta">+${r?.gain||0}</span><div><strong>${r?.gain?'아무도 오지 않았다.':r?.missed?'망설이는 사이, 끝.':'눈이 마주쳤다. 모두 빈손.'}</strong><small>${r?.gain?`혼자 고른 ${CELL_NAMES[r.cell]} 구름에서 ${r.gain}코인을 얻었어요.`:r?.missed?'아무것도 선택하지 않아 이번 라운드는 0코인이에요.':'같은 구름을 고른 모두가 이번 라운드 0코인이에요.'}</small></div></div>`;
+    }else $('choiceBar').innerHTML=`<div class="choice-intro"><strong>${state.round===state.config.rounds?'마지막 선택. 뒤집을 기회.':'잠깐의 정적.'}</strong><small>곧 선택 시간이 시작돼요.</small></div>${choiceButtons([],false)}<button class="lock-btn" disabled>곧 시작</button>`;
+  }
+  function historyBody() {
+    const hist=revealVisible()?state.history:state.history.filter(h=>h.round!==state.round);
+    return `<div class="history-list">${hist.length?hist.slice().reverse().map(h=>{const r=h.results.find(r=>r.id===state.yourId);return `<div class="history-item"><b>R${fmt(h.round)}</b>${!r||r.missed?'선택하지 않음':r.collision?'같은 구름을 선택함':'혼자 고른 구름'}<span class="${r?.gain?'gain':'fail'}">+${r?.gain||0}코인</span></div>`;}).join(''):'<p>아직 공개된 라운드가 없어요.</p>'}</div>`;
+  }
+  function renderFinish() {
+    const el=$('finishOverlay');el.hidden=screenName()!=='result';if(el.hidden)return;
+    if(mode==='tutorial'){
+      el.innerHTML=`<div class="finish-card tutor-summary"><div class="eyebrow">YOUR FIRST NIGHT, COMPLETE.</div><div class="completion-cast">${[0,1,2,3].map(s=>avatar(s)).join('')}</div><h1 id="screenHeading" tabindex="-1" class="screen-title">첫 밤을 지날 준비 끝.</h1><p>이제 친구의 생각만 읽으면 돼.<br>실전에서는 <strong>${config.rounds}라운드 동안 가장 많은 코인</strong>을 모으면 승리.<br>동점이면 함께 우승해요.</p><div class="button-row"><button class="btn btn-primary" data-action="learnSolo">봇과 한 판 →</button><button class="btn btn-line" data-action="learnFriends">친구와 플레이</button></div><button class="text-button" data-action="backHome">처음으로</button></div>`;return;
+    }
+    const order=state.players.slice().sort((a,b)=>b.score-a.score||a.slot-b.slot),best=order[0]?.score||0,winners=order.filter(p=>p.score===best),win=winners.some(p=>p.id===state.yourId),mine=me();
+    const title=winners.length>1?'같은 밤의 승자들.':win?'이 밤의 승자, 나.':`${escapeHTML(winners[0]?.name||'친구')}의 승리.`;
+    el.innerHTML=`<div class="finish-card"><div class="trophy" aria-hidden="true">☾</div><div class="eyebrow">THE NIGHT IS OVER.</div><h1 id="screenHeading" tabindex="-1" class="screen-title">${title}</h1><p class="result-summary">${state.config.rounds}번의 선택, 나의 주머니엔 <strong>${mine?.score||0}코인.</strong><br>${winners.length>1?`${winners.length}명이 ${best}코인으로 공동 우승했어요.`:'다음 밤엔, 다른 선택을.'}</p><div aria-label="최종 순위">${order.map(p=>`<div class="podium-line ${p.id===state.yourId?'is-me':''}"><span class="rank">${1+order.filter(x=>x.score>p.score).length}</span>${avatar(p.slot)}<strong>${escapeHTML(p.name)} ${p.id===state.yourId?'<span class="you-tag">나</span>':''}</strong>${coin}<span class="score">${p.score}</span></div>`).join('')}</div>${state.hostId===state.yourId?`<div class="button-row"><button class="btn btn-primary" data-action="start">한 판 더 →</button><button class="btn btn-line" data-action="${mode==='solo'?'leave':'lobby'}">${mode==='solo'?'처음으로':'대기실로'}</button></div>`:'<p class="wait-host">방장이 다음 판을 시작하면 함께 출발해요.</p>'}<button class="text-button" data-action="history">이번 판 기록 보기 →</button></div>`;
+  }
+  function renderHUD(){
+    $('roundChip').innerHTML=mode==='tutorial'?`<span class="round-label">직접 해보며 배우기</span><strong><em>${tutor?.step||1}</em><span class="total-rounds"> / 4</span></strong>`:`<span class="round-label">${state.round===state.config.rounds?'마지막 라운드':'라운드'}</span><strong><em>${fmt(state.round)}</em><span class="total-rounds"> / ${fmt(state.config.rounds)}</span></strong>`;
+    const reconnect=mode==='online'&&connection!=='connected';
+    $('networkNotice').hidden=!reconnect;$('networkNotice').textContent=reconnect?'연결이 끊겼어요. 다시 연결하는 중에는 선택을 바꿀 수 없어요. 서버의 제한 시간은 계속 흐릅니다.':'';
+    const pill=$('connectionPill');pill.hidden=mode!=='online';pill.className='connection-pill'+(reconnect?' reconnect':'');pill.innerHTML=`<i></i>${reconnect?'연결 중':'함께 플레이 중'}`;
+    $('screenLocation').textContent=({home:'작은 마을의 큰 심리전',setup:'오늘 밤의 동행',lobby:'친구를 기다리는 중',tutorial:'첫 밤의 안내',play:mode==='solo'?'봇과 연습':'친구와 플레이',result:'어느새, 동이 튼다.'})[screenName()];
+  }
+  function focusKey(el){if(!el||!el.closest('#sidebar,#choiceBar,#roster,#finishOverlay'))return null;if(el.id)return '#'+CSS.escape(el.id);if(el.dataset.action)return `[data-action="${el.dataset.action}"]${el.dataset.cell?`[data-cell="${el.dataset.cell}"]`:el.dataset.id?`[data-id="${CSS.escape(el.dataset.id)}"]`:''}`;return null;}
+  function render(){
+    const input=$('nameInput');if(input)name=input.value;
+    const key=focusKey(document.activeElement),screen=screenName(),changed=ux.screen!==screen;ux.screen=screen;
+    document.body.dataset.screen=screen;
+    $('sidebar').innerHTML=mode==='home'?(ux.page==='setup'?setupHTML():heroHTML()):mode==='tutorial'?(tutor?.stage==='done'?'':tutorialHTML()):state.phase==='lobby'?lobbyHTML():'';
+    $('roster').innerHTML=screen==='play'?state.players.map(p=>playerHTML(p)).join(''):'';
+    renderChoiceBar();renderHUD();renderFinish();updateSoundButton();updateMotionButton();
+    if(key){const target=document.querySelector(key);if(target&&!target.disabled)target.focus({preventScroll:true});else if(document.activeElement===document.body&&screen==='play')$('choiceBar').focus({preventScroll:true});}
+    if(changed){requestAnimationFrame(resize);if(screen==='result')focusHeading();}
+  }
+  function applyState(next){
+    if(mode==='online'&&next.code===state.code&&next.revision<state.revision)return;
+    if(session?.matchmaking&&next.phase!=='lobby')session.matchmaking=false;
+    const phaseChanged=state.phase!==next.phase||state.round!==next.round||state.matchId!==next.matchId;
+    if(state.round!==next.round||state.matchId!==next.matchId||next.phase!=='choose')optimisticCell=null;
+    state=next;clockOffset=mode==='online'?next.serverNow-Date.now():0;
+    if(me()?.locked)optimisticCell=null;
+    if(phaseChanged){lastBeep=0;
+      if(state.phase==='choose'){sound('start');announce(`라운드 ${state.round}. 선택을 시작하세요.`);}
+      if(state.phase==='reveal'){
+        makeParticles();
+      }
+      if(state.phase==='finished'){sound('win');announce('경기가 끝났어요. 최종 순위를 확인하세요.');}
+    }
+    render();
+  }
+  // Present outcomes once the landing is visible, not while a local game is paused.
+  function presentReveal(){
+    if(state.phase!=='reveal'||!revealVisible()||pausedAt)return;
+    const marker=`${mode}:${state.matchId}:${state.round}:${state.phaseStartedAt}`;
+    if(presentedReveal===marker)return;
+    presentedReveal=marker;
+    const r=state.results.find(r=>r.id===state.yourId);
+    sound(r?.gain?'coin':'collision');render();
+    announce(r?.gain?`${r.gain}코인 획득`:r?.missed?'선택하지 않아 0코인':'같은 구름에서 겹쳐 0코인');
+  }
+  function readName(){name=($('nameInput')?.value||name||'플레이어').trim().slice(0,12)||'플레이어';storage.set('cloud-pick:name',name);return name;}
+  function openSetup(kind='solo'){
+    if(mode==='online'||mode==='solo'){leaveDialog();return;}
+    if($('nameInput'))name=$('nameInput').value;
+    tutor=null;tutorSerial++;mode='home';state={...demoState,config:{...config}};optimisticCell=null;particles=[];ux.page='setup';ux.kind=kind;ux.error='';closeDialog();render();focusHeading();window.scrollTo({top:0,behavior:'instant'});
+  }
+  function backHome(){
+    if(mode==='online'||mode==='solo'){leaveDialog();return;}
+    tutor=null;tutorSerial++;mode='home';ux.page='home';ux.error='';state={...demoState,config:{...config}};optimisticCell=null;particles=[];closeDialog();render();focusHeading();window.scrollTo({top:0,behavior:'instant'});
+  }
+  function startSolo(){
+    readName();closeDialog();disconnect();tutor=null;tutorSerial++;mode='solo';connection='local';clockOffset=0;pausedAt=0;
+    localRoom=new G.Room('SOLO',{...config,fillBots:true});localRoom.addHuman('you',name);localRoom.start('you');optimisticCell=null;applyState(localRoom.snapshot('you'));sound('start');
+    window.scrollTo({top:0,behavior:'instant'});
+  }
+  async function api(path,data,token=session?.token){
+    const headers={'Content-Type':'application/json'};if(token)headers.Authorization=`Bearer ${token}`;
+    const response=await fetch(path,{method:data===undefined?'GET':'POST',headers,body:data===undefined?undefined:JSON.stringify(data),signal:AbortSignal.timeout(9000)});
+    const result=await response.json();if(!response.ok)throw new Error(result.error||'서버 요청에 실패했어요.');return result;
+  }
+  function disconnect(){if(stream){stream.close();stream=null;}}
+  function onlineRequired(){if(serverAvailable)return true;connectionHelp();return false;}
+  function connectionHelp(){showDialog(`<div class="eyebrow">CONNECT THE NIGHT.</div><h2>친구와 만나려면.</h2><p>HTML 파일만 열면 봇 연습과 튜토리얼을 할 수 있어요. 친구와는 <strong>멀티플레이 서버가 실행 중인 같은 웹 주소</strong>에 접속해야 해요.</p><details class="help-rule"><summary>직접 서버를 실행하는 방법</summary><p>전체 프로젝트 폴더에서 <code>node server.mjs</code>를 실행하고 <code>http://localhost:3000</code>을 여세요. 같은 Wi-Fi의 친구는 실행창에 표시되는 네트워크 주소로 접속하세요. 다른 네트워크에서 함께하려면 인터넷 배포가 필요해요.</p></details><button class="btn btn-primary settings-actions" data-action="checkConnection">연결 다시 확인</button><button class="text-button setup-secondary" data-action="closeDialog">돌아가기</button>`);}
+  function connectSession(result){
+    closeDialog();disconnect();localRoom=null;tutor=null;tutorSerial++;mode='online';pausedAt=0;session={token:result.token,id:result.id,code:result.code,matchmaking:!!result.matchmaking};storage.set('cloud-pick:session',JSON.stringify(session),true);connection='connecting';optimisticCell=null;
+    state=result.state;clockOffset=result.state.serverNow-Date.now();
+    stream=new EventSource(`/api/events?token=${encodeURIComponent(session.token)}`);
+    stream.addEventListener('state',event=>{try{connection='connected';applyState(JSON.parse(event.data));}catch{toast('서버 상태를 읽지 못했어요. 다시 연결할게요.');}});
+    stream.addEventListener('replaced',()=>{disconnect();storage.remove('cloud-pick:session',true);session=null;mode='home';connection='home';clockOffset=0;optimisticCell=null;ux.page='setup';state={...demoState,config:{...config}};render();toast('다른 탭에서 이 참가 정보를 사용 중이에요. 이 탭에서는 새로 참가해 주세요.');});
+    stream.onopen=()=>{connection='connected';render();};stream.onerror=()=>{if(mode!=='online')return;connection='reconnecting';render();};
+    render();focusHeading();window.scrollTo({top:0,behavior:'instant'});
+  }
+  async function createRoom(){
+    if(!onlineRequired()||busy)return;readName();busy=true;ux.error='';render();
+    try{connectSession(await api('/api/create',{name,config},null));toast('방을 만들었어요. 링크로 친구를 초대하세요.');}
+    catch(e){ux.error=e.message||'연결에 실패했어요.';}
+    finally{busy=false;render();}
+  }
+  async function matchmake(){
+    if(!onlineRequired()||busy)return;readName();busy=true;ux.error='';render();
+    try{connectSession(await api('/api/matchmake',{name},null));toast('랜덤 상대를 찾고 있어요.');}
+    catch(e){ux.error=e.message||'매칭을 시작하지 못했어요.';}
+    finally{busy=false;render();}
+  }
+  function joinDialog(prefill=''){
+    readName();if(!onlineRequired())return;
+    showDialog(`<div class="eyebrow">JOIN YOUR FRIENDS.</div><h2>어느 밤으로 갈까?</h2><p>친구에게 받은 6자리 방 코드를 입력하세요.</p><form id="joinForm"><label class="field-label" for="joinCode">방 코드</label><input class="join-code" id="joinCode" minlength="6" maxlength="6" pattern="[A-Za-z2-9]{6}" placeholder="ABC234" value="${escapeHTML(prefill)}" aria-describedby="joinError" autocomplete="off" autocapitalize="characters" spellcheck="false" required><p class="inline-error" id="joinError" role="alert"></p><button class="btn btn-primary" type="submit" id="joinSubmit">방에 참가하기 →</button></form>`);setTimeout(()=>$('joinCode')?.focus(),60);
+  }
+  async function joinRoom(code){
+    if(busy)return;busy=true;if($('joinSubmit')){$('joinSubmit').disabled=true;$('joinSubmit').textContent='방에 들어가는 중…';}
+    try{connectSession(await api('/api/join',{code:code.trim().toUpperCase(),name:readName()},null));toast('친구의 방에 도착했어요.');}
+    catch(e){if($('joinError')){$('joinError').textContent=e.message||'방을 찾지 못했어요.';$('joinCode').setAttribute('aria-invalid','true');$('joinCode').focus();}else toast(e.message);}
+    finally{busy=false;if($('joinSubmit')){$('joinSubmit').disabled=false;$('joinSubmit').textContent='방에 참가하기 →';}}
+  }
+  async function action(actionName,extra={}){
+    if(mode==='home'||mode==='tutorial')return;
+    if(mode==='solo'){
+      try{if(actionName==='select'||actionName==='lock')localRoom.select('you',extra.cell,extra.round,extra.matchId,actionName==='lock');else if(actionName==='start')localRoom.start('you');else if(actionName==='lobby')localRoom.returnToLobby('you');applyState(localRoom.snapshot('you'));}catch(e){optimisticCell=null;toast(e.message);render();}return;
+    }
+    const actionSession=session;actionQueue=actionQueue.catch(()=>{}).then(async()=>{
+      if(mode!=='online'||session!==actionSession)return;
+      try{const result=await api('/api/action',{action:actionName,...extra});if(result.state&&mode==='online'&&session===actionSession)applyState(result.state);}
+      catch(e){optimisticCell=null;toast(e.message||'네트워크 연결을 확인해 주세요.');render();}
+    });return actionQueue;
+  }
+  function select(cell){
+    if(mode==='tutorial'){tutorialSelect(cell);return;}
+    if(state.phase!=='choose'||me().locked||mode==='online'&&connection!=='connected'||$('dialog').open)return;
+    if(!options().includes(cell)){toast('번호가 표시된 내 옆의 세 구름 중에서 골라 주세요.');return;}
+    optimisticCell=cell;sound('select');renderChoiceBar();action('select',{cell,round:state.round,matchId:state.matchId});
+  }
+  function lock(){
+    if(mode==='tutorial'){tutorialLock();return;}
+    const cell=currentCell();if(cell===null||state.phase!=='choose'||me().locked||$('dialog').open)return;
+    sound('lock');action('lock',{cell,round:state.round,matchId:state.matchId});
+  }
+  function showDialog(html){
+    const open=$('dialog').open;if(!open){dialogReturnFocus=document.activeElement;if((mode==='solo'||mode==='tutorial')&&state.phase!=='finished')pausedAt=Date.now();}
+    $('dialogBody').innerHTML=html.replace('<h2>','<h2 id="dialogTitle">');
+    if(!open)$('dialog').showModal();
+  }
+  function closeDialog(){if($('dialog').open){$('dialog').close();resumeLocal();}}
+  function resumeLocal(){
+    if(pausedAt){const delta=Date.now()-pausedAt,room=mode==='solo'?localRoom:mode==='tutorial'?tutor?.room:null;pausedAt=0;if(room){room.phaseStartedAt+=delta;room.phaseEndsAt+=delta;room.players.forEach(p=>p.botAt+=delta);state=room.snapshot('you');render();}}
+    if(dialogReturnFocus?.isConnected)dialogReturnFocus.focus({preventScroll:true});dialogReturnFocus=null;
+  }
+  $('dialog').addEventListener('close',()=>{if(!$('dialog').open)resumeLocal();});
+  $('dialog').addEventListener('cancel',event=>{event.preventDefault();closeDialog();});
+  function liveNote(){return mode==='online'&&state.phase!=='lobby'&&state.phase!=='finished'?'<p class="menu-status">메뉴를 열어도 <strong>게임과 제한 시간은 계속 진행</strong>돼요.</p>':mode==='solo'||mode==='tutorial'?'<p class="menu-status">잠깐 멈췄어요. 메뉴를 닫으면 이어져요.</p>':'';}
+  function showMenu(){
+    showDialog(`<div class="eyebrow">A MOMENT IN THE WOODS.</div><h2>잠깐, 숨 고르기.</h2><div class="menu-list"><button class="menu-item" data-action="help">게임 방법 <span>→</span></button>${mode==='home'?'<button class="menu-item" data-action="tutorial">직접 해보며 배우기 <span>튜토리얼 →</span></button>':''}<button class="menu-item" id="soundButton" data-action="sound">효과음 <span>${muted?'꺼짐':'켜짐'}</span></button><button class="menu-item" id="motionButton" data-action="motion" aria-pressed="${reducedMotion}">움직임 줄이기 <span>${reducedMotion?'켜짐':'꺼짐'}</span></button>${mode==='online'?`<button class="menu-item" data-action="copyCode">방 코드 <span>${escapeHTML(state.code)} · 복사</span></button>`:''}${['solo','online'].includes(mode)?'<button class="menu-item" data-action="history">라운드 기록 <span>→</span></button>':''}${mode!=='home'?`<button class="menu-item danger" data-action="leaveDialog">${mode==='online'?'방 나가기':mode==='tutorial'?'튜토리얼 나가기':'연습 마치기'} <span>↗</span></button>`:''}</div>${liveNote()}`);updateSoundButton();updateMotionButton();
+  }
+  function showHelp(){
+    showDialog(`<div class="eyebrow">FIELD NOTES.</div><h2>규칙은 단순해.<br>친구는 아니고.</h2><p class="help-primary">혼자 고른 구름은 코인 획득.<br>같은 구름을 고르면 모두 0코인.</p><details class="help-rule"><summary>어떤 구름을 고를 수 있나요?</summary><p>내 캐릭터 옆의 <strong>번호가 표시된 세 구름</strong>만 고를 수 있어요. 가운데 3코인 구름은 네 명 모두 노릴 수 있어요. 구름을 누르거나 화면 아래 선택 버튼을 사용하세요.</p></details><details class="help-rule"><summary>선택은 언제까지 바꿀 수 있나요?</summary><p><strong>선택 확정 전까지만</strong> 바꿀 수 있어요. 다른 사람에게는 목적지가 아니라 확정 여부만 보여요. 모두 확정하면 시간이 남아도 동시에 공개해요.</p></details><details class="help-rule"><summary>시간이 끝나면 어떻게 되나요?</summary><p><strong>마지막으로 고른 구름</strong>이 적용돼요. 한 번도 고르지 않았다면 그 라운드는 0코인이에요. 겹치더라도 이전에 모은 코인은 잃지 않아요.</p></details><details class="help-rule"><summary>어떻게 이기나요?</summary><p>${mode==='home'?config.rounds:state.config.rounds}라운드가 끝났을 때 누적 코인이 가장 많으면 승리. 동점은 공동 우승이에요. 현재 선택 시간은 ${mode==='home'?config.seconds:state.config.seconds}초예요.</p></details><details class="help-rule"><summary>키보드로 플레이할 수 있나요?</summary><p><kbd>1</kbd>·<kbd>2</kbd>·<kbd>3</kbd>으로 선택하고 <kbd>Enter</kbd>로 확정해요. <kbd>Tab</kbd>으로 버튼을 옮기고 <kbd>Space</kbd>로 누를 수도 있어요. 대화창은 <kbd>Esc</kbd>로 닫아요.</p></details>${mode==='home'?'<button class="btn btn-primary settings-actions" data-action="tutorial">직접 해보며 배우기 →</button>':''}${liveNote()}<button class="text-button setup-secondary" data-action="closeDialog">게임으로 돌아가기</button>`);
+  }
+  function settingsDialog(){
+    if(mode==='online'&&(state.phase!=='lobby'||state.hostId!==state.yourId))return;
+    const c=mode==='online'?state.config:config;
+    showDialog(`<div class="eyebrow">SET THE PACE.</div><h2>오늘 밤의 속도.</h2><p>처음엔 기본 규칙으로 시작해도 좋아요.</p><form id="settingsForm"><div class="config-fields"><label for="roundSetting">라운드<select id="roundSetting">${[3,5,8,10].map(n=>`<option value="${n}" ${c.rounds===n?'selected':''}>${n}라운드</option>`).join('')}</select></label><label for="timeSetting">선택 시간<select id="timeSetting">${[5,10,15,20].map(n=>`<option value="${n}" ${c.seconds===n?'selected':''}>${n}초</option>`).join('')}</select></label></div>${mode==='online'?`<label class="check-label"><input id="fillBotsSetting" type="checkbox" ${c.fillBots?'checked':''}>빈자리는 봇으로 채우기</label>`:'<p class="inline-note">혼자 연습할 때는 봇 3명이 함께해요.</p>'}<div class="settings-actions"><button class="btn btn-primary" type="submit">적용하기</button></div></form>`);
+  }
+  function showHistory(){showDialog(`<div class="eyebrow">YOUR TRAIL TONIGHT.</div><h2>나의 선택이 남긴 것.</h2>${historyBody()}${liveNote()}<button class="text-button setup-secondary" data-action="closeDialog">돌아가기</button>`);}
+  function leaveDialog(){
+    if(mode==='home'){backHome();return;}
+    showDialog(`<div class="eyebrow">SEE YOU AFTER DARK.</div><h2>${mode==='online'?'방을 나갈까요?':mode==='tutorial'?'튜토리얼을 마칠까요?':'연습을 마칠까요?'}</h2><p>${mode==='online'?'진행 중에 나가면 남은 라운드는 0코인이에요. 방장이 나가면 다른 접속자가 방장을 이어받아요.':mode==='tutorial'?'연습 점수는 실전에 영향을 주지 않아요. 처음 화면에서 언제든 다시 배울 수 있어요.':'이번 연습의 점수는 저장되지 않아요.'}</p><div class="button-row"><button class="btn btn-soft" data-action="closeDialog">계속하기</button><button class="btn btn-primary" data-action="leave">${mode==='online'?'방 나가기':'처음으로'}</button></div>`);
+  }
+  async function leave(){
+    if(mode==='online'&&session){try{await api('/api/action',{action:'leave'});}catch{}}
+    closeDialog();disconnect();storage.remove('cloud-pick:session',true);session=null;localRoom=null;tutor=null;tutorSerial++;pausedAt=0;
+    mode='home';ux.page='home';connection='home';clockOffset=0;optimisticCell=null;particles=[];state={...demoState,config:{...config}};render();focusHeading();window.scrollTo({top:0,behavior:'instant'});
+  }
+  async function copy(text,message){
+    try{if(!navigator.clipboard)throw new Error();await navigator.clipboard.writeText(text);toast(message);}
+    catch{showDialog(`<div class="eyebrow">SHARE THE NIGHT.</div><h2>친구에게 보내 주세요.</h2><p>자동 복사가 제한된 환경이에요. 아래 내용을 선택해 복사하세요.</p><label class="field-label" for="copyField">복사할 내용</label><input id="copyField" class="join-code" style="letter-spacing:0;font-size:14px;text-transform:none" readonly value="${escapeHTML(text)}"><button class="btn btn-primary" data-action="closeDialog">확인</button>`);$('copyField').select();}
+  }
+  function copyInvite(){copy(`${location.origin}${location.pathname}?room=${state.code}`,['localhost','127.0.0.1'].includes(location.hostname)?'복사했어요. 다른 기기에는 localhost 대신 서버 PC의 네트워크 주소를 알려 주세요.':'초대 링크를 복사했어요.');}
+
+  // Tutorial uses a separate local Room. Scripted examples never touch an online room.
+  function startTutorial(){
+    if(mode==='online'||mode==='solo'){leaveDialog();return;}
+    readName();closeDialog();disconnect();localRoom=null;mode='tutorial';clockOffset=0;pausedAt=0;connection='local';tutorSerial++;
+    tutor={step:1,stage:'pick',room:null,changed:false,first:null,resultReady:false,serial:tutorSerial};prepareLesson();window.scrollTo({top:0,behavior:'instant'});focusHeading();
+  }
+  function prepareLesson(){
+    const room=new G.Room('LEARN',{rounds:5,seconds:10,fillBots:true});room.addHuman('you','나');while(room.players.length<4)room.addBot('you');
+    room.players[1].name='친구';room.players[2].name='안내자';room.players[3].name='친구 2';room.matchId=tutorSerial;room.round=tutor.step;
+    room.board=[1,0,2,0,3,0,2,0,1];room.phase='choose';room.phaseStartedAt=Date.now();room.phaseEndsAt=Date.now()+86400000;
+    room.players[0].score=tutor.step>1?2:0;
+    tutor.room=room;tutor.stage=tutor.step===4?'ready':'pick';tutor.changed=false;tutor.first=null;tutor.resultReady=false;particles=[];optimisticCell=null;lastBeep=0;
+    applyState(room.snapshot('you'));announce(`튜토리얼 ${tutor.step}단계. ${lessonCopy().title}`);
+  }
+  function tutorialAllowed(){return tutor?.step===1?[6]:tutor?.step===2?[4]:options();}
+  function lessonCopy(){
+    if(!tutor)return{title:'',body:'',note:''};const done=tutor.stage==='reveal',r=state.results.find(r=>r.id==='you');
+    if(tutor.step===1)return done?{title:'혼자 고르면, 전부 내 것.',body:'네가 고른 구름엔 아무도 없었어. 코인 2개가 주머니에 들어왔지.',note:'목표는 이렇게 코인을 모으는 거야.'}:{title:'첫 발은, 이쪽으로.',body:'아래쪽 고양이가 너야. 번호가 표시된 세 구름 중, 왼쪽의 1번을 골라봐.',note:'구름을 직접 누르거나, 아래 1번 버튼을 눌러도 돼.'};
+    if(tutor.step===2)return done?{title:'같은 생각. 둘 다 빈손.',body:'친구도 가운데를 골랐네. 같은 구름을 고른 둘 모두 이번에는 0코인이야.',note:'이미 모은 2코인은 잃지 않아.'}:{title:'가운데는, 모두의 욕심.',body:'가운데엔 코인이 3개나 있어. 이번엔 2번 구름을 골라봐.',note:'가운데 구름은 네 명 모두 고를 수 있어.'};
+    if(tutor.step===3)return done?{title:'확정하면, 되돌릴 수 없어.',body:'다른 사람에게는 목적지가 아니라 확정 여부만 보여. 모두 확정하면 함께 공개해.',note:'네가 마지막으로 고르고 확정한 구름으로 이동했어.'}:tutor.changed?{title:'좋아. 이제 네 선택을 믿어.',body:'마음이 정해졌다면 ‘선택 확정’을 눌러봐. 확정한 뒤에는 바꿀 수 없어.',note:'목적지는 공개 전까지 비밀이야.'}:tutor.first!==null?{title:'아직 마음을 바꿔도 돼.',body:'이번엔 다른 구름으로 바꿔봐. 확정 전까지는 몇 번이든 다시 고를 수 있어.',note:'친구들에게는 네가 고른 구름이 보이지 않아.'}:{title:'선택은, 너만의 비밀.',body:'이제 세 구름 중 마음에 드는 곳을 골라봐. 이번엔 바로 이동하지 않을 거야.',note:'다른 사람의 목적지는 공개 전까지 알 수 없어.'};
+    if(done)return r?.missed?{title:'선택하지 않으면, 0코인.',body:'시간 안에 아무것도 고르지 않았어. 괜찮아. 연습이니까 다시 해봐도 돼.',note:'선택만 해두면, 시간이 끝날 때 마지막 선택이 적용돼.'}:{title:'마지막 선택으로 도착.',body:`${r?.collision?'친구와 겹쳐 이번엔 0코인이야.':'이번에는 '+(r?.gain||0)+'코인을 얻었어.'} 확정하지 않아도 시간이 끝나면 마지막으로 고른 구름으로 가.`,note:'이번 연습의 점수는 실전에 반영되지 않아.'};
+    if(tutor.stage==='ready')return{title:'마지막은, 10초 연습.',body:'마지막으로 제한 시간 안에 골라보자. 준비되면 아래 버튼을 눌러.',note:'시간이 끝나면 마지막 선택이 적용돼. 아무것도 고르지 않으면 0코인.'};
+    return{title:'10초 안에, 네 선택을.',body:'세 구름 중 하나를 골라. 마음이 정해졌다면 바로 확정해도 돼.',note:'확정하지 않고 기다리면 마지막 선택으로 이동해.'};
+  }
+  function tutorialHTML(){
+    const c=lessonCopy(),labels=['코인 획득','겹침','선택과 확정','제한 시간'];
+    return `<section class="lesson-panel"><div class="lesson-meta"><strong>첫 밤의 안내</strong><span>${tutor.step} / 4 · ${labels[tutor.step-1]}</span></div><div class="lesson-progress" aria-label="4단계 중 ${tutor.step}단계">${[1,2,3,4].map(n=>`<i class="${n<tutor.step?'done':n===tutor.step?'active':''}"></i>`).join('')}</div><div class="lesson-speaker">${avatar(2)}<span>올빼미가 건네는 작은 조언</span></div><div id="lessonText" aria-live="polite" aria-atomic="true"><h1 id="screenHeading" class="screen-title" tabindex="-1">${c.title}</h1><p class="lesson-copy">${c.body}</p><p class="lesson-aside">${c.note}</p></div><div class="lesson-exit"><button class="text-button" data-action="leaveDialog">건너뛰기 ↗</button></div></section>`;
+  }
+  function tutorialControls(){
+    if(!tutor||tutor.stage==='done')return'';
+    if(tutor.stage==='reveal')return `<div class="lesson-next"><small>${tutor.step===4?'실전 점수에는 반영되지 않아요.':'이해했다면, 다음 한 걸음.'}</small><button class="btn btn-primary" data-action="lessonNext" ${!tutor.resultReady||!revealVisible()?'disabled':''}>${tutor.step===4?'이제 알겠어 →':'다음으로 →'}</button></div>${tutor.step===4?'<button class="text-button" data-action="lessonRetry">10초 연습 다시 하기</button>':''}`;
+    if(tutor.stage==='ready')return '<div class="lesson-next"><small>준비될 때 시작해도 돼.</small><button class="btn btn-primary" data-action="lessonTimed">10초 연습 시작 →</button></div>';
+    const active=tutor.stage==='pick'||tutor.stage==='timed',lockable=tutor.step===3?tutor.changed:tutor.step===4&&currentCell()!==null;
+    if(tutor.step<=2)return `<div class="choice-intro"><strong>${tutor.step===1?'1번 구름을 골라봐.':'2번, 가운데 구름을 골라봐.'}</strong><small>시간제한 없는 연습</small></div>${choiceButtons(tutorialAllowed(),active)}<span class="waiting-note" style="grid-column:auto;text-align:right;font-size:11px">선택하면 이동해</span>`;
+    return `<div class="choice-intro"><strong>${tutor.step===3?(tutor.changed?'선택을 확정해봐.':tutor.first!==null?'다른 구름으로 바꿔봐.':'어떤 구름이 좋을까?'):'누가 오지 않을까?'}</strong><small>${tutor.step===3?'시간제한 없는 연습':'시간이 끝나면 마지막 선택으로 이동해요.'}</small></div>${choiceButtons(options(),active)}<button class="lock-btn" data-action="lock" ${!lockable?'disabled':''}>선택 확정 ↗</button>`;
+  }
+  function tutorialSelect(cell){
+    if(!tutor||!['pick','timed'].includes(tutor.stage)||$('dialog').open)return;
+    if(!tutorialAllowed().includes(cell)){toast(tutor.step===1?'먼저 1번, 왼쪽 구름을 골라봐.':tutor.step===2?'이번엔 2번, 가운데 구름을 골라봐.':'번호가 표시된 세 구름 중에서 골라봐.');return;}
+    if(tutor.stage==='timed'&&Date.now()>=tutor.room.phaseEndsAt){tutorialResolve();return;}
+    sound('select');const p=tutor.room.player('you');p.selected=cell;optimisticCell=null;
+    if(tutor.step<=2){tutorialResolve();return;}
+    if(tutor.first===null)tutor.first=cell;else if(tutor.first!==cell)tutor.changed=true;
+    applyState(tutor.room.snapshot('you'));
+  }
+  function tutorialLock(){
+    if(!tutor||$('dialog').open||!['pick','timed'].includes(tutor.stage)||currentCell()===null)return;
+    if(tutor.step===3&&!tutor.changed)return;
+    sound('lock');tutor.room.player('you').locked=true;tutorialResolve();
+  }
+  function tutorialResolve(){
+    if(!tutor||tutor.stage==='reveal'||tutor.stage==='done')return;
+    const room=tutor.room,used=new Set([room.player('you').selected]);
+    // Explicitly staged examples, confined to the tutorial. Real bots still use G.botChoice.
+    room.players.filter(p=>p.bot).forEach((p,i)=>{let cell;if(tutor.step===2&&i===0)cell=4;else cell=G.TARGETS[p.slot].find(c=>c!==4&&!used.has(c))??G.TARGETS[p.slot].find(c=>!used.has(c))??null;p.selected=cell;p.locked=true;if(cell!==null)used.add(cell);});
+    room.resolve(Date.now());tutor.stage='reveal';tutor.resultReady=false;applyState(room.snapshot('you'));
+    const serial=tutor.serial,step=tutor.step;setTimeout(()=>{if(tutor?.serial===serial&&tutor.step===step&&tutor.stage==='reveal'){tutor.resultReady=true;render();}},reducedMotion?120:1250);
+  }
+  function nextLesson(){if(!tutor||tutor.stage!=='reveal'||!tutor.resultReady||!revealVisible())return;if(tutor.step===4){tutor.stage='done';storage.set(LEARN_KEY,'done');render();focusHeading();window.scrollTo({top:0,behavior:'instant'});}else{tutor.step++;prepareLesson();focusHeading();}}
+  function startTimedLesson(){if(!tutor||tutor.step!==4||tutor.stage!=='ready')return;tutor.stage='timed';tutor.room.phaseStartedAt=Date.now();tutor.room.phaseEndsAt=Date.now()+10000;applyState(tutor.room.snapshot('you'));sound('start');}
+
+  document.addEventListener('click',event=>{
+    const b=event.target.closest('[data-action]');if(!b||b.disabled)return;event.preventDefault();unlockAudio();const a=b.dataset.action;
+    if(a==='setup')openSetup();else if(a==='backHome')backHome();else if(a==='kindSolo'||a==='kindFriends'){ux.kind=a==='kindSolo'?'solo':'friends';ux.error='';render();}
+    else if(a==='solo')startSolo();else if(a==='matchmake')matchmake();else if(a==='create')createRoom();else if(a==='joinDialog')joinDialog();
+    else if(a==='menu')showMenu();else if(a==='help')showHelp();else if(a==='closeDialog')closeDialog();else if(a==='settings')settingsDialog();
+    else if(a==='sound'){muted=!muted;storage.set('cloud-pick:muted',muted?'1':'0');if(!muted){unlockAudio();tone(700);}updateSoundButton();}
+    else if(a==='motion'){reducedMotion=!reducedMotion;storage.set('cloud-pick:motion',reducedMotion?'reduced':'full');updateMotionButton();}
+    else if(a==='select')select(Number(b.dataset.cell));else if(a==='lock')lock();else if(a==='start'){closeDialog();action('start');window.scrollTo({top:0,behavior:'instant'});}
+    else if(a==='addBot')action('addBot');else if(a==='removeBot')action('removeBot',{id:b.dataset.id});else if(a==='lobby')action('lobby');
+    else if(a==='leaveDialog')leaveDialog();else if(a==='leave')leave();else if(a==='home'){if(mode==='home')backHome();else leaveDialog();}
+    else if(a==='copyCode')copy(state.code,'방 코드를 복사했어요.');else if(a==='copyLink')copyInvite();else if(a==='history')showHistory();
+    else if(a==='tutorial')startTutorial();else if(a==='lessonNext')nextLesson();else if(a==='lessonTimed')startTimedLesson();else if(a==='lessonRetry')prepareLesson();
+    else if(a==='learnSolo')startSolo();else if(a==='learnFriends')openSetup('friends');else if(a==='connectionHelp')connectionHelp();
+    else if(a==='checkConnection'){closeDialog();initializeBackend(false).then(()=>toast(serverAvailable?'멀티플레이 서버에 연결됐어요.':'서버를 찾지 못했어요. 서버 주소에서 열었는지 확인해 주세요.'));}
+  });
+  document.addEventListener('submit',event=>{
+    if(event.target.id==='joinForm'){event.preventDefault();joinRoom($('joinCode').value);}
+    else if(event.target.id==='settingsForm'){event.preventDefault();const c={rounds:Number($('roundSetting').value),seconds:Number($('timeSetting').value),fillBots:mode==='online'?$('fillBotsSetting').checked:true};if(mode==='online')action('configure',{config:c});else{config=c;state.config={...c};}closeDialog();render();}
+  });
+  document.addEventListener('input',event=>{if(event.target.id==='nameInput'){name=event.target.value;storage.set('cloud-pick:name',name);}if(event.target.id==='joinCode')event.target.removeAttribute('aria-invalid');});
+  document.addEventListener('keydown',event=>{
+    if(/INPUT|TEXTAREA|SELECT/.test(event.target.tagName)||event.target.isContentEditable||$('dialog').open||event.altKey||event.ctrlKey||event.metaKey||event.repeat)return;
+    if(['1','2','3'].includes(event.key)){event.preventDefault();unlockAudio();select(options()[Number(event.key)-1]);}
+    else if(event.key==='Enter'&&state.phase==='choose'&&(!event.target.closest('button,a')||event.target.closest('[data-action=select],[data-action=lock]'))){event.preventDefault();unlockAudio();lock();}
+  });
+  $('dialog').addEventListener('click',event=>{if(event.target===$('dialog')){const r=$('dialog').getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeDialog();}});
+  canvas.addEventListener('pointermove',event=>{const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*1000,y=(event.clientY-r.top)/r.width*1000;hoverCell=view.cells.findIndex(c=>Math.pow((x-c.x)/(103*c.s),2)+Math.pow((y-c.y+12)/(64*c.s),2)<1);canvas.style.cursor=state.phase==='choose'&&!me().locked&&(mode==='tutorial'?tutorialAllowed():options()).includes(hoverCell)?'pointer':'default';});
+  canvas.addEventListener('pointerleave',()=>{hoverCell=null;});
+  canvas.addEventListener('pointerdown',event=>{if(mode==='home'||state.phase==='lobby')return;const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*1000,y=(event.clientY-r.top)/r.width*1000;const cell=view.cells.findIndex(c=>Math.pow((x-c.x)/(108*c.s),2)+Math.pow((y-c.y+12)/(73*c.s),2)<1);if(cell<0)return;unlockAudio();if(state.board[cell]>0)select(cell);});
+
+  function ellipse(x,y,rx,ry,fill) { ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fillStyle=fill;ctx.fill(); }
+  function rounded(x,y,w,h,r,fill,stroke,lineWidth=1) {ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lineWidth;ctx.stroke();}}
+  const artPathCache=new Map();
+  function path(d,fill,stroke='',width=1,c=ctx){let p=artPathCache.get(d);if(!p){p=new Path2D(d);if(artPathCache.size<900)artPathCache.set(d,p);}if(fill&&fill!=='none'){c.fillStyle=fill;c.fill(p);}if(stroke){c.strokeStyle=stroke;c.lineWidth=width;c.stroke(p);}}
+  function poly(points,fill,c=ctx){c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();c.fillStyle=fill;c.fill();}
+  function circ(x,y,rx,ry,fill,c=ctx){c.beginPath();c.ellipse(x,y,rx,ry,0,0,Math.PI*2);c.fillStyle=fill;c.fill();}
+  function line(points,stroke,width=1,c=ctx){c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.strokeStyle=stroke;c.lineWidth=width;c.stroke();}
+  function star(x,y,s,fill,c=ctx){poly([[x,y-s],[x+s*.28,y-s*.22],[x+s,y],[x+s*.26,y+s*.2],[x,y+s],[x-s*.22,y+s*.25],[x-s,y],[x-s*.28,y-s*.22]],fill,c);}
+  let backdrop=null,backdropKey='',grainPattern=null;
+  function backdropCanvas() {
+    const H=view.height,key=`${Math.round(H)}:${canvas.width}`;
+    if(backdrop&&backdropKey===key)return backdrop;
+    backdropKey=key;backdrop=document.createElement('canvas');
+    const density=Math.min(2,Math.max(1,canvas.width/1000));
+    backdrop.width=Math.ceil(1000*density);backdrop.height=Math.ceil(H*density);
+    const c=backdrop.getContext('2d');c.scale(density,density);
+    c.fillStyle='#262d47';c.fillRect(0,0,1000,H);
+    // Broad, flat planes of midnight indigo; no 3D gradients or airbrushed bloom.
+    poly([[0,H*.51],[216,H*.44],[548,H*.50],[780,H*.43],[1000,H*.51],[1000,H],[0,H]],'#323249',c);
+    poly([[0,H*.69],[160,H*.67],[375,H*.74],[561,H*.66],[820,H*.65],[1000,H*.71],[1000,H],[0,H]],'#3b3346',c);
+    for(let i=0;i<73;i++){
+      const x=(i*179.33+57)%1000,y=28+((i*91.77+6)%(H*.61));
+      if(i%11===0)star(x,y,3.5,'#a7aab0',c);else{c.globalAlpha=.35+(i%3)*.14;circ(x,y,.7+i%2*.45,.7+i%2*.45,'#d6c5a8',c);c.globalAlpha=1;}
+    }
+    // A crescent, deliberately imperfect, above the town.
+    const moonY=H*.166,moonX=H>850?705:823;
+    circ(moonX,moonY,39,42,'#d9bd91',c);circ(moonX+14,moonY-11,34,37,'#262d47',c);
+    star(757,moonY-32,4,'#aeaaad',c);star(888,moonY+29,2.6,'#c4b398',c);
+    // Drifting-looking strips are cached; a handful of leaves move over them.
+    poly([[142,H*.195],[223,H*.187],[336,H*.195],[397,H*.208],[274,H*.211],[171,H*.206]],'#3b3c54',c);
+    poly([[626,H*.36],[700,H*.343],[801,H*.351],[852,H*.366],[754,H*.372]],'#444058',c);
+    // Far ridge, tiny pines, disused water tower, and sleepy windows.
+    poly([[0,H*.78],[118,H*.7],[233,H*.80],[381,H*.83],[493,H*.8],[674,H*.83],[812,H*.69],[1000,H*.75],[1000,H],[0,H]],'#27293e',c);
+    for(let i=0;i<27;i++){
+      const x=i*40-27,base=H*.88+Math.sin(i*2.1)*28,hei=39+(i*29%68);
+      poly([[x-21,base],[x-8,base-hei*.42],[x-18,base-hei*.42],[x-5,base-hei*.68],[x-11,base-hei*.66],[x+1,base-hei],[x+12,base-hei*.63],[x+6,base-hei*.66],[x+21,base-hei*.38],[x+12,base-hei*.41],[x+24,base]],'#1e2539',c);
+    }
+    const towerX=125,towerY=H*.68;
+    line([[towerX-20,towerY+95],[towerX-13,towerY+8]],'#252339',4,c);line([[towerX+20,towerY+95],[towerX+13,towerY+8]],'#252339',4,c);
+    line([[towerX-17,towerY+28],[towerX+17,towerY+67],[towerX-20,towerY+88]],'#252339',3,c);
+    c.fillStyle='#383047';c.fillRect(towerX-22,towerY-21,44,45);
+    poly([[towerX-28,towerY-21],[towerX-2,towerY-36],[towerX+27,towerY-21]],'#22243a',c);
+    line([[towerX-20,towerY+2],[towerX+22,towerY+2]],'#605164',1,c);
+    const townY=H*.91;
+    [[45,96,48],[148,78,67],[768,91,60],[872,121,75],[994,80,49]].forEach(([x,w,h],j)=>{
+      c.fillStyle=['#383045','#2e2b40','#312a40'][j%3];c.fillRect(x-w/2,townY-h,w,h+55);
+      poly([[x-w/2-9,townY-h],[x-4,townY-h-29],[x+w/2+8,townY-h]],'#171e30',c);
+      c.fillStyle='#514050';c.fillRect(x+w/4,townY-h-26,9,24);
+      for(let k=0;k<3;k++){c.fillStyle=(j+k)%3===0?'#b18055':'#67505a';c.fillRect(x-w/2+17+k*(w-23)/3,townY-h+18,10,16);c.fillStyle='#302b3d';c.fillRect(x-w/2+21+k*(w-23)/3,townY-h+18,2,16);}
+    });
+    // Town telegraph wires: thin diagonals keep the composition slightly uneasy.
+    line([[934,H*.47],[922,H]],'#151e30',7,c);line([[902,H*.55],[958,H*.55]],'#151e30',6,c);
+    path(`M0 ${H*.65} Q385 ${H*.97} 930 ${H*.54} Q982 ${H*.58} 1040 ${H*.61}`,'none','#171d30',2,c);
+    path(`M0 ${H*.67} Q435 ${H*.97} 930 ${H*.56}`,'none','#171d30',1,c);
+    // A tiny bird on the wire; two amber pixels, not a borrowed character.
+    poly([[850,H*.69],[846,H*.66],[853,H*.642],[865,H*.65],[869,H*.66],[883,H*.659],[871,H*.67],[874,H*.683],[865,H*.7]],'#121b2a',c);
+    circ(863,H*.657,1.3,1.3,'#b18a65',c);
+    // Crooked oak trunks make a side-view paper theatre around the cloud board.
+    poly([[-50,H],[32,H],[43,H*.79],[29,H*.61],[42,H*.43],[31,H*.19],[68,-15],[32,-17],[3,H*.22],[-5,H*.43],[-32,H*.65]],'#141d2d',c);
+    line([[17,H*.5],[72,H*.30],[94,H*.18],[111,H*.13]],'#141d2d',9,c);
+    line([[27,H*.3],[139,H*.12],[217,H*.067]],'#141d2d',7,c);
+    line([[70,H*.24],[75,H*.09],[48,H*.02]],'#141d2d',5,c);
+    line([[34,H*.70],[110,H*.63],[143,H*.56]],'#141d2d',9,c);
+    line([[71,H*.64],[103,H*.54]],'#141d2d',5,c);
+    poly([[981,H],[1040,H],[1035,H*.08],[1009,H*.27],[987,H*.44],[1001,H*.69]],'#172032',c);
+    line([[1012,H*.22],[940,H*.08],[869,H*.052]],'#172032',9,c);
+    line([[1000,H*.43],[940,H*.31],[910,H*.25]],'#172032',8,c);
+    line([[988,H*.78],[939,H*.70],[892,H*.67]],'#172032',8,c);
+    // Angular clusters of burnt-orange leaves, deliberately kept at the edges.
+    const foliage=[[-4,H*.025,1.22],[49,H*.047,1.0],[103,H*.072,.76],[157,H*.06,.65],[202,H*.049,.4],[-9,H*.32,.75],[57,H*.20,.40],[1001,H*.12,.7],[962,H*.046,.75],[900,H*.036,.48],[945,H*.27,.4],[-7,H*.64,.7],[1030,H*.62,.8]];
+    foliage.forEach(([x,y,s],i)=>{
+      c.save();c.translate(x,y);c.scale(s,s);
+      poly([[-51,-18],[-38,-42],[-9,-35],[9,-51],[40,-32],[43,-11],[64,8],[42,31],[14,28],[-5,42],[-29,21],[-54,17]],['#995e4d','#ad704e','#785047','#95624c'][i%4],c);
+      for(let k=0;k<4;k++){c.save();c.translate(-32+k*23,(k%2?3:-15));c.rotate(k*.8+i);poly([[-10,0],[-2,-7],[12,0],[0,7]],['#bd824f','#ca9357','#8b5449','#c17f4d'][k],c);c.restore();}
+      c.restore();
+    });
+    // A low, ragged foreground bank keeps dark feet and moonlit clouds legible.
+    poly([[0,H*.955],[122,H*.927],[243,H*.964],[389,H*.99],[617,H*.979],[811,H*.943],[1000,H*.954],[1000,H],[0,H]],'#151c2c',c);
+    for(let i=0;i<44;i++){
+      const x=(i*97+3)%1000,y=H-((i*17)%32);c.save();c.translate(x,y);c.rotate(i*.49);
+      poly([[-5,0],[1,-2],[7,1],[0,3]],['#735143','#956247','#b17b51','#4d454d'][i%4],c);c.restore();
+    }
+    return backdrop;
+  }
+  function drawBackground(t){
+    ctx.drawImage(backdropCanvas(),0,0,1000,view.height);
+    // Leaves drift independently of gameplay: soft movement, not glowing particles.
+    for(let i=0;i<12;i++){
+      const speed=7+i%4*2,x=((i*197+73+t*speed)%1160)-80,y=((i*117+t*(9+i%3*3))%(view.height+70))-30;
+      if(x>185&&x<815&&y>view.height*.24&&y<view.height*.91)continue;
+      ctx.save();ctx.translate(x,y);ctx.rotate(Math.sin(t*.45+i)*.65+i);ctx.globalAlpha=.65;
+      poly([[-7,0],[-1,-3],[8,0],[0,4]],['#c9945e','#ac7151','#bf8562'][i%3]);ctx.restore();
+    }
+    // Sparse eyes in the trees. They stay behind the interactive board.
+    if(!reducedMotion&&Math.sin(t*.29)>.30){const a=Math.min(.65,(Math.sin(t*.29)-.3));ctx.save();ctx.globalAlpha=a;ellipse(80,view.height*.43,2.2,1.3,'#cba56b');ellipse(90,view.height*.43,2.2,1.3,'#cba56b');ctx.restore();}
+  }
+  const CLOUD_PATH=new Path2D('M-77 14Q-104 13-98-9Q-96-23-72-26Q-76-43-55-47Q-36-54-19-40Q-3-54 14-45Q31-57 52-43Q63-36 62-25Q84-31 96-14Q108 3 88 16L70 20Q49 33 28 26L5 30-17 27Q-38 36-56 24Z');
+  function cloudShape(){return CLOUD_PATH;}
+  function drawCloud(cell,t){
+    const c=view.cells[cell],target=state.board[cell]>0;
+    const reachable=(mode==='tutorial'?tutorialAllowed():options()).includes(cell)&&!['home','lobby','finished'].includes(state.phase), selected=currentCell()===cell&&state.phase==='choose';
+    const hover=hoverCell===cell&&reachable&&state.phase==='choose'&&!me().locked;
+    const e=(now()-state.phaseStartedAt)/1000, revealed=state.phase==='finished'||(state.phase==='reveal'&&(reducedMotion||e>=NIGHT_TIMING.land));
+    const occupants=state.results.filter(r=>r.cell===cell),collision=revealed&&occupants.length>1;
+    ctx.save();ctx.translate(c.x,c.y);ctx.scale(c.s,c.s);
+    const bob=reducedMotion?0:Math.sin(t*.9+cell*.65)*1.8;ctx.translate(0,bob);
+    // One offset silhouette and one flat paper surface; no pillow shading.
+    ctx.save();ctx.translate(0,11);ctx.scale(1,.83);ctx.fillStyle=collision?'#654555':'#41465e';ctx.fill(CLOUD_PATH);ctx.restore();
+    ctx.save();ctx.scale(1,.83);
+    ctx.fillStyle=collision?'#917174':selected?'#c0aa9b':reachable&&['home','choose','countdown'].includes(state.phase)?'#a39aa7':target?'#817c96':'#696880';
+    ctx.fill(CLOUD_PATH);
+    if(reachable&&['home','choose','countdown'].includes(state.phase)){ctx.strokeStyle=selected?'#efc183':hover?'#d9c5a2':'#c9b6ad';ctx.lineWidth=selected?3.8:hover?2.6:1.2;ctx.stroke(CLOUD_PATH);}
+    ctx.restore();
+    path('M-66 5L-40 12-11 10 8 15 37 10 65 12','none',selected?'#d9c2aa':'#b8a9b36b',1.4);
+    if(selected){path('M-19-50L-13-55-10-50M-3-54L0-60 3-54M11-50L15-55 18-50','none','#e7b37c',1.8);}
+    if(target&&(!revealed||!occupants.length)){
+      const count=state.board[cell],ps=count===1?[[0,-21]]:count===2?[[-18,-21],[18,-25]]:[[-27,-19],[0,-32],[27,-19]];
+      ps.forEach(([x,y],i)=>drawCoin(x,y+(reducedMotion?0:Math.sin(t*1.6+i+cell)*1.5),1,t+i+cell));
+    }
+    if(options().includes(cell)&&target&&!revealed&&!['home','lobby'].includes(state.phase)){
+      rounded(67,7,24,23,2,selected?'#d6a871':'#292e44',selected?'#efc48c':'#c2a895',1);
+      ctx.font='600 12px ui-monospace,monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=selected?'#242b3d':'#e0c7a6';ctx.fillText(String(options().indexOf(cell)+1),79,19);
+    }
+    if(collision){path('M-25-2L-11 3-4-5 4 9 14-1 23 5','none','#d7a080',2);}
+    ctx.restore();
+  }
+  function drawCoin(x,y,scale,t=0){
+    ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
+    const rx=10+(reducedMotion?0:Math.sin(t*1.5)*.8);
+    ellipse(3,1,rx,15.5,'#ab714d');ellipse(0,-1,rx,15.5,'#deb773');
+    ctx.beginPath();ctx.ellipse(0,-1,rx-2.5,12,0,0,Math.PI*2);ctx.strokeStyle='#f0cd91';ctx.lineWidth=1;ctx.stroke();
+    path('M1-8L-2 5','none','#8e5b47',2.5);
+    ctx.restore();
+  }
+  function character(slot,x,y,scale,t,expression='idle',squash=1){
+    ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);ctx.scale(1/Math.sqrt(squash),squash);
+    const step=reducedMotion?0:Math.floor(t*8)/8,bob=expression==='idle'?Math.sin(step*1.7+slot)*1.3:0;
+    ctx.translate(0,bob);
+    const blink=!reducedMotion&&((step+slot*1.33)%5.3<.16);
+    animalLayers(slot,expression,blink).forEach(p=>{if(p.fill!=='none'){ctx.fillStyle=p.fill;ctx.fill(p.path);}if(p.stroke){ctx.strokeStyle=p.stroke;ctx.lineWidth=p.width;ctx.lineCap='round';ctx.stroke(p.path);}});
+    ctx.restore();
+  }
+  function tag(text,x,y,fill,ink,size=12,border=''){
+    ctx.save();const portrait=view.height>850;size*=portrait?1.5:1;ctx.font=`550 ${size}px "Malgun Gothic",system-ui,sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';const width=Math.min(220,ctx.measureText(text).width+19);
+    rounded(x-width/2,y-(portrait?15:11),width,portrait?31:23,2,fill,border||undefined,1);ctx.fillStyle=ink;ctx.fillText(text,x,y,width-11);ctx.restore();
+  }
+  function drawPlayers(t){
+    const reveal=state.phase==='reveal'||state.phase==='finished',elapsed=(now()-state.phaseStartedAt)/1000;
+    const moves=state.players.map(p=>{
+      const home=view.cells[G.HOMES[p.slot]],r=state.results.find(r=>r.id===p.id),destination=reveal&&r&&r.cell!==null?view.cells[r.cell]:home;
+      const progress=reveal?(reducedMotion?1:Math.min(1,Math.max(0,(elapsed-NIGHT_TIMING.anticipation)/NIGHT_TIMING.jump))):0;
+      const ease=progress<.5?2*progress*progress:1-Math.pow(-2*progress+2,2)/2;
+      const peers=r?.cell!==null?state.results.filter(x=>x.cell===r?.cell):[],rank=peers.findIndex(x=>x.id===p.id);
+      const spread=peers.length>1?(rank-(peers.length-1)/2)*43*progress:0;
+      const x=home.x+(destination.x-home.x)*ease+spread;
+      const y=home.y+(destination.y-home.y)*ease-(reducedMotion?0:Math.sin(progress*Math.PI)*105)-6;
+      return{p,home,r,x,y,s:(home.s+(destination.s-home.s)*ease)*(view.height>850?1.0:.85),progress};
+    });
+    moves.sort((a,b)=>a.y-b.y).forEach(({p,home,r,x,y,s,progress})=>{
+      const self=p.id===state.yourId;
+      if(!reveal){
+        ellipse(home.x,home.y+4,25*home.s,6.5*home.s,'#33384b');
+        if(self){ctx.strokeStyle='#e0b780';ctx.lineWidth=1.6;ctx.beginPath();ctx.ellipse(home.x,home.y+5,37*home.s,10*home.s,0,0,Math.PI*2);ctx.stroke();}
+      }
+      const landed=reveal&&(reducedMotion||elapsed>=NIGHT_TIMING.land),expression=landed?(r?.gain?'happy':'sad'):'idle';
+      let squash=1;
+      if(reveal&&!reducedMotion){if(elapsed<NIGHT_TIMING.anticipation)squash=1-.08*Math.sin(Math.min(1,elapsed/NIGHT_TIMING.anticipation)*Math.PI/2);else if(elapsed>=NIGHT_TIMING.land&&elapsed<NIGHT_TIMING.land+.23)squash=.87+.13*((elapsed-NIGHT_TIMING.land)/.23);}
+      character(p.slot,x,y,s,t,expression,squash);
+      if(!reveal){
+        if(!['home','lobby'].includes(state.phase))tag(`${p.name}${self&&p.name!=='나'?' · 나':''}`,home.x,home.y+37*home.s,self?'#bb895f':'#252b40',self?'#1a2131':'#d5c4ad',11.5,self?'':'#645768');
+        if(state.phase==='choose'&&p.locked)tag('✓',home.x+57*home.s,home.y-120*s,'#38483f','#c7d0a2',13,'#81947c');
+      }else if(landed&&r){
+        const gainY=y-153*s,group=state.results.filter(z=>z.cell===r.cell);
+        if(!r.collision||group[0]?.id===p.id)tag(r.missed?'놓쳤다.':r.collision?`${group.length}명 충돌 · 빈손`:`+${r.gain} COINS`,r.collision?view.cells[r.cell].x:x,gainY,r.gain?'#3c3439':'#4c303b',r.gain?'#edc78d':'#edb096',12,r.gain?'#af895c':'#a36b59');
+      }
+    });
+  }
+  function drawSelectedPath(){
+    if(state.phase!=='choose'||currentCell()===null)return;
+    const home=view.cells[G.HOMES[me().slot]],dest=view.cells[currentCell()];
+    ctx.save();ctx.lineWidth=2;ctx.strokeStyle='#d4a773aa';ctx.setLineDash([3,9]);ctx.lineCap='round';ctx.beginPath();ctx.moveTo(home.x,home.y-7);ctx.quadraticCurveTo((home.x+dest.x)/2,(home.y+dest.y)/2-48,dest.x,dest.y-7);ctx.stroke();ctx.restore();
+  }
+  function makeParticles(){
+    particles=[];
+    state.results.forEach(r=>{
+      if(r.missed||r.cell===null)return;
+      if(r.collision&&state.results.find(z=>z.cell===r.cell)?.id!==r.id)return;
+      for(let i=0;i<(r.gain?13:9);i++)particles.push({cell:r.cell,angle:i*2.399+r.slot,speed:50+(i*31%83),size:2+i%4,delay:NIGHT_TIMING.land+(i%3)*.025,color:r.gain?['#dfb371','#eed4a1','#b38a61'][i%3]:['#b8806b','#8b7087','#d6a586'][i%3],bad:r.collision});
+    });
+  }
+  function drawParticles(){
+    if(state.phase!=='reveal'||reducedMotion)return;
+    const elapsed=(now()-state.phaseStartedAt)/1000;
+    particles.forEach(p=>{const t=elapsed-p.delay;if(t<0||t>1.7)return;const c=view.cells[p.cell],x=c.x+Math.cos(p.angle)*p.speed*t,y=c.y-24+Math.sin(p.angle)*p.speed*t-85*t+90*t*t;
+      ctx.save();ctx.globalAlpha=Math.max(0,1-t/1.7);ctx.translate(x,y);ctx.rotate(t*3+p.angle);poly([[-p.size,0],[0,-p.size*.6],[p.size,0],[0,p.size*.55]],p.color);ctx.restore();
+    });
+  }
+  function drawAtmosphere(t){
+    // A subtle paper print, generated once. This never touches UI text/hit areas.
+    if(!grainPattern){const g=document.createElement('canvas');g.width=g.height=128;const gc=g.getContext('2d'),id=gc.createImageData(128,128);let seed=98731;for(let i=0;i<id.data.length;i+=4){seed=(Math.imul(seed,1664525)+1013904223)>>>0;id.data[i]=id.data[i+1]=id.data[i+2]=((seed>>>17)&255)>127?236:8;id.data[i+3]=(seed>>>24)%6;}gc.putImageData(id,0,0);grainPattern=ctx.createPattern(g,'repeat');}
+    ctx.fillStyle=grainPattern;ctx.fillRect(0,0,1000,view.height);
+    const remaining=Math.max(0,state.phaseEndsAt-now())/1000;
+    if(state.phase==='choose'&&remaining<=3&&!reducedMotion){ctx.strokeStyle=`rgba(191,116,78,${.18+.12*Math.sin(t*6.5)})`;ctx.lineWidth=5;ctx.strokeRect(2,2,996,view.height-4);}
+    if(state.phase==='reveal'&&!reducedMotion){const e=(now()-state.phaseStartedAt)/1000;if(e<NIGHT_TIMING.anticipation){ctx.fillStyle=`rgba(10,17,31,${.12*Math.sin(e/NIGHT_TIMING.anticipation*Math.PI)})`;ctx.fillRect(0,0,1000,view.height);}}
+  }
+  function resize(){
+    const r=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);if(!r.width||!r.height)return;
+    canvas.width=Math.round(r.width*dpr);canvas.height=Math.round(r.height*dpr);
+    view.width=1000;view.height=r.height/r.width*1000;
+    ctx.setTransform(canvas.width/1000,0,0,canvas.width/1000,0,0);
+    const H=view.height,ys=H>850?[H*.445,H*.64,H*.835]:[H*.39,H*.607,H*.819];
+    view.cells=Array.from({length:9},(_,i)=>{const row=Math.floor(i/3),col=i%3;return{x:500+(col-1)*[236,247,258][row],y:ys[row],s:[.92,1,1.055][row]};});
+  }
+  let previousPaint=0;
+  function frame(ms){
+    requestAnimationFrame(frame);
+    if(!view.cells.length||screenName()==='result'||document.hidden||(reducedMotion&&ms-previousPaint<80)||(!reducedMotion&&ms-previousPaint<15))return;
+    previousPaint=ms;const t=reducedMotion?0:ms/1000;
+    ctx.clearRect(0,0,1000,view.height);drawBackground(t);
+    // Tiny camera impulse on a pile-up, never on selection or pointer targeting.
+    ctx.save();const e=(now()-state.phaseStartedAt)/1000;
+    if(state.phase==='reveal'&&e>=NIGHT_TIMING.land&&e<NIGHT_TIMING.land+.23&&state.results.some(r=>r.collision)&&!reducedMotion){const strength=1-(e-NIGHT_TIMING.land)/.23;ctx.translate(Math.sin(e*83)*3.6*strength,Math.cos(e*67)*1.8*strength);}
+    drawSelectedPath();for(let i=0;i<9;i++)drawCloud(i,t);drawPlayers(t);drawParticles();ctx.restore();drawAtmosphere(t);drawTimerAndBanner();
+  }
+
+
+  function drawTimerAndBanner(){
+    const duration=state.phaseEndsAt-state.phaseStartedAt,remaining=Math.max(0,state.phaseEndsAt-now()),secs=Math.ceil(remaining/1000);
+    const lesson=mode==='tutorial',timed=lesson&&tutor?.stage==='timed';
+    let value='☾',label=lesson?'천천히':'',progress=1,banner='';
+    if(state.phase==='choose'&&(!lesson||timed)){
+      value=fmt(secs);label='초';progress=duration?remaining/duration:0;
+      if(secs>0&&secs<=3&&lastBeep!==secs&&!pausedAt){lastBeep=secs;tone(72,0,.16,.052,'sine');tone(63,.19,.14,.032,'sine');tone(690+(3-secs)*70,0,.05,.012,'triangle');announce(`${secs}초 남았어요.`);}
+      if(secs<=3&&!me().locked)banner='<span class="banner-eyebrow">DON’T BLINK.</span><strong>지금 결정해.</strong>';
+    }else if(state.phase==='countdown'){
+      value=String(secs||1);label='준비';progress=remaining/duration;
+      banner='<span class="banner-eyebrow">A MOMENT OF SILENCE.</span><strong>욕심낼까, 피해 갈까.</strong>';
+    }else if(state.phase==='reveal'){
+      value=lesson?'✓':String(Math.max(1,secs));label=lesson?'확인':'다음';progress=lesson?1:remaining/duration;
+      if(!revealVisible())banner='<span class="banner-eyebrow">THE MOMENT OF TRUTH.</span><strong>함께, 공개.</strong>';
+    }
+    if($('timerValue').textContent!==value)$('timerValue').textContent=value;
+    if($('timerLabel').textContent!==label)$('timerLabel').textContent=label;
+    $('timerProgress').style.strokeDashoffset=String(175.93*(1-Math.max(0,Math.min(1,progress))));
+    const urgent=state.phase==='choose'&&(!lesson||timed)&&secs<=3&&secs>0;
+    $('timer').classList.toggle('urgent',urgent);const u=String(urgent);if($('stage').dataset.urgent!==u)$('stage').dataset.urgent=u;
+    if($('phaseBanner').innerHTML!==banner)$('phaseBanner').innerHTML=banner;
+  }
+
+  new ResizeObserver(resize).observe($('stage'));
+  setInterval(()=>{
+    if($('dialog').open||pausedAt)return;
+    if(mode==='solo'&&localRoom&&localRoom.advance())applyState(localRoom.snapshot('you'));
+    else if(mode==='tutorial'&&tutor?.stage==='timed'&&Date.now()>=tutor.room.phaseEndsAt)tutorialResolve();
+    presentReveal();
+  },65);
+  window.addEventListener('pagehide',disconnect);
+  window.addEventListener('pageshow',event=>{if(event.persisted&&mode==='online'&&session)restoreSession();});
+  async function restoreSession(){
+    let saved;try{saved=JSON.parse(storage.get('cloud-pick:session',true));}catch{}
+    if(!saved?.token)return false;
+    try{const next=await api('/api/state',undefined,saved.token);connectSession({...saved,state:next});toast('이전 방으로 다시 연결했어요.');return true;}
+    catch{storage.remove('cloud-pick:session',true);return false;}
+  }
+  async function initializeBackend(restore=true){
+    if(location.protocol==='http:'||location.protocol==='https:'){
+      try{const health=await api('/api/health',undefined,null);serverAvailable=health.ok&&health.app==='cloud-pick';}catch{serverAvailable=false;}
+    }
+    backendChecked=true;
+    // A delayed health check must not overwrite a tutorial or practice already started.
+    if(restore&&serverAvailable&&mode==='home'&&await restoreSession())return;
+    render();
+    const invited=new URLSearchParams(location.search).get('room');
+    if(restore&&mode==='home'&&invited&&/^[A-Z2-9]{6}$/i.test(invited)){openSetup('friends');joinDialog(invited.toUpperCase());}
+  }
+  // Read-only diagnostic view. Never exposes session tokens or unseen opponent choices.
+  window.__CLOUD_DEBUG__=Object.freeze({
+    getState:()=>JSON.parse(JSON.stringify(state)),getMode:()=>mode,
+    getUX:()=>({screen:screenName(),tutorial:tutor?{step:tutor.step,stage:tutor.stage,changed:tutor.changed}:null,paused:!!pausedAt,learned:storage.get(LEARN_KEY)==='done'}),
+    getTheme:()=>({name:'AFTER DARK · VOL. 03',reducedMotion,muted,embeddedArtwork:true}),
+  });
+  render();resize();requestAnimationFrame(frame);initializeBackend();
+})();
+</script>
+</body>
+</html>
