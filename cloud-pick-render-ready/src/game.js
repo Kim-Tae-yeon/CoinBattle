@@ -5,10 +5,14 @@
   const TARGETS = [[6, 4, 8], [0, 4, 6], [0, 4, 2], [2, 4, 8]];
   const COLORS = ['#fa9775', '#63c6b2', '#af99e8', '#efc35b'];
   const BOT_NAMES = ['피치', '모모', '루루', '콩이'];
-  const DEFAULTS = { rounds: 5, seconds: 10, fillBots: true };
+  const DEFAULTS = { rounds: 10, seconds: 10, fillBots: true };
+  const REWARD_CELLS = Object.freeze([0, 2, 4, 6, 8]);
+  const HIGH_REWARD_START = 3;
+  const EARLY_REWARDS = Object.freeze([1, 1, 2, 2, 4]);
+  const HIGH_REWARDS = Object.freeze([1, 2, 3, 5, 6]);
   const fail = (message) => { throw new Error(message); };
   const clampConfig = (config = {}) => ({
-    rounds: [3, 5, 8, 10].includes(Number(config.rounds)) ? Number(config.rounds) : 5,
+    rounds: [3, 5, 8, 10].includes(Number(config.rounds)) ? Number(config.rounds) : DEFAULTS.rounds,
     seconds: [5, 10, 15, 20].includes(Number(config.seconds)) ? Number(config.seconds) : 10,
     fillBots: config.fillBots !== false,
   });
@@ -19,9 +23,15 @@
     }
     return a;
   }
-  function makeBoard(rng = Math.random) {
-    const edges = shuffle([1, 1, 2, 2], rng);
-    return [edges[0], 0, edges[1], 0, 3, 0, edges[2], 0, edges[3]];
+  // All five reward clouds, including the centre, use the same value pool.
+  // A room supplies a bag-drawn jackpot cell. Standalone previews use a random one.
+  function makeBoard(rng = Math.random, round = 1, jackpotCell = null) {
+    const rewards = round >= HIGH_REWARD_START ? HIGH_REWARDS : EARLY_REWARDS;
+    const cell = REWARD_CELLS.includes(jackpotCell)
+      ? jackpotCell : REWARD_CELLS[Math.floor(rng() * REWARD_CELLS.length)];
+    const small = shuffle(rewards.slice(0, -1), rng), board = Array(9).fill(0);
+    for (const spot of REWARD_CELLS) board[spot] = spot === cell ? rewards[rewards.length - 1] : small.pop();
+    return board;
   }
   /* Bots only receive public information. Never pass human selections here. */
   function botChoice(slot, board, history, rng = Math.random) {
@@ -40,12 +50,13 @@
       this.code = code;
       this.config = clampConfig(config);
       this.rng = options.rng || Math.random;
-      this.timings = { countdown: 2500, between: 1800, reveal: 4000, ...options.timings };
+      this.timings = { countdown: 3000, between: 3000, reveal: 7000, ...options.timings };
       this.players = [];
       this.hostId = null;
       this.phase = 'lobby';
       this.round = 0;
       this.matchId = 0;
+      this.jackpotBag = []; // Server/local-room private; never included in snapshots.
       this.board = makeBoard(this.rng);
       this.phaseEndsAt = 0;
       this.phaseStartedAt = 0;
@@ -122,10 +133,18 @@
       if (this.players.length < 2) fail('2명 이상 필요해요. 봇을 추가하거나 친구를 초대해 주세요.');
       this.players.forEach(p => { p.score = 0; p.selected = null; p.locked = false; });
       this.round = 0; this.matchId++; this.results = []; this.history = [];
+      this.jackpotBag = [];
       this.nextRound(now, true);
     }
     nextRound(now, first = false) {
-      this.round++; this.board = makeBoard(this.rng); this.results = [];
+      this.round++;
+      // The high-value run begins at R3. Complete five-round runs visit each cell
+      // once; a final partial run is NOT advertised as perfectly equal exposure.
+      if (this.round === HIGH_REWARD_START || !this.jackpotBag.length) {
+        this.jackpotBag = shuffle(REWARD_CELLS, this.rng);
+      }
+      this.board = makeBoard(this.rng, this.round, this.jackpotBag.pop());
+      this.results = [];
       this.players.forEach(p => { p.selected = null; p.locked = false; });
       this.phase = 'countdown'; this.phaseStartedAt = now;
       this.phaseEndsAt = now + (first ? this.timings.countdown : this.timings.between);
@@ -195,7 +214,7 @@
       this.players = this.players.filter(p => !p.departed && (p.bot || p.connected));
       this.players.forEach(p => { p.score = 0; p.selected = null; p.locked = false; });
       this.phase = 'lobby'; this.round = 0; this.results = []; this.history = [];
-      this.phaseEndsAt = 0; this.board = makeBoard(this.rng); this.touch(now);
+      this.phaseEndsAt = 0; this.jackpotBag = []; this.board = makeBoard(this.rng); this.touch(now);
     }
     snapshot(viewerId, now = Date.now()) {
       const reveal = this.phase === 'reveal' || this.phase === 'finished';
@@ -214,5 +233,5 @@
       };
     }
   }
-  root.CloudGame = { Room, HOMES, TARGETS, COLORS, BOT_NAMES, DEFAULTS, makeBoard, botChoice, clampConfig };
+  root.CloudGame = { Room, HOMES, TARGETS, COLORS, BOT_NAMES, DEFAULTS, REWARD_CELLS, HIGH_REWARD_START, EARLY_REWARDS, HIGH_REWARDS, makeBoard, botChoice, clampConfig };
 })(typeof globalThis !== 'undefined' ? globalThis : this);
