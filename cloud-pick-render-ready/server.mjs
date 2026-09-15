@@ -6,7 +6,7 @@ import { Matchmaker } from './src/matchmaker.mjs';
 import { networkInterfaces } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import './src/game.js';
-const { Room } = globalThis.CloudGame;
+const { Room, DEFAULTS, HIGH_REWARD_START, EARLY_REWARDS, HIGH_REWARDS } = globalThis.CloudGame;
 const PORT = Number(process.env.PORT || 3000);
 const HOST = process.env.HOST || '0.0.0.0';
 const MAX_ROOMS = 500;
@@ -99,7 +99,7 @@ const matchmaker = new Matchmaker({
   onMatch(tickets, now) {
     if (rooms.size >= MAX_ROOMS) throw new Error('Server full');
     let c; do { c = code(); } while (rooms.has(c));
-    const room = new Room(c, { rounds: 5, seconds: 10, fillBots: true }, { timings: { countdown: 4000 } });
+    const room = new Room(c, DEFAULTS, { timings: { countdown: 4000 } });
     room.matchmaking = { kind: 'random', humans: tickets.length, bots: 4 - tickets.length };
     rooms.set(c, room);
     const seats = tickets.slice();
@@ -136,7 +136,7 @@ const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
     if (url.pathname === '/api/health' && req.method === 'GET') {
-      return json(res, 200, { ok: true, app: 'cloud-pick', version: '4.0.1', revision: process.env.RENDER_GIT_COMMIT || 'local', protocol: 2, transport: 'SSE + HTTP', matchmaking: { enabled: true, target: 4, minimumHumans: 2, fallbackMs, rounds: 5, seconds: 10 }, lanUrls: lan });
+      return json(res, 200, { ok: true, app: 'cloud-pick', version: '4.1.0', revision: process.env.RENDER_GIT_COMMIT || 'local', protocol: 2, transport: 'SSE + HTTP', matchmaking: { enabled: true, target: 4, minimumHumans: 2, fallbackMs, rounds: DEFAULTS.rounds, seconds: DEFAULTS.seconds }, rewards: { highStartRound: HIGH_REWARD_START, maximum: 6, early: EARLY_REWARDS, high: HIGH_REWARDS }, lanUrls: lan });
     }
     if (url.pathname === '/api/matchmake' && req.method === 'GET') {
       checkLimit(req); return json(res, 200, queuePayload(matchmaker.poll(queueKey(req))));
