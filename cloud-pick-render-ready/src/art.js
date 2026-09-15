@@ -112,10 +112,17 @@
     if(reachable&&['home','choose','countdown'].includes(state.phase)){ctx.strokeStyle=selected?'#efc183':hover?'#d9c5a2':'#c9b6ad';ctx.lineWidth=selected?3.8:hover?2.6:1.2;ctx.stroke(CLOUD_PATH);}
     ctx.restore();
     path('M-66 5L-40 12-11 10 8 15 37 10 65 12','none',selected?'#d9c2aa':'#b8a9b36b',1.4);
-    if(selected){path('M-19-50L-13-55-10-50M-3-54L0-60 3-54M11-50L15-55 18-50','none','#e7b37c',1.8);}
+    if(selected){path('M-9-61L-2-54 12-69','none','#fff0d8',3.5);}
     if(target&&(!revealed||!occupants.length)){
-      const count=state.board[cell],ps=count===1?[[0,-21]]:count===2?[[-18,-21],[18,-25]]:[[-27,-19],[0,-32],[27,-19]];
-      ps.forEach(([x,y],i)=>drawCoin(x,y+(reducedMotion?0:Math.sin(t*1.6+i+cell)*1.5),1,t+i+cell));
+      const count=state.board[cell],big=count>=5;
+      // The number is the reward; the small lower badge is the keyboard shortcut.
+      // Equal styling for centre and edge clouds. Selection outranks reward size.
+      rounded(-53,-48,106,47,4,selected?'#f2e7d5':'#1c2232',selected?'#fff0d8':'#ac98ae',selected?3:1.5);
+      drawCoin(-30,-24,.67,t+cell);
+      ctx.font=`800 ${big?39:35}px ui-monospace,monospace`;
+      ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillStyle=selected?'#1c2232':'#f2e7d5';
+      ctx.fillText(String(count),13,-23);
     }
     if(options().includes(cell)&&target&&!revealed&&!['home','lobby'].includes(state.phase)){
       rounded(67,7,24,23,2,selected?'#d6a871':'#292e44',selected?'#efc48c':'#c2a895',1);

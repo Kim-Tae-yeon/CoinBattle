@@ -13,6 +13,7 @@
       value=lesson?'✓':String(Math.max(1,secs));label=lesson?'확인':'다음';progress=lesson?1:remaining/duration;
       if(!revealVisible())banner='<span class="banner-eyebrow">THE MOMENT OF TRUTH.</span><strong>함께, 공개.</strong>';
     }
+    if(state.phase==='countdown'&&state.round===G.HIGH_REWARD_START&&mode!=='tutorial')banner='<span class="banner-eyebrow">더 큰 보상</span><strong>이제 5·6코인도 등장해.</strong>';
     if($('timerValue').textContent!==value)$('timerValue').textContent=value;
     if($('timerLabel').textContent!==label)$('timerLabel').textContent=label;
     $('timerProgress').style.strokeDashoffset=String(175.93*(1-Math.max(0,Math.min(1,progress))));

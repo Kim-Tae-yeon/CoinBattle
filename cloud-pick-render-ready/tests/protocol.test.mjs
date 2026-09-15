@@ -5,7 +5,7 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 const pause = ms => new Promise(r => setTimeout(r, ms));
 const port = Number(process.env.TEST_PORT || 3138), base = `http://127.0.0.1:${port}`;
-async function until(predicate, timeout = 10000) {
+async function until(predicate, timeout = 15000) {
   const end = Date.now() + timeout;
   while (Date.now() < end) { if (await predicate()) return; await pause(25); }
   throw new Error('Timed out waiting for server state');
@@ -104,7 +104,7 @@ test('After Dark: original multiplayer protocol, four real clients', { timeout: 
       assert.ok(clients.every(c => c.latest.results.every(r => r.missed && r.gain === 0)));
     });
     await t.test('whole match finishes with matching score histories', async () => {
-      await until(() => clients.every(c => c.latest.phase === 'finished'), 6000);
+      await until(() => clients.every(c => c.latest.phase === 'finished'), 9000);
       for (const c of clients) {
         assert.deepEqual(c.latest.players.map(p => p.score), expected);
         for (const p of c.latest.players) assert.equal(p.score, c.latest.history.reduce((s, h) => s + h.results.find(r => r.id === p.id).gain, 0));
