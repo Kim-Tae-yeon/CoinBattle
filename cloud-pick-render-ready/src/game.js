@@ -5,7 +5,7 @@
   const TARGETS = [[6, 4, 8], [0, 4, 6], [0, 4, 2], [2, 4, 8]];
   const COLORS = ['#fa9775', '#63c6b2', '#af99e8', '#efc35b'];
   const BOT_NAMES = ['피치', '모모', '루루', '콩이'];
-  const VERSION = '5.1.0';
+  const VERSION = '5.2.0';
   const DEFAULTS = { rounds: 10, seconds: 10, fillBots: true };
   const REWARD_CELLS = [0, 2, 4, 6, 8];
   const REWARD_SETS = { low: [1, 1, 2, 2, 4], mid: [1, 1, 2, 3, 5], high: [1, 2, 2, 3, 6] };
@@ -236,12 +236,15 @@
         phaseStartedAt: this.phaseStartedAt, phaseEndsAt: this.phaseEndsAt, serverNow: now,
         revision: this.revision, yourId: viewerId,
         players: this.players.map(p => ({ id: p.id, name: p.name, slot: p.slot, bot: p.bot,
-          connected: p.connected, departed: p.departed, score: p.score, locked: p.locked, ready: !!p.ready,
-          // A locked player reveals only readiness, NEVER their destination.
+          connected: p.connected, departed: p.departed, score: p.score, locked: p.id === viewerId ? p.locked : false, ready: !!p.ready,
+          // Only your lock is returned. Current destinations are shared at simultaneous reveal.
           selected: p.id === viewerId || reveal ? p.selected : null,
         })),
         results: reveal ? this.results.map(r => ({ ...r })) : [],
-        history: this.history.map(h => ({ round: h.round, board: h.board.slice(), results: h.results.map(r => ({ ...r })) })),
+        // Past selections are personal only; internal history remains available to the server bots.
+        history: this.history.map(h => ({ round: h.round, board: h.board.slice(),
+          results: h.results.filter(r => r.id === viewerId).map(r => ({ ...r })),
+        })),
       };
     }
   }

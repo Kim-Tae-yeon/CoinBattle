@@ -5,7 +5,7 @@ import '../src/game.js';
 const G=globalThis.CloudGame;
 const seeded=seed=>()=>{seed=(Math.imul(1664525,seed)+1013904223)>>>0;return seed/4294967296;};
 function room(seed=1){const r=new G.Room('TEST',{}, {rng:seeded(seed)});for(let i=0;i<4;i++)r.addHuman('p'+i,'Player'+i,0);r.start('p0',0);return r;}
-test('v5 defaults: ten rounds, ten-second choices',()=>{assert.equal(G.VERSION,'5.1.0');assert.deepEqual(G.DEFAULTS,{rounds:10,seconds:10,fillBots:true});});
+test('v5 defaults: ten rounds, ten-second choices',()=>{assert.equal(G.VERSION,'5.2.0');assert.deepEqual(G.DEFAULTS,{rounds:10,seconds:10,fillBots:true});});
 test('10,000 seeds: reward curve, jackpot rotation, legal cells and hidden schedule',()=>{
  let earlyFive=false,earlySix=false,centerLower=false;
  for(let seed=0;seed<10000;seed++){

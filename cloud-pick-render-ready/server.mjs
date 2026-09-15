@@ -190,8 +190,8 @@ const server = http.createServer(async (req, res) => {
           }
           default: throw new Error('알 수 없는 명령이에요.');
         }
-        // A provisional selection is private, including its timing.
-        if (data.action === 'select') sendState(token, room, session.id);
+        // Selection and lock acknowledgements are private until a round resolves.
+        if ((data.action === 'select' || data.action === 'lock') && room.phase === 'choose') sendState(token, room, session.id);
         else broadcast(room);
         return json(res, 200, { ok: true, state: snapshot(room, session.id) });
       }

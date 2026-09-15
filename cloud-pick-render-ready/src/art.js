@@ -172,7 +172,7 @@
       character(p.slot,x,y,s,t,expression,squash);
       if(!reveal){
         if(!['home','lobby'].includes(state.phase))tag(`${p.name}${self&&p.name!=='나'?' · 나':''}`,home.x,home.y+37*home.s,self?'#bb895f':'#252b40',self?'#1a2131':'#d5c4ad',11.5,self?'':'#645768');
-        if(state.phase==='choose'&&p.locked)tag('✓',home.x+57*home.s,home.y-120*s,'#38483f','#c7d0a2',13,'#81947c');
+        if(self&&state.phase==='choose'&&p.locked)tag('✓',home.x+57*home.s,home.y-120*s,'#38483f','#c7d0a2',13,'#81947c');
       }else if(landed&&r){
         const gainY=y-153*s,group=state.results.filter(z=>z.cell===r.cell);
         if(!r.collision||group[0]?.id===p.id)tag(r.missed?'미선택 · 0':r.collision?`${group.length}명 겹침 · 0`:`+${r.gain}코인`,r.collision?view.cells[r.cell].x:x,gainY,r.gain?'#3c3439':'#4c303b',r.gain?'#edc78d':'#edb096',12,r.gain?'#af895c':'#a36b59');

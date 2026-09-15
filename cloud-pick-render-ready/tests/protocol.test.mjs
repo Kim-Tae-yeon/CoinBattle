@@ -109,7 +109,8 @@ test('After Dark: original multiplayer protocol, four real clients', { timeout: 
       await until(() => clients.every(c => c.latest.phase === 'finished'), 12000);
       for (const c of clients) {
         assert.deepEqual(c.latest.players.map(p => p.score), expected);
-        for (const p of c.latest.players) assert.equal(p.score, c.latest.history.reduce((s, h) => s + h.results.find(r => r.id === p.id).gain, 0));
+        assert.ok(c.latest.history.every(h => h.results.length === 1 && h.results[0].id === c.id));
+        assert.equal(c.latest.players.find(p => p.id === c.id).score, c.latest.history.reduce((s,h) => s + h.results[0].gain, 0));
       }
     });
     await t.test('host disconnect transfers authority; new host can replay', async () => {
