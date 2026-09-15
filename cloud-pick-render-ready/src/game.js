@@ -5,7 +5,7 @@
   const TARGETS = [[6, 4, 8], [0, 4, 6], [0, 4, 2], [2, 4, 8]];
   const COLORS = ['#fa9775', '#63c6b2', '#af99e8', '#efc35b'];
   const BOT_NAMES = ['피치', '모모', '루루', '콩이'];
-  const VERSION = '5.0.0';
+  const VERSION = '5.1.0';
   const DEFAULTS = { rounds: 10, seconds: 10, fillBots: true };
   const REWARD_CELLS = [0, 2, 4, 6, 8];
   const REWARD_SETS = { low: [1, 1, 2, 2, 4], mid: [1, 1, 2, 3, 5], high: [1, 2, 2, 3, 6] };

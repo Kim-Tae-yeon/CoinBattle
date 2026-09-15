@@ -21,8 +21,7 @@
     else if (state.phase === 'choose') {label=p.locked?'확정':'고르는 중';cls=p.locked?'is-locked':'';}
     else if (r && !presented) label='공개 중';
     else if (r) {label=r.missed?'선택 없음':r.collision?'겹침 · +0':`획득 · +${r.gain}`;cls=r.gain?'gained':'collision';}
-    const previous = state.history.filter(h => h.round < state.round).at(-1)?.results.find(x => x.id === p.id);
-    const last = previous ? `<div class="previous-choice">직전 · ${previous.missed ? '미선택' : ({0:'좌상',2:'우상',4:'중앙',6:'좌하',8:'우하'})[previous.cell] + (previous.collision ? ' 겹침' : ' +' + previous.gain)}</div>` : '';
+    const last = lobby ? '' : recentChoicesHTML(p);
     return `<div class="player-row ${p.bot?'is-bot':''} ${self?'is-me':''} ${!p.connected&&!p.bot?'offline':''}">${avatar(p.slot)}<div class="player-meta"><div class="player-name"><span class="text-name" title="${escapeHTML(p.name)}">${escapeHTML(p.name)}</span>${self?'<span class="you-tag">나</span>':p.bot?'<span class="bot-tag">봇</span>':''}${p.id===state.hostId&&mode==='online'&&!isRandom()?'<span class="host-crown" title="방장">♛</span>':''}</div><div class="player-status ${cls}">${label}</div>${!lobby?last:''}</div>${!lobby?`<div class="player-score" aria-label="${score}코인">${coin}<span>${score}</span></div>`:p.bot&&state.hostId===state.yourId?`<button class="remove-bot" data-action="removeBot" data-id="${escapeHTML(p.id)}" aria-label="${escapeHTML(p.name)} 봇 빼기">×</button>`:''}</div>`;
   }
   function lobbyHTML() {
