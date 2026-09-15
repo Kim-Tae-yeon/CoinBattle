@@ -1,6 +1,6 @@
   // Queue credentials stay in this tab's sessionStorage, never in URLs or the debug view.
   const QUEUE_KEY = 'cloud-pick:public-queue:v1';
-  let matchInfo = { enabled: false, fallbackMs: 20000, rounds: 5, seconds: 10 };
+  let matchInfo = { enabled: false, fallbackMs: 20000, rounds: G.DEFAULTS.rounds, seconds: G.DEFAULTS.seconds };
   let queue = null, queueTimer = 0, queueEpoch = 0, queuePending = false, queueCancelling = false, recovering = false;
   function isRandom() { return mode === 'online' && state.matchmaking?.kind === 'random'; }
   function randomSetupHTML() {
@@ -8,7 +8,7 @@
     const choices = `<details class="alternate-modes"><summary>다른 방식으로 플레이</summary><div class="alternate-buttons">${!random ? '<button class="text-button" data-action="kindRandom">랜덤 매칭 →</button>' : ''}${ux.kind !== 'solo' ? '<button class="text-button" data-action="kindSolo">혼자 봇과 연습 →</button>' : ''}${!online ? '<button class="text-button" data-action="kindFriends">친구끼리 플레이 →</button>' : ''}</div></details>`;
     let content;
     if (random) {
-      content = `<div class="setup-meta"><span>5라운드 · 선택 10초 · 최대 4명</span><span class="fixed-rule">공통 규칙</span></div>${!matchInfo.enabled ? `<div class="server-offline" role="status">${!backendChecked ? '매칭 서버를 확인하고 있어요…' : serverAvailable ? '기존 서버는 연결됐지만 랜덤 매칭 업데이트가 필요해요. 전체 프로젝트의 서버도 함께 교체해 주세요.' : '튜토리얼과 봇 연습은 바로 가능해요. 랜덤 매칭은 서버가 실행 중인 웹 주소에서 이용해 주세요.'}</div>` : ''}<button class="btn btn-primary" data-action="match" ${busy || !matchInfo.enabled ? 'disabled' : ''}>${busy ? '대기열에 연결하는 중…' : '상대 찾기'} <span class="arrow">↗</span></button><p class="match-policy">4명이 모이면 즉시 시작.<br>${Math.round(matchInfo.fallbackMs / 1000)}초 대기 후 2명 이상이면 빈자리를 봇으로 채워요.<br>혼자라면 다른 사람이 올 때까지 기다려요.</p>${!matchInfo.enabled && backendChecked ? '<button class="text-button setup-secondary" data-action="connectionHelp">서버 연결 안내 →</button>' : ''}`;
+      content = `<div class="setup-meta"><span>${matchInfo.rounds}라운드 · 선택 ${matchInfo.seconds}초 · 최대 4명</span><span class="fixed-rule">공통 규칙</span></div>${!matchInfo.enabled ? `<div class="server-offline" role="status">${!backendChecked ? '매칭 서버를 확인하고 있어요…' : serverAvailable ? '기존 서버는 연결됐지만 랜덤 매칭 업데이트가 필요해요. 전체 프로젝트의 서버도 함께 교체해 주세요.' : '튜토리얼과 봇 연습은 바로 가능해요. 랜덤 매칭은 서버가 실행 중인 웹 주소에서 이용해 주세요.'}</div>` : ''}<button class="btn btn-primary" data-action="match" ${busy || !matchInfo.enabled ? 'disabled' : ''}>${busy ? '대기열에 연결하는 중…' : '상대 찾기'} <span class="arrow">↗</span></button><p class="match-policy">4명이 모이면 즉시 시작.<br>${Math.round(matchInfo.fallbackMs / 1000)}초 대기 후 2명 이상이면 빈자리를 봇으로 채워요.<br>혼자라면 다른 사람이 올 때까지 기다려요.</p>${!matchInfo.enabled && backendChecked ? '<button class="text-button setup-secondary" data-action="connectionHelp">서버 연결 안내 →</button>' : ''}`;
     } else if (online) {
       content = `${!serverAvailable ? '<div class="server-offline">친구끼리 플레이하려면 같은 멀티플레이 서버 주소에서 열어 주세요.</div>' : ''}<button class="btn btn-primary" data-action="create" ${busy || !serverAvailable ? 'disabled' : ''}>방 만들기 →</button><button class="text-button setup-secondary" data-action="joinDialog" ${busy || !serverAvailable ? 'disabled' : ''}>초대 코드로 참가하기</button>`;
     } else {
