@@ -107,15 +107,19 @@
     // One offset silhouette and one flat paper surface; no pillow shading.
     ctx.save();ctx.translate(0,11);ctx.scale(1,.83);ctx.fillStyle=collision?'#654555':'#41465e';ctx.fill(CLOUD_PATH);ctx.restore();
     ctx.save();ctx.scale(1,.83);
-    ctx.fillStyle=collision?'#917174':selected?'#c0aa9b':reachable&&['home','choose','countdown'].includes(state.phase)?'#a39aa7':target?'#817c96':'#696880';
+    ctx.fillStyle=collision?'#917174':selected?'#f2d6af':reachable&&['home','choose','countdown'].includes(state.phase)?'#a39aa7':target?'#817c96':'#696880';
     ctx.fill(CLOUD_PATH);
-    if(reachable&&['home','choose','countdown'].includes(state.phase)){ctx.strokeStyle=selected?'#efc183':hover?'#d9c5a2':'#c9b6ad';ctx.lineWidth=selected?3.8:hover?2.6:1.2;ctx.stroke(CLOUD_PATH);}
+    if(reachable&&['home','choose','countdown'].includes(state.phase)){ctx.strokeStyle=selected?'#fff0d8':hover?'#d9c5a2':'#c9b6ad';ctx.lineWidth=selected?5:hover?2.6:1.2;ctx.stroke(CLOUD_PATH);}
     ctx.restore();
     path('M-66 5L-40 12-11 10 8 15 37 10 65 12','none',selected?'#d9c2aa':'#b8a9b36b',1.4);
-    if(selected){path('M-19-50L-13-55-10-50M-3-54L0-60 3-54M11-50L15-55 18-50','none','#e7b37c',1.8);}
+    if(selected){path('M-14-60L-5-52 13-73','none','#fff0d8',5);}
     if(target&&(!revealed||!occupants.length)){
-      const count=state.board[cell],ps=count===1?[[0,-21]]:count===2?[[-18,-21],[18,-25]]:[[-27,-19],[0,-32],[27,-19]];
-      ps.forEach(([x,y],i)=>drawCoin(x,y+(reducedMotion?0:Math.sin(t*1.6+i+cell)*1.5),1,t+i+cell));
+      const count=state.board[cell];
+      rounded(-58,-44,116,55,7,selected?'#fff0d8':'#202638',selected?'#fff0d8':'#e2c8a7',1.8);
+      drawCoin(-31,-16,.77,t+cell);
+      ctx.font='800 42px ui-monospace,monospace';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillStyle=selected?'#1c2232':'#fff0d8';ctx.fillText(String(count),17,-14);
+
     }
     if(options().includes(cell)&&target&&!revealed&&!['home','lobby'].includes(state.phase)){
       rounded(67,7,24,23,2,selected?'#d6a871':'#292e44',selected?'#efc48c':'#c2a895',1);
@@ -171,7 +175,7 @@
         if(state.phase==='choose'&&p.locked)tag('✓',home.x+57*home.s,home.y-120*s,'#38483f','#c7d0a2',13,'#81947c');
       }else if(landed&&r){
         const gainY=y-153*s,group=state.results.filter(z=>z.cell===r.cell);
-        if(!r.collision||group[0]?.id===p.id)tag(r.missed?'놓쳤다.':r.collision?`${group.length}명 충돌 · 빈손`:`+${r.gain} COINS`,r.collision?view.cells[r.cell].x:x,gainY,r.gain?'#3c3439':'#4c303b',r.gain?'#edc78d':'#edb096',12,r.gain?'#af895c':'#a36b59');
+        if(!r.collision||group[0]?.id===p.id)tag(r.missed?'미선택 · 0':r.collision?`${group.length}명 겹침 · 0`:`+${r.gain}코인`,r.collision?view.cells[r.cell].x:x,gainY,r.gain?'#3c3439':'#4c303b',r.gain?'#edc78d':'#edb096',12,r.gain?'#af895c':'#a36b59');
       }
     });
   }

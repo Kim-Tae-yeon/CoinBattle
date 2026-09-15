@@ -5,10 +5,13 @@
   const TARGETS = [[6, 4, 8], [0, 4, 6], [0, 4, 2], [2, 4, 8]];
   const COLORS = ['#fa9775', '#63c6b2', '#af99e8', '#efc35b'];
   const BOT_NAMES = ['피치', '모모', '루루', '콩이'];
-  const DEFAULTS = { rounds: 5, seconds: 10, fillBots: true };
+  const VERSION = '5.0.0';
+  const DEFAULTS = { rounds: 10, seconds: 10, fillBots: true };
+  const REWARD_CELLS = [0, 2, 4, 6, 8];
+  const REWARD_SETS = { low: [1, 1, 2, 2, 4], mid: [1, 1, 2, 3, 5], high: [1, 2, 2, 3, 6] };
   const fail = (message) => { throw new Error(message); };
   const clampConfig = (config = {}) => ({
-    rounds: [3, 5, 8, 10].includes(Number(config.rounds)) ? Number(config.rounds) : 5,
+    rounds: [3, 5, 8, 10].includes(Number(config.rounds)) ? Number(config.rounds) : DEFAULTS.rounds,
     seconds: [5, 10, 15, 20].includes(Number(config.seconds)) ? Number(config.seconds) : 10,
     fillBots: config.fillBots !== false,
   });
@@ -19,14 +22,28 @@
     }
     return a;
   }
-  function makeBoard(rng = Math.random) {
-    const edges = shuffle([1, 1, 2, 2], rng);
-    return [edges[0], 0, edges[1], 0, 3, 0, edges[2], 0, edges[3]];
+  function makeBoard(rng = Math.random, level = 'low', jackpotCell = null) {
+    const rewards = REWARD_SETS[level];
+    if (!rewards) fail('Invalid reward level');
+    const cells = shuffle(REWARD_CELLS, rng);
+    const jackpot = jackpotCell === null ? cells[0] : jackpotCell;
+    if (!REWARD_CELLS.includes(jackpot)) fail('Invalid jackpot cell');
+    const board = Array(9).fill(0), others = shuffle(rewards.slice(0, -1), rng);
+    board[jackpot] = rewards[4];
+    REWARD_CELLS.filter(c => c !== jackpot).forEach((c, i) => { board[c] = others[i]; });
+    return board;
+  }
+  // The schedule stays on the authoritative Room; snapshots never include future boards.
+  function makeMatchBoards(rng = Math.random) {
+    const levels = ['low', 'low', ...shuffle(['low', 'mid', 'high'], rng),
+      ...shuffle(['mid', 'mid', 'high', 'high', 'high'], rng)];
+    const jackpots = [...shuffle(REWARD_CELLS, rng), ...shuffle(REWARD_CELLS, rng)];
+    return levels.map((level, i) => makeBoard(rng, level, jackpots[i]));
   }
   /* Bots only receive public information. Never pass human selections here. */
   function botChoice(slot, board, history, rng = Math.random) {
     const options = TARGETS[slot];
-    const greed = [1.0, .65, 1.3, .85][slot];
+    const greed = .9; // One policy for all seats; only public outcomes affect weights.
     const weights = options.map(cell => {
       const recent = history.slice(-2).flatMap(r => r.results).filter(r => r.cell === cell).length;
       return Math.max(.2, Math.pow(board[cell], greed) / (1 + recent * .42));
@@ -40,13 +57,14 @@
       this.code = code;
       this.config = clampConfig(config);
       this.rng = options.rng || Math.random;
-      this.timings = { countdown: 2500, between: 1800, reveal: 4000, ...options.timings };
+      this.timings = { prepare: 20000, countdown: 3000, between: 3000, reveal: 7000, break: 4000, ...options.timings };
       this.players = [];
       this.hostId = null;
       this.phase = 'lobby';
       this.round = 0;
       this.matchId = 0;
       this.board = makeBoard(this.rng);
+      this.matchBoards = [];
       this.phaseEndsAt = 0;
       this.phaseStartedAt = 0;
       this.results = [];
@@ -67,7 +85,7 @@
         else fail('방이 가득 찼어요. 최대 4명까지 참가할 수 있어요.');
       }
       const slot = [0, 1, 2, 3].find(s => !this.players.some(p => p.slot === s));
-      const player = { id, name: String(name || '플레이어').replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, 12) || '플레이어', slot, bot: false, connected: true, departed: false, score: 0, selected: null, locked: false, botAt: 0 };
+      const player = { id, name: String(name || '플레이어').replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, 12) || '플레이어', slot, bot: false, connected: true, departed: false, score: 0, selected: null, locked: false, ready: false, botAt: 0 };
       this.players.push(player);
       this.players.sort((a, b) => a.slot - b.slot);
       if (!this.hostId) this.hostId = id;
@@ -107,6 +125,7 @@
       const p = this.player(id); if (!p) return;
       p.connected = false; p.departed = true; p.selected = null;
       if (this.phase === 'choose') p.locked = true;
+      p.ready = true;
       if (this.phase === 'lobby' || this.phase === 'finished') this.players = this.players.filter(x => x.id !== id);
       if (this.hostId === id) this.hostId = this.players.find(x => !x.bot && x.connected && !x.departed)?.id || null;
       this.touch(now);
@@ -120,12 +139,22 @@
         while (this.players.length < 4) this.addBot(hostId, now);
       }
       if (this.players.length < 2) fail('2명 이상 필요해요. 봇을 추가하거나 친구를 초대해 주세요.');
-      this.players.forEach(p => { p.score = 0; p.selected = null; p.locked = false; });
+      this.players.forEach(p => { p.score = 0; p.selected = null; p.locked = false; p.ready = !!p.bot; });
       this.round = 0; this.matchId++; this.results = []; this.history = [];
-      this.nextRound(now, true);
+      this.matchBoards = makeMatchBoards(this.rng);
+      this.board = this.matchBoards[0].slice();
+      this.phase = 'prepare'; this.phaseStartedAt = now; this.phaseEndsAt = now + this.timings.prepare;
+      this.touch(now);
+    }
+    ready(id, matchId, now = Date.now()) {
+      if (this.phase !== 'prepare' || this.matchId !== matchId) fail('준비 시간이 끝났습니다.');
+      const p = this.player(id);
+      if (!p || p.bot || p.departed) fail('참가 정보를 찾을 수 없습니다.');
+      p.ready = true; this.touch(now);
+      if (this.players.every(x => x.ready || x.departed)) this.nextRound(now, true);
     }
     nextRound(now, first = false) {
-      this.round++; this.board = makeBoard(this.rng); this.results = [];
+      this.round++; this.board = this.matchBoards[this.round - 1].slice(); this.results = [];
       this.players.forEach(p => { p.selected = null; p.locked = false; });
       this.phase = 'countdown'; this.phaseStartedAt = now;
       this.phaseEndsAt = now + (first ? this.timings.countdown : this.timings.between);
@@ -166,12 +195,14 @@
         return r;
       });
       this.history.push({ round: this.round, board: this.board.slice(), results: this.results.map(r => ({ ...r })) });
-      this.phase = 'reveal'; this.phaseStartedAt = now; this.phaseEndsAt = now + this.timings.reveal;
+      this.phase = 'reveal'; this.phaseStartedAt = now;
+      this.phaseEndsAt = now + this.timings.reveal + ((this.round === 4 || this.round === 8) && this.round < this.config.rounds ? this.timings.break : 0);
       this.touch(now);
     }
     advance(now = Date.now()) {
       const before = this.revision;
-      if (this.phase === 'countdown' && now >= this.phaseEndsAt) this.beginChoice(now);
+      if (this.phase === 'prepare' && now >= this.phaseEndsAt) this.nextRound(now, true);
+      else if (this.phase === 'countdown' && now >= this.phaseEndsAt) this.beginChoice(now);
       else if (this.phase === 'choose') {
         // Apply the deadline before processing bots that woke up too late.
         if (now >= this.phaseEndsAt) this.resolve(now);
@@ -205,7 +236,7 @@
         phaseStartedAt: this.phaseStartedAt, phaseEndsAt: this.phaseEndsAt, serverNow: now,
         revision: this.revision, yourId: viewerId,
         players: this.players.map(p => ({ id: p.id, name: p.name, slot: p.slot, bot: p.bot,
-          connected: p.connected, departed: p.departed, score: p.score, locked: p.locked,
+          connected: p.connected, departed: p.departed, score: p.score, locked: p.locked, ready: !!p.ready,
           // A locked player reveals only readiness, NEVER their destination.
           selected: p.id === viewerId || reveal ? p.selected : null,
         })),
@@ -214,5 +245,5 @@
       };
     }
   }
-  root.CloudGame = { Room, HOMES, TARGETS, COLORS, BOT_NAMES, DEFAULTS, makeBoard, botChoice, clampConfig };
+  root.CloudGame = { VERSION, REWARD_CELLS, REWARD_SETS, makeMatchBoards, Room, HOMES, TARGETS, COLORS, BOT_NAMES, DEFAULTS, makeBoard, botChoice, clampConfig };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

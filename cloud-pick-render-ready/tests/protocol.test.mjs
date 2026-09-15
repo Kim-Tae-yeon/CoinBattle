@@ -5,7 +5,7 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 const pause = ms => new Promise(r => setTimeout(r, ms));
 const port = Number(process.env.TEST_PORT || 3138), base = `http://127.0.0.1:${port}`;
-async function until(predicate, timeout = 10000) {
+async function until(predicate, timeout = 20000) {
   const end = Date.now() + timeout;
   while (Date.now() < end) { if (await predicate()) return; await pause(25); }
   throw new Error('Timed out waiting for server state');
@@ -51,7 +51,7 @@ class Client {
     return this.send(lock ? 'lock' : 'select', { cell, round: this.latest.round, matchId: this.latest.matchId });
   }
 }
-test('After Dark: original multiplayer protocol, four real clients', { timeout: 45000 }, async t => {
+test('After Dark: original multiplayer protocol, four real clients', { timeout: 100000 }, async t => {
   const server = spawn(process.execPath, [fileURLToPath(new URL('../server.mjs', import.meta.url))], {
     env: { ...process.env, PORT: String(port), HOST: '127.0.0.1' }, stdio: 'ignore',
   });
@@ -66,6 +66,8 @@ test('After Dark: original multiplayer protocol, four real clients', { timeout: 
       assert.ok(clients.every(c => c.latest.code === first.code && c.latest.players.every(p => !p.bot)));
     });
     await first.send('start');
+    await until(()=>clients.every(c=>c.latest.phase==='prepare'));
+    for (const c of clients) await c.send('ready',{matchId:c.latest.matchId});
     await until(() => clients.every(c => c.latest.phase === 'choose' && c.latest.round === 1));
     await t.test('provisional choices stay private until reveal', async () => {
       await first.pick(4, false);
@@ -104,7 +106,7 @@ test('After Dark: original multiplayer protocol, four real clients', { timeout: 
       assert.ok(clients.every(c => c.latest.results.every(r => r.missed && r.gain === 0)));
     });
     await t.test('whole match finishes with matching score histories', async () => {
-      await until(() => clients.every(c => c.latest.phase === 'finished'), 6000);
+      await until(() => clients.every(c => c.latest.phase === 'finished'), 12000);
       for (const c of clients) {
         assert.deepEqual(c.latest.players.map(p => p.score), expected);
         for (const p of c.latest.players) assert.equal(p.score, c.latest.history.reduce((s, h) => s + h.results.find(r => r.id === p.id).gain, 0));
@@ -114,6 +116,8 @@ test('After Dark: original multiplayer protocol, four real clients', { timeout: 
       await first.close();
       await until(() => clients[1].latest.hostId === clients[1].id);
       await clients[1].send('start');
+      await until(() => clients[1].latest.phase === 'prepare');
+      for(const c of clients.slice(1)) await c.send('ready',{matchId:clients[1].latest.matchId});
       await until(() => clients[1].latest.phase === 'countdown' && clients[1].latest.round === 1);
       assert.ok(clients[1].latest.players.every(p => p.score === 0));
     });

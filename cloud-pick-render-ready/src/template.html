@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#171a29">
-<meta name="description" content="조용한 밤, 수상한 친구들. 랜덤 매칭으로 만나 서로의 마음을 읽는 최대 4인 심리전.">
-<title>CLOUD PICK — Random After Dark</title>
+<meta name="description" content="세 구름 중 하나를 선택하세요. 혼자면 코인 획득, 겹치면 0코인. 최대 4인 랜덤 매칭 게임.">
+<title>CLOUD PICK · AFTER DARK</title>
 <style>/*STYLE*/</style>
 </head>
 <body data-screen="home">
@@ -16,7 +16,7 @@
   <span class="brand-mark"><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M30 5A17 17 0 1 0 35 34A18 18 0 0 1 30 5" fill="#dab583"/><path d="M34 6 35 10 39 11 35 12 34 16 33 12 29 11 33 10Z" fill="#dab583"/></svg></span>
   <span>CLOUD PICK<small>AFTER DARK</small></span>
  </a>
- <div id="screenLocation" class="screen-location">작은 마을의 큰 심리전</div>
+ <div id="screenLocation" class="screen-location"></div>
  <nav class="top-actions" aria-label="게임 메뉴"><span id="connectionPill" class="connection-pill" hidden></span><button class="menu-trigger" data-action="menu" aria-label="메뉴 열기" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>메뉴</span></button></nav>
 </header>
 <main id="main" tabindex="-1">
@@ -33,7 +33,6 @@
    </div>
    <div class="phase-banner" id="phaseBanner" aria-live="polite"></div>
    <div class="stage-caption" id="stageCaption"></div>
-   <div class="scene-note" aria-hidden="true"><span>WICKER HOLLOW</span><span>11:47 PM</span></div>
   </div>
   <div class="choice-bar" id="choiceBar" tabindex="-1"></div>
   <div class="board-footer"><span>내 선택은 공개 전까지 비밀.</span><span class="keyboard-hint"><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> 선택 <span>·</span> <kbd>Enter</kbd> 확정</span></div>
@@ -41,7 +40,7 @@
  <aside class="sidebar" id="sidebar" aria-label="현재 단계 안내"></aside>
 </div>
 <section class="finish-overlay" id="finishOverlay" aria-label="게임 결과" hidden></section>
-<footer class="page-footer"><span>THE WOODS ARE QUIET. YOUR FRIENDS AREN’T.</span><span>VOL. 04 <b> / </b> AFTER DARK</span></footer>
+
 </main>
 </div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>

@@ -28,3 +28,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,su
 .player-row.is-me .you-tag{background:#f0c293;color:#1c2232}
 .text-button,.menu-item span,.history-link{color:#f0c293}
 @media(max-width:780px){.queue-hint,.match-policy,.inline-note,.choice-intro small{font-size:12px}.queue-fine{font-size:11px}.phase-banner:not(:empty){padding:7px 10px}.round-chip{padding:6px 8px}.roster .player-status{font-size:10px}}
+
+/* Functional UI only: one rule summary, one decision, explicit outcomes. */
+body{padding-bottom:24px}
+.hero h1{font-size:44px;letter-spacing:-1.5px}.hero .premise{color:var(--ink)}
+.previous-choice{font-size:10px;color:var(--muted);margin-top:5px;white-space:nowrap}
+.prepare-rules{display:flex;flex-direction:column;gap:7px;grid-column:1/-1;color:var(--ink);font-size:13px;line-height:1.6}
+.ready-button{grid-column:1/-1;max-width:260px;justify-self:end}
+.timer span{font-size:9px;white-space:nowrap}
+@media(max-width:780px){.hero h1{font-size:34px}.roster .previous-choice{grid-column:1/-1;font-size:9px;margin:0}.roster .player-row{min-height:84px}.prepare-rules{font-size:12px}.ready-button{max-width:none}.timer span{font-size:8px}}
