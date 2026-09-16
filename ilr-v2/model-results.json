@@ -1,0 +1,23 @@
+{
+  "runs": 800,
+  "checks": 1832958,
+  "events": 22,
+  "optionsTested": 66,
+  "outcomes": {
+    "디너쇼 레전드": 541,
+    "50세 현역 가수": 57,
+    "오디션 탈락": 78,
+    "데뷔조 탈락": 75,
+    "데뷔 무산": 49
+  },
+  "manualChoices": {
+    "min": 6,
+    "max": 80,
+    "mean": 62.3
+  },
+  "carryChoices": {
+    "min": 6,
+    "max": 39,
+    "mean": 23.8
+  }
+}

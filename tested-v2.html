@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<meta name="theme-color" content="#19584b">
+<title>이번 생은 아이돌! · 2.0.0</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="ilr-v2/base.css?v=2.0.0">
+<link rel="stylesheet" href="ilr-v2/play.css?v=2.0.0">
+<script>
+window.ILR_BOOT_ERRORS=[];
+window.addEventListener('error',function(e){window.ILR_BOOT_ERRORS.push(e.message||'리소스 로딩 실패');});
+window.setTimeout(function(){if(!window.ILR_READY){var b=document.getElementById('boot');b.hidden=false;b.textContent='게임을 불러오지 못했어요. 새로고침 후 다시 확인해주세요. '+window.ILR_BOOT_ERRORS.join(' / ');}},7000);
+</script>
+<script defer src="ilr-v2/catalog.js?v=2.0.0"></script>
+<script defer src="ilr-v2/events-school.js?v=2.0.0"></script>
+<script defer src="ilr-v2/events-career.js?v=2.0.0"></script>
+<script defer src="ilr-v2/events-late.js?v=2.0.0"></script>
+<script defer src="ilr-v2/model.js?v=2.0.0"></script>
+<script defer src="ilr-v2/progress.js?v=2.0.0"></script>
+<script defer src="ilr-v2/view.js?v=2.0.0"></script>
+<script defer src="ilr-v2/app.js?v=2.0.0"></script>
+</head>
+<body>
+<div id="app">
+<header class="topbar"><div class="brand"><div class="logo">ILR</div><div><small>SECOND LIFE : IDOL · 2.0</small><h1>이번 생은 아이돌!</h1></div></div><button id="settings" class="head-button" aria-label="설정 열기">설정</button></header>
+<main id="screen"><div class="welcome"><p class="eyebrow">NEW IDOL LIFE</p><h2>새 인생을 준비하고 있어요.</h2><p>게임을 불러오는 중입니다.</p><p id="boot" role="alert" hidden></p><noscript>JavaScript를 켜야 게임을 시작할 수 있어요.</noscript></div></main>
+</div>
+<dialog id="info"><header><h2 id="infoTitle"></h2><button id="closeInfo" aria-label="정보 닫기">닫기 ×</button></header><div id="infoBody"></div></dialog>
+<div id="rotation" hidden><strong>휴대폰을 세로로 돌려주세요.</strong><p>선택지 전체가 한 화면에 보이는 세로형 게임입니다.</p></div>
+<div id="fx" aria-hidden="true"></div><div id="announce" class="sr-only" aria-live="polite"></div>
+</body>
+</html>
