@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
+<meta name="theme-color" content="#19594b">
+<meta name="color-scheme" content="only light">
+<meta name="description" content="반년의 선택이 만드는 아이돌 커리어. 학원에서 디너쇼까지.">
+<title>이번 생은 아이돌! · 0.4.1</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="ilr/base.css?v=041">
+<link rel="stylesheet" href="ilr/play.css?v=041">
+<script defer src="ilr/boot.js?v=041"></script>
+<script defer src="ilr/data.js?v=041"></script>
+<script defer src="ilr/events-early.js?v=041"></script>
+<script defer src="ilr/events-career.js?v=041"></script>
+<script defer src="ilr/events-longrun.js?v=041"></script>
+<script defer src="ilr/core.js?v=041"></script>
+<script defer src="ilr/season.js?v=041"></script>
+<script defer src="ilr/exam.js?v=041"></script>
+<script defer src="ilr/story.js?v=041"></script>
+<script defer src="ilr/view.js?v=041"></script>
+<script defer src="ilr/panels.js?v=041"></script>
+<script defer src="ilr/motion.js?v=041"></script>
+<script defer src="ilr/app.js?v=041"></script>
+</head>
+<body>
+<main class="app" id="app">
+<header class="header">
+ <div class="brand"><b class="logo">ILR</b><div><small>SECOND LIFE : IDOL</small><h1>이번 생은 아이돌!</h1></div></div>
+ <div class="tools"><button id="auto" class="head-btn" hidden type="button" aria-pressed="false">자동</button><button id="reset" class="head-btn" type="button" aria-label="새 인생 시작">↻</button></div>
+</header>
+<div class="boot" id="boot" role="status">게임을 준비하고 있어요…</div>
+<div id="view"></div>
+<footer class="version" id="version">SEASON R&D · 0.4.1</footer>
+</main>
+<dialog id="info"><div class="dialog-head"><h2 id="info-title"></h2><button id="close-info" class="icon-btn" aria-label="닫기" type="button">×</button></div><div id="info-body"></div></dialog>
+<div id="rotate" hidden><b>세로로 돌려주세요</b><p>선택지는 세로 화면 한 장에 모여 있어요.</p></div>
+<div id="fatal" hidden role="alert" style="position:fixed;inset:20px;z-index:200;background:white;color:#17384c;padding:24px;overflow:auto"><h2>게임 파일을 불러오지 못했어요</h2><p>새로고침해 다시 연결해주세요. 저장된 커리어는 지우지 않습니다.</p><pre id="fatal-detail" style="white-space:pre-wrap"></pre><button type="button" onclick="location.reload()">다시 불러오기</button></div>
+<noscript>이 게임을 시작하려면 브라우저에서 JavaScript를 허용해주세요.</noscript>
+</body>
+</html>

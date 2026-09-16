@@ -1,0 +1,116 @@
+{
+  "version": "0.4.1",
+  "scope": "Local Node engine and local Chromium DOM tests; not a live-device browser verification.",
+  "syntax": {
+    "javascriptFiles": 13,
+    "status": "pass"
+  },
+  "simulation": {
+    "runs": 1000,
+    "checks": 7404785,
+    "byPolicy": {
+      "survival": {
+        "runs": 750,
+        "endings": {
+          "디너쇼 레전드": 750
+        },
+        "averageDecisions": 96.2,
+        "maxDecisions": 98,
+        "averageEvents": 16.2
+      },
+      "random": {
+        "runs": 250,
+        "endings": {
+          "데뷔 전의 또 다른 길": 108,
+          "디너쇼 레전드": 42,
+          "장수 아이돌": 88,
+          "활동 중단": 12
+        },
+        "averageDecisions": 62.4,
+        "maxDecisions": 105,
+        "averageEvents": 11.3
+      }
+    },
+    "eventDefinitions": 24
+  },
+  "layout": {
+    "checks": 3260,
+    "errors": [],
+    "layouts": [
+      {
+        "width": 393,
+        "height": 704,
+        "eventLayouts": 24,
+        "routeFlows": 4,
+        "examLayouts": 9
+      },
+      {
+        "width": 360,
+        "height": 640,
+        "eventLayouts": 24,
+        "routeFlows": 4,
+        "examLayouts": 9
+      },
+      {
+        "width": 320,
+        "height": 568,
+        "eventLayouts": 24,
+        "routeFlows": 4,
+        "examLayouts": 9
+      },
+      {
+        "width": 430,
+        "height": 820,
+        "eventLayouts": 24,
+        "routeFlows": 4,
+        "examLayouts": 9
+      },
+      {
+        "width": 412,
+        "height": 732,
+        "eventLayouts": 24,
+        "routeFlows": 4,
+        "examLayouts": 9
+      }
+    ]
+  },
+  "browserLives": [
+    {
+      "route": "vocal",
+      "steps": 384,
+      "step": "end",
+      "age": 50,
+      "decisions": 96,
+      "ending": "디너쇼 레전드"
+    },
+    {
+      "route": "dance",
+      "steps": 384,
+      "step": "end",
+      "age": 50,
+      "decisions": 96,
+      "ending": "디너쇼 레전드"
+    },
+    {
+      "route": "audition",
+      "steps": 380,
+      "step": "end",
+      "age": 50,
+      "decisions": 95,
+      "ending": "디너쇼 레전드"
+    },
+    {
+      "route": "casting",
+      "steps": 392,
+      "step": "end",
+      "age": 50,
+      "decisions": 98,
+      "ending": "디너쇼 레전드"
+    }
+  ],
+  "interactions": {
+    "checks": 15,
+    "errors": [],
+    "scope": "Local Chromium button handlers, double input, motion cleanup, actual autoplay start/stop, reset cancel, sheet Escape, orientation, reduced motion, HTML escaping."
+  }
+}
