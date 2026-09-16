@@ -32,9 +32,10 @@
     return `<div class="choice-options" role="group" aria-label="내가 갈 수 있는 구름 세 개">${options().map((cell,i)=>`<button class="pick-btn" data-action="select" data-cell="${cell}" ${!active||!allowed.includes(cell)?'disabled':''} aria-label="${i+1}번, ${CELL_NAMES[cell]} 구름, ${state.board[cell]}코인" aria-pressed="${selected===cell}"><kbd>${i+1}</kbd>${coin}<strong>${state.board[cell]}</strong></button>`).join('')}</div>`;
   }
   function renderChoiceBar() {
+    if (['bait_choose','bait_reveal'].includes(state.phase)) { $('choiceBar').innerHTML=baitControlsHTML(); return; }
     if(mode==='tutorial'){ $('choiceBar').innerHTML=tutorialControls();return; }
     if(state.phase==='prepare') {
-      $('choiceBar').innerHTML=`<div class="prepare-rules"><strong>게임 방법</strong><span>1. 세 구름 중 하나 선택</span><span>2. 혼자 도착하면 코인 획득 · 겹치면 0</span><span>3. ${state.config.rounds}라운드 후 코인이 가장 많으면 승리</span></div><button class="btn btn-primary ready-button" data-action="ready" ${me().ready || (mode==='online' && connection!=='connected') ? 'disabled' : ''}>${me().ready?'다른 플레이어 준비 중':'준비 완료'}</button>`;return;
+      $('choiceBar').innerHTML=`<div class="prepare-rules"><strong>게임 방법</strong><span>1. 세 구름 중 하나 선택</span><span>2. 혼자 도착하면 코인 획득 · 겹치면 0</span><span>3. ${state.config.rounds}라운드 후 코인이 가장 많으면 승리</span>${state.expansion === 'bait' ? baitRulesHTML() : ''}</div><button class="btn btn-primary ready-button" data-action="ready" ${me().ready || (mode==='online' && connection!=='connected') ? 'disabled' : ''}>${me().ready?'다른 플레이어 준비 중':'준비 완료'}</button>`;return;
     }
     if(mode==='home'||state.phase==='lobby'||state.phase==='finished'){ $('choiceBar').innerHTML='';return; }
     const p=me(), selected=currentCell(), active=state.phase==='choose'&&!p.locked&&(mode!=='online'||connection==='connected');
@@ -44,7 +45,7 @@
     }else if(state.phase==='reveal'){
       const r=state.results.find(r=>r.id===state.yourId);
       if(!revealVisible())$('choiceBar').innerHTML='<div class="waiting-note">선택 공개 중</div>';
-      else $('choiceBar').innerHTML=`<div class="result-line ${!r?.gain?'bad':''}"><span class="delta">+${r?.gain||0}</span><div><strong>${r?.gain?'코인 획득':r?.missed?'미선택 · 0코인':'같은 구름 · 0코인'}</strong><small>${r?.gain?`혼자 고른 ${CELL_NAMES[r.cell]} 구름에서 ${r.gain}코인을 얻었어요.`:r?.missed?'아무것도 선택하지 않아 이번 라운드는 0코인이에요.':'같은 구름을 고른 모두가 이번 라운드 0코인이에요.'}</small></div></div>`;
+      else $('choiceBar').innerHTML=`<div class="result-line ${!r?.gain?'bad':''}"><span class="delta">+${r?.gain||0}</span><div><strong>${r?.gain?'코인 획득':r?.missed?'미선택 · 0코인':'같은 구름 · 0코인'}</strong><small>${r?.gain?`혼자 고른 ${CELL_NAMES[r.cell]} 구름에서 ${r.gain}코인을 얻었어요.`:r?.missed?'나간 참가자는 이번 라운드에 참여하지 않습니다.':'같은 구름을 고른 모두가 이번 라운드 0코인이에요.'}</small></div></div>`;
     }else $('choiceBar').innerHTML=`<div class="choice-intro"><strong>${state.round===state.config.rounds?'마지막 라운드':'다음 라운드 준비'}</strong><small>곧 선택 시간이 시작돼요.</small></div>${choiceButtons([],false)}<button class="lock-btn" disabled>곧 시작</button>`;
   }
   function historyBody() {
@@ -58,14 +59,14 @@
     }
     const order=state.players.slice().sort((a,b)=>b.score-a.score||a.slot-b.slot),best=order[0]?.score||0,winners=order.filter(p=>p.score===best),win=winners.some(p=>p.id===state.yourId),mine=me();
     const title=winners.length>1?'공동 우승':win?'승리':`${escapeHTML(winners[0]?.name||'친구')}의 승리.`;
-    el.innerHTML=`<div class="finish-card"><div class="trophy" aria-hidden="true">☾</div><h1 id="screenHeading" tabindex="-1" class="screen-title">${title}</h1><p class="result-summary">${isRandom()?`랜덤 매칭 · 사람 ${state.matchmaking.humans}명${state.matchmaking.bots?' + 봇 '+state.matchmaking.bots+'명':''}<br>`:''}${state.config.rounds}라운드 완료 · 내 점수 <strong>${mine?.score||0}코인</strong><br>${winners.length>1?`${winners.length}명이 ${best}코인으로 공동 우승했어요.`:''}</p><div aria-label="최종 순위">${order.map(p=>`<div class="podium-line ${p.id===state.yourId?'is-me':''}"><span class="rank">${1+order.filter(x=>x.score>p.score).length}</span>${avatar(p.slot)}<strong>${escapeHTML(p.name)} ${p.id===state.yourId?'<span class="you-tag">나</span>':''}</strong>${coin}<span class="score">${p.score}</span></div>`).join('')}</div>${isRandom()?`<div class="button-row"><button class="btn btn-primary" data-action="match" ${busy?'disabled':''}>다시 매칭 →</button><button class="btn btn-line" data-action="leave">처음으로</button></div>`:state.hostId===state.yourId?`<div class="button-row"><button class="btn btn-primary" data-action="start">한 판 더 →</button><button class="btn btn-line" data-action="${mode==='solo'?'leave':'lobby'}">${mode==='solo'?'처음으로':'대기실로'}</button></div>`:'<p class="wait-host">방장이 다음 판을 시작하면 함께 출발해요.</p>'}<button class="text-button" data-action="history">내 기록 보기 →</button></div>`;
+    el.innerHTML=`<div class="finish-card"><div class="trophy" aria-hidden="true">☾</div><h1 id="screenHeading" tabindex="-1" class="screen-title">${title}</h1><p class="result-summary">${isRandom()?`랜덤 매칭 · 사람 ${state.matchmaking.humans}명${state.matchmaking.bots?' + 봇 '+state.matchmaking.bots+'명':''}<br>`:''}${state.config.rounds}라운드 완료 · 내 점수 <strong>${mine?.score||0}코인</strong><br>${winners.length>1?`${winners.length}명이 ${best}코인으로 공동 우승했어요.`:''}</p>${rematchHTML()}<div aria-label="최종 순위">${order.map(p=>`<div class="podium-line ${p.id===state.yourId?'is-me':''}"><span class="rank">${1+order.filter(x=>x.score>p.score).length}</span>${avatar(p.slot)}<strong>${escapeHTML(p.name)} ${p.id===state.yourId?'<span class="you-tag">나</span>':''}</strong>${coin}<span class="score">${p.score}</span></div>`).join('')}</div>${isRandom()?`<div class="button-row"><button class="btn btn-primary" data-action="match" ${busy?'disabled':''}>다시 매칭 →</button><button class="btn btn-line" data-action="leave">처음으로</button></div>`:state.hostId===state.yourId?`<div class="button-row"><button class="btn btn-primary" data-action="start">한 판 더 →</button><button class="btn btn-line" data-action="${mode==='solo'?'leave':'lobby'}">${mode==='solo'?'처음으로':'대기실로'}</button></div>`:'<p class="wait-host">방장이 다음 판을 시작하면 함께 출발해요.</p>'}<button class="text-button" data-action="history">내 기록 보기 →</button></div>`;
   }
   function renderHUD(){
     $('roundChip').innerHTML=state.phase==='prepare'?`<span class="round-label">준비</span><strong>${state.config.rounds}라운드 · ${state.config.seconds}초</strong>`:mode==='tutorial'?`<span class="round-label">게임 방법 배우기</span><strong><em>${tutor?.step||1}</em><span class="total-rounds"> / 4</span></strong>`:`<span class="round-label">${state.round===state.config.rounds?'마지막 라운드':'라운드'}</span><strong><em>${fmt(state.round)}</em><span class="total-rounds"> / ${fmt(state.config.rounds)}</span></strong>`;
     const reconnect=mode==='online'&&connection!=='connected';
     $('networkNotice').hidden=!reconnect;$('networkNotice').textContent=reconnect?'연결이 끊겼어요. 다시 연결하는 중에는 선택을 바꿀 수 없어요. 서버의 제한 시간은 계속 흐릅니다.':'';
     const pill=$('connectionPill');pill.hidden=mode!=='online';pill.className='connection-pill'+(reconnect?' reconnect':'');pill.innerHTML=`<i></i>${reconnect?'연결 중':'함께 플레이 중'}`;
-    $('screenLocation').textContent=({home:'',setup:'플레이 방식',lobby:'친구를 기다리는 중',tutorial:'튜토리얼',queue:'랜덤 매칭 · 상대 찾는 중',play:mode==='solo'?'봇과 연습':isRandom()?'랜덤 매칭':'친구와 플레이',result:'경기 결과'})[screenName()];
+    $('screenLocation').textContent=({home:'',setup:'플레이 방식',lobby:'친구를 기다리는 중',tutorial:'튜토리얼',queue:'랜덤 매칭 · 상대 찾는 중',play:mode==='solo'?'봇과 연습':state.expansion==='bait'?'미끼 확장':isRandom()?'랜덤 매칭':'친구와 플레이',result:'경기 결과'})[screenName()];
   }
   function focusKey(el){if(!el||!el.closest('#sidebar,#choiceBar,#roster,#finishOverlay'))return null;if(el.id)return '#'+CSS.escape(el.id);if(el.dataset.action)return `[data-action="${el.dataset.action}"]${el.dataset.cell?`[data-cell="${el.dataset.cell}"]`:el.dataset.id?`[data-id="${CSS.escape(el.dataset.id)}"]`:''}`;return null;}
   function render(){
@@ -80,6 +81,8 @@
   }
   function applyState(next){
     if(mode==='online'&&next.code===state.code&&next.revision<state.revision)return;
+    if (state.phase !== next.phase || state.round !== next.round || state.matchId !== next.matchId) { baitDraft=null; baitBusy=false; }
+    if (mode==='online' && state.matchId !== next.matchId) closeDialog();
     const phaseChanged=state.phase!==next.phase||state.round!==next.round||state.matchId!==next.matchId;
     if(state.round!==next.round||state.matchId!==next.matchId||next.phase!=='choose')optimisticCell=null;
     state=next;clockOffset=mode==='online'?next.serverNow-Date.now():0;
@@ -89,6 +92,8 @@
       if(state.phase==='reveal'){
         makeParticles();
       }
+      if(state.phase==='bait_choose'){sound('start');announce('미끼를 놓거나 보류하세요.');}
+      if(state.phase==='bait_reveal')announce('미끼 배치 공개. 곧 구름 선택이 시작됩니다.');
       if(state.phase==='finished'){sound('win');announce('경기가 끝났어요. 최종 순위를 확인하세요.');}
     }
     render();
@@ -101,7 +106,7 @@
     presentedReveal=marker;
     const r=state.results.find(r=>r.id===state.yourId);
     sound(r?.gain?'coin':'collision');render();
-    announce(r?.gain?`${r.gain}코인 획득`:r?.missed?'선택하지 않아 0코인':'같은 구름에서 겹쳐 0코인');
+    announce(r?.gain?`${r.gain}코인 획득`:r?.missed?'라운드 미참여 · 0코인':'같은 구름에서 겹쳐 0코인');
   }
   function readName(){name=($('nameInput')?.value||name||'플레이어').trim().slice(0,12)||'플레이어';storage.set('cloud-pick:name',name);return name;}
   function openSetup(kind='random'){
@@ -158,7 +163,7 @@
   async function action(actionName,extra={}){
     if(mode==='home'||mode==='tutorial'||mode==='queue')return;
     if(mode==='solo'){
-      try{if(actionName==='select'||actionName==='lock')localRoom.select('you',extra.cell,extra.round,extra.matchId,actionName==='lock');else if(actionName==='ready')localRoom.ready('you',extra.matchId);else if(actionName==='start')localRoom.start('you');else if(actionName==='lobby')localRoom.returnToLobby('you');applyState(localRoom.snapshot('you'));}catch(e){optimisticCell=null;toast(e.message);render();}return;
+      try{if(actionName==='select'||actionName==='lock')localRoom.select('you',extra.cell,extra.round,extra.matchId,actionName==='lock');else if(actionName==='bait')localRoom.placeBait('you',extra.cell,extra.round,extra.matchId);else if(actionName==='ready')localRoom.ready('you',extra.matchId);else if(actionName==='start')localRoom.start('you');else if(actionName==='lobby')localRoom.returnToLobby('you');applyState(localRoom.snapshot('you'));}catch(e){optimisticCell=null;toast(e.message);render();}return;
     }
     const actionSession=session;actionQueue=actionQueue.catch(()=>{}).then(async()=>{
       if(mode!=='online'||session!==actionSession)return;
@@ -167,12 +172,14 @@
     });return actionQueue;
   }
   function select(cell){
+    if(state.phase==='bait_choose'){chooseBait(cell);return;}
     if(mode==='tutorial'){tutorialSelect(cell);return;}
     if(state.phase!=='choose'||me().locked||mode==='online'&&connection!=='connected'||$('dialog').open)return;
     if(!options().includes(cell)){toast('번호가 표시된 내 옆의 세 구름 중에서 골라 주세요.');return;}
     optimisticCell=cell;sound('select');renderChoiceBar();action('select',{cell,round:state.round,matchId:state.matchId});
   }
   function lock(){
+    if(state.phase==='bait_choose'){submitBait();return;}
     if(mode==='tutorial'){tutorialLock();return;}
     const cell=currentCell();if(cell===null||state.phase!=='choose'||me().locked||$('dialog').open)return;
     sound('lock');action('lock',{cell,round:state.round,matchId:state.matchId});
@@ -194,7 +201,7 @@
     showDialog(`<h2>메뉴</h2><div class="menu-list"><button class="menu-item" data-action="help">게임 방법 <span>→</span></button>${mode==='home'?'<button class="menu-item" data-action="tutorial">게임 방법 배우기 <span>튜토리얼 →</span></button>':''}<button class="menu-item" id="soundButton" data-action="sound">효과음 <span>${muted?'꺼짐':'켜짐'}</span></button><button class="menu-item" id="motionButton" data-action="motion" aria-pressed="${reducedMotion}">움직임 줄이기 <span>${reducedMotion?'켜짐':'꺼짐'}</span></button>${mode==='online'&&!isRandom()?`<button class="menu-item" data-action="copyCode">방 코드 <span>${escapeHTML(state.code)} · 복사</span></button>`:''}${['solo','online'].includes(mode)&&state.phase==='finished'?'<button class="menu-item" data-action="history">내 라운드 기록 <span>→</span></button>':''}${mode!=='home'?`<button class="menu-item danger" data-action="leaveDialog">${mode==='queue'?'매칭 취소':isRandom()?'경기 나가기':mode==='online'?'방 나가기':mode==='tutorial'?'튜토리얼 나가기':'연습 마치기'} <span>↗</span></button>`:''}</div>${liveNote()}`);updateSoundButton();updateMotionButton();
   }
   function showHelp(){
-    showDialog(`<h2>게임 방법</h2><p class="help-primary">혼자 도착하면 표시된 코인 획득.<br>겹치면 이번 라운드는 0코인.</p><details class="help-rule"><summary>어떤 구름을 고를 수 있나요?</summary><p>내 캐릭터 옆의 <strong>번호가 표시된 세 구름</strong>만 고를 수 있어요. 중앙은 네 명 모두 선택할 수 있습니다. 코인 수는 매번 바뀌며 주변이 더 높을 수 있습니다. 구름을 누르거나 화면 아래 선택 버튼을 사용하세요.</p></details><details class="help-rule"><summary>선택은 언제까지 바꿀 수 있나요?</summary><p><strong>선택 확정 전까지만</strong> 바꿀 수 있어요. 공개 전에는 다른 사람의 선택과 확정 여부가 보이지 않아요. 모두 확정하면 시간이 남아도 동시에 공개해요.</p></details><details class="help-rule"><summary>시간이 끝나면 어떻게 되나요?</summary><p><strong>마지막으로 고른 구름</strong>이 적용돼요. 한 번도 고르지 않았다면 그 라운드는 0코인이에요. 겹치더라도 이전에 모은 코인은 잃지 않아요.</p></details><details class="help-rule"><summary>어떻게 이기나요?</summary><p>${mode==='home'?config.rounds:state.config.rounds}라운드가 끝났을 때 누적 코인이 가장 많으면 승리. 동점은 공동 우승이에요. 현재 선택 시간은 ${mode==='home'?config.seconds:state.config.seconds}초예요.</p></details><details class="help-rule"><summary>키보드로 플레이할 수 있나요?</summary><p><kbd>1</kbd>·<kbd>2</kbd>·<kbd>3</kbd>으로 선택하고 <kbd>Enter</kbd>로 확정해요. <kbd>Tab</kbd>으로 버튼을 옮기고 <kbd>Space</kbd>로 누를 수도 있어요. 대화창은 <kbd>Esc</kbd>로 닫아요.</p></details>${mode==='home'?'<button class="btn btn-primary settings-actions" data-action="tutorial">게임 방법 배우기 →</button>':''}${liveNote()}<button class="text-button setup-secondary" data-action="closeDialog">게임으로 돌아가기</button>`);
+    showDialog(`<h2>게임 방법</h2><p class="help-primary">혼자 도착하면 표시된 코인 획득.<br>겹치면 이번 라운드는 0코인.</p><details class="help-rule"><summary>어떤 구름을 고를 수 있나요?</summary><p>내 캐릭터 옆의 <strong>번호가 표시된 세 구름</strong>만 고를 수 있어요. 중앙은 네 명 모두 선택할 수 있습니다. 코인 수는 매번 바뀌며 주변이 더 높을 수 있습니다. 구름을 누르거나 화면 아래 선택 버튼을 사용하세요.</p></details><details class="help-rule"><summary>선택은 언제까지 바꿀 수 있나요?</summary><p><strong>선택 확정 전까지만</strong> 바꿀 수 있어요. 공개 전에는 다른 사람의 선택과 확정 여부가 보이지 않아요. 모두 확정하면 시간이 남아도 동시에 공개해요.</p></details><details class="help-rule"><summary>시간이 끝나면 어떻게 되나요?</summary><p><strong>마지막으로 고른 구름</strong>이 적용돼요. 아무것도 고르지 않았다면 세 구름 중 하나가 자동 선택됩니다. 겹치더라도 이전에 모은 코인은 잃지 않아요.</p></details><details class="help-rule"><summary>어떻게 이기나요?</summary><p>${mode==='home'?config.rounds:state.config.rounds}라운드가 끝났을 때 누적 코인이 가장 많으면 승리. 동점은 공동 우승이에요. 현재 선택 시간은 ${mode==='home'?config.seconds:state.config.seconds}초예요.</p></details><details class="help-rule"><summary>키보드로 플레이할 수 있나요?</summary><p><kbd>1</kbd>·<kbd>2</kbd>·<kbd>3</kbd>으로 선택하고 <kbd>Enter</kbd>로 확정해요. <kbd>Tab</kbd>으로 버튼을 옮기고 <kbd>Space</kbd>로 누를 수도 있어요. 대화창은 <kbd>Esc</kbd>로 닫아요.</p></details>${mode==='home'?'<button class="btn btn-primary settings-actions" data-action="tutorial">게임 방법 배우기 →</button>':''}${liveNote()}<button class="text-button setup-secondary" data-action="closeDialog">게임으로 돌아가기</button>`);
   }
   function settingsDialog(){
     if(isRandom())return;
@@ -252,8 +259,8 @@
         : tutor.first!==null
           ? {title:'선택 변경',body:'다른 구름을 선택하세요. 확정 전에는 바꿀 수 있습니다.',note:'목적지는 공개 전까지 비밀입니다.'}
           : {title:'비밀 선택',body:'세 구름 중 하나를 선택하세요.',note:'이번 단계에서는 선택한 뒤 한 번 바꿔봅니다.'};
-    if(done)return {title:r?.missed?'미선택 · 0코인':'선택 시간 종료',body:r?.missed?'한 번도 선택하지 않아 0코인입니다. 다시 연습할 수 있습니다.':`마지막 선택으로 ${r?.gain||0}코인을 얻었습니다.`,note:'확정하지 않아도 시간이 끝나면 마지막 선택이 적용됩니다.'};
-    return {title:tutor.stage==='ready'?'10초 선택 연습':'10초 안에 선택',body:tutor.stage==='ready'?'시작 버튼을 누르면 제한 시간이 흐릅니다.':'세 구름 중 하나를 선택하고 확정하세요.',note:'미선택이면 0코인. 연습 점수는 실제 경기에 반영되지 않습니다.'};
+    if(done)return {title:'선택 시간 종료',body:`${r?.automatic?'자동으로 처리된 선택':'확정한 선택'}으로 ${r?.gain||0}코인을 얻었습니다.`,note:'미확정은 마지막 선택, 미선택은 세 구름 중 자동 선택입니다.'};
+    return {title:tutor.stage==='ready'?'10초 선택 연습':'10초 안에 선택',body:tutor.stage==='ready'?'시작 버튼을 누르면 제한 시간이 흐릅니다.':'세 구름 중 하나를 선택하고 확정하세요.',note:'미선택이면 세 구름 중 자동 선택. 연습 점수는 실제 경기에 반영되지 않습니다.'};
   }
   function tutorialHTML(){
     const c=lessonCopy(),labels=['코인 획득','겹침','선택과 확정','제한 시간'];
@@ -264,7 +271,7 @@
     if(tutor.stage==='reveal')return `<div class="lesson-next"><small>${tutor.step===4?'실전 점수에는 반영되지 않아요.':'결과를 확인하고 다음으로 진행하세요.'}</small><button class="btn btn-primary" data-action="lessonNext" ${!tutor.resultReady||!revealVisible()?'disabled':''}>${tutor.step===4?'완료':'다음'}</button></div>${tutor.step===4?'<button class="text-button" data-action="lessonRetry">10초 연습 다시 하기</button>':''}`;
     if(tutor.stage==='ready')return '<div class="lesson-next"><small>시작 버튼을 누르면 10초가 흐릅니다.</small><button class="btn btn-primary" data-action="lessonTimed">10초 연습 시작 →</button></div>';
     const active=tutor.stage==='pick'||tutor.stage==='timed',lockable=tutor.step===3?tutor.changed:tutor.step===4&&currentCell()!==null;
-    if(tutor.step<=2)return `<div class="choice-intro"><strong>${tutor.step===1?'1번 구름을 골라봐.':'2번, 가운데 구름을 골라봐.'}</strong><small>시간제한 없는 연습</small></div>${choiceButtons(tutorialAllowed(),active)}<span class="waiting-note" style="grid-column:auto;text-align:right;font-size:11px">선택하면 이동해</span>`;
+    if(tutor.step<=2)return `<div class="choice-intro"><strong>${tutor.step===1?'1번 구름을 골라봐.':'2번, 가운데 구름을 골라봐.'}</strong><small>시간제한 없는 연습</small></div>${choiceButtons(tutorialAllowed(),active)}<span class="waiting-note" style="grid-column:auto;text-align:right;font-size:11px">선택하면 이동</span>`;
     return `<div class="choice-intro"><strong>${tutor.step===3?(tutor.changed?'선택을 확정해봐.':tutor.first!==null?'다른 구름으로 바꿔봐.':'구름을 선택하세요'):'10초 안에 선택하세요'}</strong><small>${tutor.step===3?'시간제한 없는 연습':'시간이 끝나면 마지막 선택으로 이동해요.'}</small></div>${choiceButtons(options(),active)}<button class="lock-btn" data-action="lock" ${!lockable?'disabled':''}>선택 확정</button>`;
   }
   function tutorialSelect(cell){
@@ -315,7 +322,7 @@
   document.addEventListener('keydown',event=>{
     if(/INPUT|TEXTAREA|SELECT/.test(event.target.tagName)||event.target.isContentEditable||$('dialog').open||event.altKey||event.ctrlKey||event.metaKey||event.repeat)return;
     if(['1','2','3'].includes(event.key)){event.preventDefault();unlockAudio();select(options()[Number(event.key)-1]);}
-    else if(event.key==='Enter'&&state.phase==='choose'&&(!event.target.closest('button,a')||event.target.closest('[data-action=select],[data-action=lock]'))){event.preventDefault();unlockAudio();lock();}
+    else if(event.key==='Enter'&&['choose','bait_choose'].includes(state.phase)&&(!event.target.closest('button,a')||event.target.closest('[data-action=select],[data-action=lock]'))){event.preventDefault();unlockAudio();lock();}
   });
   $('dialog').addEventListener('click',event=>{if(event.target===$('dialog')){const r=$('dialog').getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeDialog();}});
   canvas.addEventListener('pointermove',event=>{const r=canvas.getBoundingClientRect(),x=(event.clientX-r.left)/r.width*1000,y=(event.clientY-r.top)/r.width*1000;hoverCell=view.cells.findIndex(c=>Math.pow((x-c.x)/(103*c.s),2)+Math.pow((y-c.y+12)/(64*c.s),2)<1);canvas.style.cursor=state.phase==='choose'&&!me().locked&&(mode==='tutorial'?tutorialAllowed():options()).includes(hoverCell)?'pointer':'default';});

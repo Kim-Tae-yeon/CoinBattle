@@ -5,7 +5,7 @@
   const TARGETS = [[6, 4, 8], [0, 4, 6], [0, 4, 2], [2, 4, 8]];
   const COLORS = ['#fa9775', '#63c6b2', '#af99e8', '#efc35b'];
   const BOT_NAMES = ['피치', '모모', '루루', '콩이'];
-  const VERSION = '5.2.0';
+  const VERSION = '6.0.0';
   const DEFAULTS = { rounds: 10, seconds: 10, fillBots: true };
   const REWARD_CELLS = [0, 2, 4, 6, 8];
   const REWARD_SETS = { low: [1, 1, 2, 2, 4], mid: [1, 1, 2, 3, 5], high: [1, 2, 2, 3, 6] };
@@ -40,14 +40,10 @@
     const jackpots = [...shuffle(REWARD_CELLS, rng), ...shuffle(REWARD_CELLS, rng)];
     return levels.map((level, i) => makeBoard(rng, level, jackpots[i]));
   }
-  /* Bots only receive public information. Never pass human selections here. */
+  /* Memoryless fallback bots: current rewards only, never human selections or history. */
   function botChoice(slot, board, history, rng = Math.random) {
     const options = TARGETS[slot];
-    const greed = .9; // One policy for all seats; only public outcomes affect weights.
-    const weights = options.map(cell => {
-      const recent = history.slice(-2).flatMap(r => r.results).filter(r => r.cell === cell).length;
-      return Math.max(.2, Math.pow(board[cell], greed) / (1 + recent * .42));
-    });
+    const weights = options.map(cell => Math.pow(board[cell], .9));
     let roll = rng() * weights.reduce((a, b) => a + b, 0);
     for (let i = 0; i < options.length; i++) { roll -= weights[i]; if (roll <= 0) return options[i]; }
     return options[options.length - 1];
@@ -57,7 +53,7 @@
       this.code = code;
       this.config = clampConfig(config);
       this.rng = options.rng || Math.random;
-      this.timings = { prepare: 20000, countdown: 3000, between: 3000, reveal: 7000, break: 4000, ...options.timings };
+      this.timings = { prepare: 20000, countdown: 3000, between: 3000, reveal: 7000, baitChoose: 6000, baitReveal: 2000, rematch: 12000, ...options.timings };
       this.players = [];
       this.hostId = null;
       this.phase = 'lobby';
@@ -72,6 +68,12 @@
       this.createdAt = Date.now();
       this.touchedAt = Date.now();
       this.revision = 0;
+      this.expansion = 'none';
+      this.tableMatch = 0;
+      this.rematch = null;
+      this.baitPlacements = [];
+      this.baitCells = [];
+      this.baitBaseBoard = null;
     }
     touch(now = Date.now()) { this.touchedAt = now; this.revision++; }
     player(id) { return this.players.find(p => p.id === id); }
@@ -120,17 +122,19 @@
         if (next) this.hostId = next.id;
       }
       this.touch(now);
+      if (connected) this.tryRematch(now);
     }
     leave(id, now = Date.now()) {
       const p = this.player(id); if (!p) return;
       p.connected = false; p.departed = true; p.selected = null;
+      if (this.rematch?.status === 'open') this.rematch.status = 'cancelled';
       if (this.phase === 'choose') p.locked = true;
       p.ready = true;
       if (this.phase === 'lobby' || this.phase === 'finished') this.players = this.players.filter(x => x.id !== id);
       if (this.hostId === id) this.hostId = this.players.find(x => !x.bot && x.connected && !x.departed)?.id || null;
       this.touch(now);
     }
-    start(hostId, now = Date.now()) {
+    start(hostId, now = Date.now(), continuation = null) {
       this.assertHost(hostId);
       if (!['lobby', 'finished'].includes(this.phase)) fail('진행 중인 게임이 있어요.');
       this.players = this.players.filter(p => !p.departed && (p.bot || p.connected));
@@ -139,7 +143,13 @@
         while (this.players.length < 4) this.addBot(hostId, now);
       }
       if (this.players.length < 2) fail('2명 이상 필요해요. 봇을 추가하거나 친구를 초대해 주세요.');
-      this.players.forEach(p => { p.score = 0; p.selected = null; p.locked = false; p.ready = !!p.bot; });
+      this.tableMatch = continuation ? this.tableMatch + 1 : 1;
+      this.expansion = continuation?.bait === true ? 'bait' : 'none';
+      this.rematch = null; this.baitPlacements = []; this.baitCells = []; this.baitBaseBoard = null;
+      this.players.forEach(p => {
+        p.score = 0; p.selected = null; p.locked = false; p.ready = !!p.bot;
+        p.baitUsed = false; p.baitLocked = false; p.baitCell = null;
+      });
       this.round = 0; this.matchId++; this.results = []; this.history = [];
       this.matchBoards = makeMatchBoards(this.rng);
       this.board = this.matchBoards[0].slice();
@@ -155,10 +165,77 @@
     }
     nextRound(now, first = false) {
       this.round++; this.board = this.matchBoards[this.round - 1].slice(); this.results = [];
-      this.players.forEach(p => { p.selected = null; p.locked = false; });
+      this.baitCells = []; this.baitPlacements = []; this.baitBaseBoard = null;
+      this.players.forEach(p => { p.selected = null; p.locked = false; p.baitCell = null; p.baitLocked = !!p.baitUsed; });
       this.phase = 'countdown'; this.phaseStartedAt = now;
       this.phaseEndsAt = now + (first ? this.timings.countdown : this.timings.between);
       this.touch(now);
+    }
+    beginRoundInput(now) {
+      // Windows apply to R6 and R9, following R5 and R8 results respectively.
+      if (this.expansion === 'bait' && [6, 9].includes(this.round) && this.players.some(p => !p.baitUsed && !p.departed)) {
+        this.phase = 'bait_choose'; this.phaseStartedAt = now;
+        this.phaseEndsAt = now + this.timings.baitChoose; this.touch(now);
+      } else this.beginChoice(now);
+    }
+    placeBait(id, cell, round, matchId, now = Date.now()) {
+      if (this.phase !== 'bait_choose' || now >= this.phaseEndsAt) fail('미끼 배치 시간이 끝났습니다.');
+      if (round !== this.round || matchId !== this.matchId) fail('이전 경기의 미끼는 적용할 수 없습니다.');
+      const p = this.player(id);
+      if (!p || p.bot || p.departed) fail('참가 정보를 찾을 수 없습니다.');
+      if (cell !== null && (!Number.isInteger(cell) || !TARGETS[p.slot].includes(cell))) fail('내 세 구름 중 하나에 미끼를 놓으세요.');
+      if (p.baitLocked) {
+        if (p.baitCell === cell) return; // Idempotent acknowledgement; never spends twice.
+        fail('이미 미끼 선택을 확정했습니다.');
+      }
+      if (p.baitUsed) fail('미끼를 이미 사용했습니다.');
+      p.baitCell = cell; p.baitLocked = true;
+      if (cell !== null) p.baitUsed = true;
+      this.touch(now);
+    }
+    revealBait(now) {
+      if (this.phase !== 'bait_choose') return;
+      this.baitPlacements = this.players.filter(p => p.baitCell !== null && !p.departed)
+        .map(p => ({ id: p.id, slot: p.slot, cell: p.baitCell }));
+      this.baitCells = [...new Set(this.baitPlacements.map(p => p.cell))];
+      this.baitBaseBoard = this.board.slice();
+      for (const cell of this.baitCells) this.board[cell] += 1; // Shared bonus, cap +1.
+      this.players.forEach(p => { p.baitLocked = true; }); // Timeouts hold, not random placements.
+      this.phase = 'bait_reveal'; this.phaseStartedAt = now;
+      this.phaseEndsAt = now + this.timings.baitReveal; this.touch(now);
+    }
+    openRematch(now) {
+      const humans = this.players.filter(p => !p.bot);
+      if (this.tableMatch !== 1 || humans.length < 2 || this.players.some(p => p.departed)) return;
+      this.rematch = {
+        status: 'open', endsAt: now + this.timings.rematch,
+        ids: humans.map(p => p.id), votes: {},
+        allowBait: humans.length === 4 && this.config.rounds === 10,
+      };
+    }
+    voteRematch(id, choice, matchId, now = Date.now()) {
+      const r = this.rematch;
+      if (this.phase !== 'finished' || this.matchId !== matchId || r?.status !== 'open' || now >= r.endsAt) fail('재경기 선택 시간이 끝났습니다.');
+      if (!r.ids.includes(id) || !this.player(id)?.connected || this.player(id)?.departed) fail('재경기에 참가할 수 없습니다.');
+      if (!['base', 'bait', 'decline'].includes(choice) || (choice === 'bait' && !r.allowBait)) fail('선택할 수 없는 재경기 방식입니다.');
+      if (r.votes[id]) {
+        if (r.votes[id] === choice) return;
+        fail('이미 재경기 의사를 확정했습니다.');
+      }
+      r.votes[id] = choice;
+      if (choice === 'decline') r.status = 'cancelled';
+      this.touch(now); this.tryRematch(now);
+    }
+    tryRematch(now) {
+      const r = this.rematch;
+      if (this.phase !== 'finished' || r?.status !== 'open') return;
+      if (now >= r.endsAt || r.ids.some(id => !this.player(id) || this.player(id).departed)) {
+        r.status = 'cancelled'; this.touch(now); return;
+      }
+      if (r.ids.every(id => ['base', 'bait'].includes(r.votes[id]) && this.player(id).connected)) {
+        const bait = r.allowBait && r.ids.every(id => r.votes[id] === 'bait');
+        this.start(this.hostId, now, { bait });
+      }
     }
     beginChoice(now) {
       this.phase = 'choose'; this.phaseStartedAt = now;
@@ -183,6 +260,10 @@
     }
     resolve(now) {
       if (this.phase !== 'choose') return;
+      // Draw once, at the deadline, only for active seats with no submitted choice.
+      this.players.forEach(p => {
+        if (!p.departed && p.selected === null) p.selected = TARGETS[p.slot][Math.floor(this.rng() * 3)];
+      });
       const count = {};
       this.players.forEach(p => { if (p.selected !== null) count[p.selected] = (count[p.selected] || 0) + 1; });
       this.results = this.players.map(p => {
@@ -196,13 +277,15 @@
       });
       this.history.push({ round: this.round, board: this.board.slice(), results: this.results.map(r => ({ ...r })) });
       this.phase = 'reveal'; this.phaseStartedAt = now;
-      this.phaseEndsAt = now + this.timings.reveal + ((this.round === 4 || this.round === 8) && this.round < this.config.rounds ? this.timings.break : 0);
+      this.phaseEndsAt = now + this.timings.reveal;
       this.touch(now);
     }
     advance(now = Date.now()) {
       const before = this.revision;
       if (this.phase === 'prepare' && now >= this.phaseEndsAt) this.nextRound(now, true);
-      else if (this.phase === 'countdown' && now >= this.phaseEndsAt) this.beginChoice(now);
+      else if (this.phase === 'countdown' && now >= this.phaseEndsAt) this.beginRoundInput(now);
+      else if (this.phase === 'bait_choose' && now >= this.phaseEndsAt) this.revealBait(now);
+      else if (this.phase === 'bait_reveal' && now >= this.phaseEndsAt) this.beginChoice(now);
       else if (this.phase === 'choose') {
         // Apply the deadline before processing bots that woke up too late.
         if (now >= this.phaseEndsAt) this.resolve(now);
@@ -215,9 +298,10 @@
         }
       } else if (this.phase === 'reveal' && now >= this.phaseEndsAt) {
         if (this.round >= this.config.rounds) {
-          this.phase = 'finished'; this.phaseStartedAt = now; this.phaseEndsAt = 0; this.touch(now);
+          this.phase = 'finished'; this.phaseStartedAt = now; this.phaseEndsAt = 0; this.openRematch(now); this.touch(now);
         } else this.nextRound(now);
       }
+      if (this.phase === 'finished') this.tryRematch(now);
       return this.revision !== before;
     }
     returnToLobby(hostId, now = Date.now()) {
@@ -226,22 +310,40 @@
       this.players = this.players.filter(p => !p.departed && (p.bot || p.connected));
       this.players.forEach(p => { p.score = 0; p.selected = null; p.locked = false; });
       this.phase = 'lobby'; this.round = 0; this.results = []; this.history = [];
+      this.expansion = 'none'; this.rematch = null; this.baitCells = []; this.baitPlacements = []; this.baitBaseBoard = null;
       this.phaseEndsAt = 0; this.board = makeBoard(this.rng); this.touch(now);
     }
     snapshot(viewerId, now = Date.now()) {
       const reveal = this.phase === 'reveal' || this.phase === 'finished';
+      const self = this.player(viewerId), r = this.rematch;
+      const resultForViewer = result => {
+        const { automatic, ...visible } = result;
+        return result.id === viewerId ? { ...visible, automatic } : visible;
+      };
       return {
         code: this.code, hostId: this.hostId, config: { ...this.config }, phase: this.phase,
         round: this.round, matchId: this.matchId, board: this.board.slice(),
         phaseStartedAt: this.phaseStartedAt, phaseEndsAt: this.phaseEndsAt, serverNow: now,
         revision: this.revision, yourId: viewerId,
+        expansion: this.expansion, tableMatch: this.tableMatch,
+        rematch: r ? {
+          status: r.status, endsAt: r.endsAt, allowBait: r.allowBait,
+          total: r.ids.length, count: Object.keys(r.votes).length, ownVote: r.votes[viewerId] || null,
+        } : null,
+        bait: {
+          enabled: this.expansion === 'bait', cells: this.baitCells.slice(),
+          baseBoard: this.baitBaseBoard?.slice() || null,
+          own: { remaining: this.expansion === 'bait' && self && !self.baitUsed && this.round <= 9 ? 1 : 0,
+            locked: !!self?.baitLocked, cell: self?.baitCell ?? null },
+          placements: this.phase === 'bait_reveal' ? this.baitPlacements.map(p => ({ ...p })) : [],
+        },
         players: this.players.map(p => ({ id: p.id, name: p.name, slot: p.slot, bot: p.bot,
           connected: p.connected, departed: p.departed, score: p.score, locked: p.id === viewerId ? p.locked : false, ready: !!p.ready,
           // Only your lock is returned. Current destinations are shared at simultaneous reveal.
           selected: p.id === viewerId || reveal ? p.selected : null,
         })),
-        results: reveal ? this.results.map(r => ({ ...r })) : [],
-        // Past selections are personal only; internal history remains available to the server bots.
+        results: reveal ? this.results.map(resultForViewer) : [],
+        // Past selections are personal only. No opponent logs or token inventory is serialized.
         history: this.history.map(h => ({ round: h.round, board: h.board.slice(),
           results: h.results.filter(r => r.id === viewerId).map(r => ({ ...r })),
         })),

@@ -5,7 +5,7 @@ import '../src/game.js';
 const G=globalThis.CloudGame;
 const seeded=seed=>()=>{seed=(Math.imul(1664525,seed)+1013904223)>>>0;return seed/4294967296;};
 function room(seed=1){const r=new G.Room('TEST',{}, {rng:seeded(seed)});for(let i=0;i<4;i++)r.addHuman('p'+i,'Player'+i,0);r.start('p0',0);return r;}
-test('v5 defaults: ten rounds, ten-second choices',()=>{assert.equal(G.VERSION,'5.2.0');assert.deepEqual(G.DEFAULTS,{rounds:10,seconds:10,fillBots:true});});
+test('v5 defaults: ten rounds, ten-second choices',()=>{assert.equal(G.VERSION,'6.0.0');assert.deepEqual(G.DEFAULTS,{rounds:10,seconds:10,fillBots:true});});
 test('10,000 seeds: reward curve, jackpot rotation, legal cells and hidden schedule',()=>{
  let earlyFive=false,earlySix=false,centerLower=false;
  for(let seed=0;seed<10000;seed++){
@@ -38,13 +38,13 @@ test('ten rounds: secrecy, collision, score conservation, legal high rewards',()
  assert.equal(r.phase,'finished');assert.equal(r.history.length,10);
  for(const p of r.players)assert.equal(p.score,r.history.reduce((sum,h)=>sum+h.results.find(x=>x.id===p.id).gain,0));
 });
-test('last selection applies at deadline; no choice pays zero; previous coins survive collisions',()=>{
+test('last selection applies at deadline; no choice falls back to a legal cloud; previous coins survive collisions',()=>{
  const r=room();r.advance(20000);r.advance(23000);r.players[0].score=7;r.select('p0',6,1,r.matchId,false,23001);r.select('p1',6,1,r.matchId,true,23002);r.advance(33000);
- assert.equal(r.player('p0').score,7);assert.ok(r.results[0].collision);assert.ok(r.results[2].missed);assert.equal(r.results[2].gain,0);
+ assert.equal(r.player('p0').score,7);assert.ok(r.results[0].collision);assert.ok(!r.results[2].missed);assert.ok(G.TARGETS[2].includes(r.results[2].cell));assert.equal(r.results[2].automatic,true);
  assert.throws(()=>r.select('p0',8,1,r.matchId,true,33001));
 });
-test('full-duration game reaches results in 228 seconds; future match resets everything',()=>{
- const r=room();let now=0;while(r.phase!=='finished'){now=r.phaseEndsAt;r.advance(now);}assert.equal(now,228000);assert.equal(now+15000,243000);
+test('full-duration game reaches results in 220 seconds; future match resets everything',()=>{
+ const r=room();let now=0;while(r.phase!=='finished'){now=r.phaseEndsAt;r.advance(now);}assert.equal(now,220000);assert.equal(now+15000,235000);
  const previous=r.matchBoards;r.start('p0',now);assert.equal(r.phase,'prepare');assert.equal(r.history.length,0);assert.ok(r.players.every(p=>p.score===0));assert.notStrictEqual(r.matchBoards,previous);
 });
 test('UI strips decorative slogans and renders actual coin numbers',async()=>{

@@ -7,3 +7,5 @@ public/
 src/app.js
 tests/artifacts/
 __pycache__/
+
+verification/

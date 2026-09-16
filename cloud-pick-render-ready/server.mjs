@@ -136,7 +136,7 @@ const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
     if (url.pathname === '/api/health' && req.method === 'GET') {
-      return json(res, 200, { ok: true, app: 'cloud-pick', version: VERSION, revision: process.env.RENDER_GIT_COMMIT || 'local', protocol: 2, transport: 'SSE + HTTP', matchmaking: { enabled: true, target: 4, minimumHumans: 2, fallbackMs, rounds: DEFAULTS.rounds, seconds: DEFAULTS.seconds }, lanUrls: lan });
+      return json(res, 200, { ok: true, app: 'cloud-pick', version: VERSION, revision: process.env.RENDER_GIT_COMMIT || 'local', protocol: 3, design: "v0.37", transport: 'SSE + HTTP', matchmaking: { enabled: true, target: 4, minimumHumans: 2, fallbackMs, rounds: DEFAULTS.rounds, seconds: DEFAULTS.seconds }, lanUrls: lan });
     }
     if (url.pathname === '/api/matchmake' && req.method === 'GET') {
       checkLimit(req); return json(res, 200, queuePayload(matchmaker.poll(queueKey(req))));
@@ -173,8 +173,10 @@ const server = http.createServer(async (req, res) => {
       if (url.pathname === '/api/action') {
         const { token, session, room } = authenticate(req, url);
         if (room.advance()) broadcast(room);
-        if (room.matchmaking && !['select', 'lock', 'leave', 'ready'].includes(data.action)) throw new Error('랜덤 매칭은 공통 규칙으로 진행해요. 끝나면 다시 매칭해 주세요.');
+        if (room.matchmaking && !['select', 'lock', 'leave', 'ready', 'bait', 'rematch'].includes(data.action)) throw new Error('랜덤 매칭은 공통 규칙으로 진행해요. 끝나면 다시 매칭해 주세요.');
         switch (data.action) {
+          case 'bait': room.placeBait(session.id, data.cell, data.round, data.matchId); break;
+          case 'rematch': room.voteRematch(session.id, data.choice, data.matchId); break;
           case 'ready': room.ready(session.id, data.matchId); break;
           case 'select': room.select(session.id, data.cell, data.round, data.matchId, false); break;
           case 'lock': room.select(session.id, data.cell, data.round, data.matchId, true); break;
@@ -191,7 +193,7 @@ const server = http.createServer(async (req, res) => {
           default: throw new Error('알 수 없는 명령이에요.');
         }
         // Selection and lock acknowledgements are private until a round resolves.
-        if ((data.action === 'select' || data.action === 'lock') && room.phase === 'choose') sendState(token, room, session.id);
+        if ((['select','lock'].includes(data.action) && room.phase === 'choose') || (data.action === 'bait' && room.phase === 'bait_choose')) sendState(token, room, session.id);
         else broadcast(room);
         return json(res, 200, { ok: true, state: snapshot(room, session.id) });
       }
@@ -216,7 +218,8 @@ const tick = setInterval(() => {
   const now = Date.now();
   matchmaker.tick(now);
   for (const room of rooms.values()) {
-    if (room.advance(now)) broadcast(room);
+    const before = room.phase;
+    if (room.advance(now) && !(before === 'choose' && room.phase === 'choose')) broadcast(room);
     const active = room.players.some(p => !p.bot && p.connected && !p.departed);
     if (!active && now - room.touchedAt > 5 * 60 * 1000 || now - room.createdAt > 24 * 60 * 60 * 1000) {
       rooms.delete(room.code);

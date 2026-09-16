@@ -4,10 +4,10 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 const root = path.dirname(fileURLToPath(import.meta.url));
 const read = name => readFile(path.join(root, 'src', name), 'utf8');
-const parts = await Promise.all(['prefix.js','ui.js','match-ui.js','art.js','timer.js','boot.js'].map(read));
+const parts = await Promise.all(['prefix.js','ui.js','match-ui.js','extension-ui.js','art.js','timer.js','boot.js'].map(read));
 const app = parts.join('\n');
-const [template, baseStyle, matchStyle, contrastStyle, rules] = await Promise.all(['template.html','styles.css','match-styles.css','contrast.css','game.js'].map(read));
-const style = [baseStyle, matchStyle, contrastStyle].join('\n');
+const [template, baseStyle, matchStyle, contrastStyle, extensionStyle, rules] = await Promise.all(['template.html','styles.css','match-styles.css','contrast.css','extension.css','game.js'].map(read));
+const style = [baseStyle, matchStyle, contrastStyle, extensionStyle].join('\n');
 for (const marker of ['/*STYLE*/','/*RULES*/','/*APP*/']) {
   if (!template.includes(marker)) throw new Error(`Template marker missing: ${marker}`);
 }

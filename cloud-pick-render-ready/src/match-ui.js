@@ -8,7 +8,7 @@
     const choices = `<details class="alternate-modes"><summary>다른 방식으로 플레이</summary><div class="alternate-buttons">${!random ? '<button class="text-button" data-action="kindRandom">랜덤 매칭 →</button>' : ''}${ux.kind !== 'solo' ? '<button class="text-button" data-action="kindSolo">혼자 봇과 연습 →</button>' : ''}${!online ? '<button class="text-button" data-action="kindFriends">친구끼리 플레이 →</button>' : ''}</div></details>`;
     let content;
     if (random) {
-      content = `<div class="setup-meta"><span>${matchInfo.rounds}라운드 · 선택 ${matchInfo.seconds}초 · 최대 4명</span><span class="fixed-rule">공통 규칙</span></div>${!matchInfo.enabled ? `<div class="server-offline" role="status">${!backendChecked ? '매칭 서버를 확인하고 있어요…' : serverAvailable ? '기존 서버는 연결됐지만 랜덤 매칭 업데이트가 필요해요. 전체 프로젝트의 서버도 함께 교체해 주세요.' : '튜토리얼과 봇 연습은 바로 가능해요. 랜덤 매칭은 서버가 실행 중인 웹 주소에서 이용해 주세요.'}</div>` : ''}<button class="btn btn-primary" data-action="match" ${busy || !matchInfo.enabled ? 'disabled' : ''}>${busy ? '대기열에 연결하는 중…' : '상대 찾기'} <span class="arrow">↗</span></button><p class="match-policy">4명이 모이면 즉시 시작.<br>${Math.round(matchInfo.fallbackMs / 1000)}초 대기 후 2명 이상이면 빈자리를 봇으로 채워요.<br>혼자라면 다른 사람이 올 때까지 기다려요.</p>${!matchInfo.enabled && backendChecked ? '<button class="text-button setup-secondary" data-action="connectionHelp">서버 연결 안내 →</button>' : ''}`;
+      content = `<div class="setup-meta"><span>${matchInfo.rounds}라운드 · 선택 ${matchInfo.seconds}초 · 최대 4명</span><span class="fixed-rule">공통 규칙</span></div>${!matchInfo.enabled ? `<div class="server-offline" role="status">${!backendChecked ? '매칭 서버에 연결하는 중…' : serverAvailable ? '서버 업데이트 확인 중입니다. 잠시 뒤 다시 시도하세요.' : '서버가 시작 중이거나 연결이 지연되고 있습니다. 잠시 뒤 다시 확인하세요. 봇 연습은 바로 가능합니다.'}</div>` : ''}<button class="btn btn-primary" data-action="match" ${busy || !matchInfo.enabled ? 'disabled' : ''}>${busy ? '대기열에 연결하는 중…' : '상대 찾기'} <span class="arrow">↗</span></button><p class="match-policy">4명이 모이면 즉시 시작.<br>${Math.round(matchInfo.fallbackMs / 1000)}초 대기 후 2명 이상이면 빈자리를 봇으로 채워요.<br>혼자라면 다른 사람이 올 때까지 기다려요.</p>${!matchInfo.enabled && backendChecked ? '<button class="text-button setup-secondary" data-action="connectionHelp">서버 연결 안내 →</button>' : ''}`;
     } else if (online) {
       content = `${!serverAvailable ? '<div class="server-offline">친구끼리 플레이하려면 같은 멀티플레이 서버 주소에서 열어 주세요.</div>' : ''}<button class="btn btn-primary" data-action="create" ${busy || !serverAvailable ? 'disabled' : ''}>방 만들기 →</button><button class="text-button setup-secondary" data-action="joinDialog" ${busy || !serverAvailable ? 'disabled' : ''}>초대 코드로 참가하기</button>`;
     } else {
@@ -64,7 +64,7 @@
   async function pollMatchmaking() {
     if (mode!=='queue'||!queue||queuePending||queueCancelling)return;
     const epoch=queueEpoch,key=queue.key;queuePending=true;
-    try {readQueueReply(await api('/api/matchmake',undefined,key),epoch);}
+    try {readQueueReply(await api('/api/matchmake',queue.view ? undefined : {name:queue.name},key),epoch);}
     catch(e){if(mode==='queue'&&queue&&epoch===queueEpoch){queue.error='연결을 다시 확인하고 있어요. 대기 자리가 유지되는지 확인 중이에요.';if($('queueStatus'))$('queueStatus').textContent=queue.error;}}
     finally{if(epoch===queueEpoch){queuePending=false;if(mode==='queue'&&!queueCancelling)queueTimer=setTimeout(pollMatchmaking,queue?.view?.status==='ready'?450:1200);}}
   }

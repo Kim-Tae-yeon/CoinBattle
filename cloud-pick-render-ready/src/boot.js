@@ -13,11 +13,17 @@
     try{const next=await api('/api/state',undefined,saved.token);connectSession({...saved,state:next});toast('이전 경기로 다시 연결했어요.');return true;}
     catch{storage.remove('cloud-pick:session',true);return false;}
   }
+  let healthRetry = 0, healthTimer = 0;
   async function initializeBackend(restore=true){
+    clearTimeout(healthTimer);
     if(location.protocol==='http:'||location.protocol==='https:'){
       try{const health=await api('/api/health',undefined,null);serverAvailable=health.ok&&health.app==='cloud-pick';matchInfo={...matchInfo,...health.matchmaking,enabled:serverAvailable&&health.matchmaking?.enabled===true};}catch{serverAvailable=false;matchInfo.enabled=false;}
     }
     backendChecked=true;
+    if (!serverAvailable && ['http:', 'https:'].includes(location.protocol) && healthRetry < 8) {
+      const delay = Math.min(15000, 2000 * (1 + healthRetry++));
+      healthTimer = setTimeout(() => initializeBackend(restore), delay);
+    } else if (serverAvailable) healthRetry = 0;
     // A delayed health check must not overwrite a tutorial or practice already started.
     if(restore&&serverAvailable&&mode==='home'&&await restoreSession())return;
     if(restore&&serverAvailable&&mode==='home'&&await restoreMatchmaking())return;
@@ -30,7 +36,7 @@
     getState:()=>JSON.parse(JSON.stringify(state)),getMode:()=>mode,
     getUX:()=>({screen:screenName(),tutorial:tutor?{step:tutor.step,stage:tutor.stage,changed:tutor.changed}:null,paused:!!pausedAt,learned:storage.get(LEARN_KEY)==='done'}),
     getQueue:()=>queue?{status:queue.view?.status||'connecting',count:queue.view?.count||1,joinedAt:queue.view?.joinedAt,error:queue.error}:null,
-    getTheme:()=>({name:'AFTER DARK · RANDOM MATCH',reducedMotion,muted,embeddedArtwork:true}),
+    getTheme:()=>({version:G.VERSION,design:'v0.37',name:'AFTER DARK · RANDOM MATCH',reducedMotion,muted,embeddedArtwork:true}),
   });
   render();resize();requestAnimationFrame(frame);initializeBackend();
 })();

@@ -101,9 +101,10 @@ test('After Dark: original multiplayer protocol, four real clients', { timeout: 
     await t.test('illegal cloud cannot be selected', async () => {
       await assert.rejects(clients[2].pick(8, false), /구름/);
     });
-    await t.test('server deadline gives all non-choosing players zero', async () => {
+    await t.test('server deadline chooses legal clouds for non-choosing players', async () => {
       await until(() => clients.every(c => c.latest.phase === 'reveal' && c.latest.round === 3), 8000);
-      assert.ok(clients.every(c => c.latest.results.every(r => r.missed && r.gain === 0)));
+      assert.ok(clients.every(c => c.latest.results.every(r => !r.missed && Number.isInteger(r.cell))));
+      expected = first.latest.players.map(p => p.score);
     });
     await t.test('whole match finishes with matching score histories', async () => {
       await until(() => clients.every(c => c.latest.phase === 'finished'), 12000);

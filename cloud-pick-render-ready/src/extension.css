@@ -1,0 +1,20 @@
+/* Bait appears only after a complete basic match. Equal value typography stays intact. */
+.bait-panel{grid-column:1/-1;display:flex;flex-direction:column;gap:12px;min-width:0}
+.bait-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.bait-heading>span{font-size:12px;color:var(--muted);white-space:nowrap}
+.bait-panel>small,.bait-rules span{font-size:12px;color:var(--muted);line-height:1.8}
+.bait-options{display:flex;gap:10px}.bait-options .pick-btn{flex:1;width:auto;min-width:0}
+.bait-actions,.rematch-actions{display:flex;gap:10px}.bait-actions .btn,.rematch-actions .btn{flex:1}
+.bait-rules{display:flex;flex-direction:column;gap:5px;padding:12px 0;border-top:1px solid var(--line)}
+.bait-signals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.bait-signals>span{display:flex;align-items:center;gap:6px;padding:7px;background:var(--deep);border:1px solid var(--line);font-size:12px;min-width:0}
+.bait-signals b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100px}
+.bait-signals .mini-avatar{width:23px;height:31px;flex-shrink:0}.bait-signals>span>span:last-child{white-space:nowrap}
+.rematch-panel{margin-top:20px;padding:16px;background:var(--deep);border:1px solid var(--line);text-align:left}
+.rematch-panel h2{font-size:17px;margin:0}.rematch-panel p,.rematch-note{font-size:12px;line-height:1.8;color:var(--muted)}
+.rematch-panel summary{min-height:44px;display:flex;align-items:center;cursor:pointer;color:var(--gold);font-size:13px}
+.rematch-panel summary:after{content:'＋';margin-left:auto}.rematch-panel details[open] summary:after{content:'−'}
+.rematch-actions .btn{font-size:13px;padding:11px 9px}
+@media(max-width:450px){.bait-signals{grid-template-columns:1fr}.bait-signals>span{font-size:12px}.bait-actions .btn{font-size:13px;padding:11px}.rematch-panel{padding:13px}.rematch-panel h2{font-size:15px}.bait-rules span{font-size:12px}}
+
+@media(max-width:450px){.bait-signals{grid-template-columns:repeat(2,minmax(0,1fr))}.bait-signals>span{display:grid;grid-template-columns:23px minmax(0,1fr);gap:4px;font-size:11px}.bait-signals b{max-width:none}.bait-signals>span>span:last-child{grid-column:1/-1;font-size:11px}}

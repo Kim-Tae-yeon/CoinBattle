@@ -6,6 +6,9 @@
       value=fmt(secs);label='초';progress=duration?remaining/duration:0;
       if(secs>0&&secs<=3&&lastBeep!==secs&&!pausedAt){lastBeep=secs;tone(72,0,.16,.052,'sine');tone(63,.19,.14,.032,'sine');announce(`${secs}초 남았습니다.`);}
       if(secs<=3&&!me().locked)banner='<strong>선택 후 확정하세요</strong>';
+    }else if(state.phase==='bait_choose'||state.phase==='bait_reveal'){
+      value=String(secs);label=state.phase==='bait_choose'?'미끼 배치':'공개';progress=duration?remaining/duration:0;
+      banner=state.phase==='bait_choose'?'<strong>미끼 배치 · 이동 선택은 다음</strong>':'<strong>미끼 공개</strong>';
     }else if(state.phase==='prepare'){
       value=String(secs);label='준비';progress=duration?remaining/duration:0;
       banner=`<strong>${state.players.filter(p=>p.ready).length}/${state.players.length}명 준비 완료</strong>`;
@@ -22,4 +25,5 @@
     const urgent=state.phase==='choose'&&(!lesson||timed)&&secs<=3&&secs>0;
     $('timer').classList.toggle('urgent',urgent);const u=String(urgent);if($('stage').dataset.urgent!==u)$('stage').dataset.urgent=u;
     if($('phaseBanner').innerHTML!==banner)$('phaseBanner').innerHTML=banner;
+    drawBaitMarkers();
   }
