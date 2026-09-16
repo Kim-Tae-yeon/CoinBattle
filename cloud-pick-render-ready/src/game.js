@@ -5,7 +5,7 @@
   const TARGETS = [[6, 4, 8], [0, 4, 6], [0, 4, 2], [2, 4, 8]];
   const COLORS = ['#fa9775', '#63c6b2', '#af99e8', '#efc35b'];
   const BOT_NAMES = ['피치', '모모', '루루', '콩이'];
-  const VERSION = '6.0.0';
+  const VERSION = '6.0.1';
   const DEFAULTS = { rounds: 10, seconds: 10, fillBots: true };
   const REWARD_CELLS = [0, 2, 4, 6, 8];
   const REWARD_SETS = { low: [1, 1, 2, 2, 4], mid: [1, 1, 2, 3, 5], high: [1, 2, 2, 3, 6] };
@@ -167,13 +167,20 @@
       this.round++; this.board = this.matchBoards[this.round - 1].slice(); this.results = [];
       this.baitCells = []; this.baitPlacements = []; this.baitBaseBoard = null;
       this.players.forEach(p => { p.selected = null; p.locked = false; p.baitCell = null; p.baitLocked = !!p.baitUsed; });
+      // v0.38: the bait preview replaces this round's 3s board countdown.
+      // Keep a full 6s placement + 2s attribution, then all 10s of movement input.
+      if (this.hasBaitWindow()) { this.beginRoundInput(now); return; }
       this.phase = 'countdown'; this.phaseStartedAt = now;
       this.phaseEndsAt = now + (first ? this.timings.countdown : this.timings.between);
       this.touch(now);
     }
+    hasBaitWindow() {
+      return this.expansion === 'bait' && [6, 9].includes(this.round)
+        && this.players.some(p => !p.baitUsed && !p.departed);
+    }
     beginRoundInput(now) {
       // Windows apply to R6 and R9, following R5 and R8 results respectively.
-      if (this.expansion === 'bait' && [6, 9].includes(this.round) && this.players.some(p => !p.baitUsed && !p.departed)) {
+      if (this.hasBaitWindow()) {
         this.phase = 'bait_choose'; this.phaseStartedAt = now;
         this.phaseEndsAt = now + this.timings.baitChoose; this.touch(now);
       } else this.beginChoice(now);

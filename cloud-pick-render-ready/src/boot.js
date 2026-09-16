@@ -36,7 +36,7 @@
     getState:()=>JSON.parse(JSON.stringify(state)),getMode:()=>mode,
     getUX:()=>({screen:screenName(),tutorial:tutor?{step:tutor.step,stage:tutor.stage,changed:tutor.changed}:null,paused:!!pausedAt,learned:storage.get(LEARN_KEY)==='done'}),
     getQueue:()=>queue?{status:queue.view?.status||'connecting',count:queue.view?.count||1,joinedAt:queue.view?.joinedAt,error:queue.error}:null,
-    getTheme:()=>({version:G.VERSION,design:'v0.37',name:'AFTER DARK · RANDOM MATCH',reducedMotion,muted,embeddedArtwork:true}),
+    getTheme:()=>({version:G.VERSION,design:'v0.38',name:'AFTER DARK · RANDOM MATCH',reducedMotion,muted,embeddedArtwork:true}),
   });
   render();resize();requestAnimationFrame(frame);initializeBackend();
 })();

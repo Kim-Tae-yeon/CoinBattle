@@ -135,10 +135,10 @@ test('bots ignore past history and unseen opponent inputs exactly',()=>{
   assert.equal(G.botChoice(s,b,[],seedRng(n)),G.botChoice(s,b,[{results:[{cell:4},{cell:4}]}],seedRng(n)));
  }
 });
-test('full timer budgets are 220s to base result / 236s to expansion result',()=>{
+test('full timer budgets are 220s to base result / 230s to expansion result',()=>{
  const basic=finish(game());assert.equal(basic.phaseStartedAt,220000);
- const r=extension(),start=r.phaseStartedAt;finish(r);assert.equal(r.phaseStartedAt-start,236000);
- assert.equal(220+15,235);assert.equal(236+15,251);
+ const r=extension(),start=r.phaseStartedAt;finish(r);assert.equal(r.phaseStartedAt-start,230000);
+ assert.equal(220+15,235);assert.equal(230+15,245);
 });
 test('neither forced collisions nor previous-game history are added',()=>{
  const r=extension();assert.deepEqual(r.history,[]);assert.deepEqual(r.snapshot('p0').history,[]);

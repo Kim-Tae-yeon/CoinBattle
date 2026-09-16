@@ -136,7 +136,7 @@ const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
     if (url.pathname === '/api/health' && req.method === 'GET') {
-      return json(res, 200, { ok: true, app: 'cloud-pick', version: VERSION, revision: process.env.RENDER_GIT_COMMIT || 'local', protocol: 3, design: "v0.37", transport: 'SSE + HTTP', matchmaking: { enabled: true, target: 4, minimumHumans: 2, fallbackMs, rounds: DEFAULTS.rounds, seconds: DEFAULTS.seconds }, lanUrls: lan });
+      return json(res, 200, { ok: true, app: 'cloud-pick', version: VERSION, revision: process.env.RENDER_GIT_COMMIT || 'local', protocol: 3, design: "v0.38", transport: 'SSE + HTTP', matchmaking: { enabled: true, target: 4, minimumHumans: 2, fallbackMs, rounds: DEFAULTS.rounds, seconds: DEFAULTS.seconds }, lanUrls: lan });
     }
     if (url.pathname === '/api/matchmake' && req.method === 'GET') {
       checkLimit(req); return json(res, 200, queuePayload(matchmaker.poll(queueKey(req))));

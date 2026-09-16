@@ -1,6 +1,6 @@
 {
   "name": "cloud-pick-random",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "private": true,
   "description": "After Dark with public matchmaking, private rooms, and an interactive tutorial",
   "scripts": {

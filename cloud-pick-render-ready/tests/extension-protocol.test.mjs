@@ -59,7 +59,7 @@ test('v6 real HTTP/SSE: random match -> unanimous same-table expansion -> rematc
   });
   const clients=[];
   try {
-    await until(async()=>{try{return (await json('/api/health')).version==='6.0.0';}catch{return false;}});
+    await until(async()=>{try{return (await json('/api/health')).version==='6.0.1';}catch{return false;}});
     const keys=[];
     for(let i=0;i<4;i++){
       const k=ticket();keys.push(k);await json('/api/matchmake',{name:'V6-'+i},k);
